@@ -156,14 +156,16 @@
             </div>
 
             <div class="flex items-center gap-2 md:gap-8">
-                <a href="#about" class="hidden md:block text-gray-600 font-medium hover:text-ayu-green transition text-sm">About</a>
-                <!-- Updated Offline Centers link to open in new tab -->
-                <a href="centers.html" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm whitespace-nowrap">Offline Centers</a>
-                
-                <a href="#consultation" class="bg-ayu-green text-white px-4 md:px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg shadow-green-900/20">
-                    Login
-                </a>
+                <!-- Desktop Menu Items (Hidden on Mobile) -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#about" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">About</a>
+                    <a href="centers.html" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm whitespace-nowrap">Offline Centers</a>
+                    <a href="#consultation" class="bg-ayu-green text-white px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg shadow-green-900/20">
+                        Login
+                    </a>
+                </div>
 
+                <!-- 3 Dot Menu Trigger -->
                 <button onclick="toggleDrawer()" class="text-ayu-green text-2xl hover:scale-110 transition p-1 focus:outline-none cursor-pointer">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
@@ -173,12 +175,21 @@
 
     <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
     
-    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100">
+    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100 overflow-y-auto">
         <button onclick="toggleDrawer()" class="absolute top-8 right-8 text-2xl text-ayu-green hover:rotate-90 transition duration-300">
             <i class="fas fa-times"></i>
         </button>
 
         <div class="mt-16 space-y-8">
+            <!-- Mobile Navigation (Visible only on Mobile) -->
+            <div class="md:hidden space-y-4 border-b border-gray-100 pb-6">
+                <a href="#consultation" onclick="toggleDrawer()" class="block w-full bg-ayu-green text-white text-center py-3 rounded-full font-bold shadow-md hover:bg-[#1e5c22] transition">Login</a>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="#about" onclick="toggleDrawer()" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">About</a>
+                    <a href="centers.html" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">Offline Centers</a>
+                </div>
+            </div>
+
             <h3 class="font-serif text-3xl text-ayu-green border-b border-gray-100 pb-4">Wellness Menu</h3>
             
             <div class="group cursor-pointer" onclick="document.getElementById('doctors').scrollIntoView({behavior: 'smooth'}); toggleDrawer();">
@@ -206,7 +217,7 @@
             </div>
         </div>
 
-        <div class="bg-gray-50 p-6 rounded-2xl">
+        <div class="bg-gray-50 p-6 rounded-2xl mt-8">
             <p class="text-ayu-green font-serif italic mb-4">"Balance your energy, balance your life."</p>
             <button onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'}); toggleDrawer();" class="w-full bg-ayu-green text-white py-3 rounded-xl font-bold hover:bg-[#1e5c22] transition">
                 Register Now
