@@ -17,15 +17,15 @@
                 extend: {
                     colors: {
                         ayu: {
-                            orange: '#C85226', 
-                            green: '#2E7D32',  
-                            light: '#F3F8F4',  
+                            orange: '#C85226',
+                            green: '#2E7D32',
+                            light: '#F3F8F4',
                             dark: '#1B4D3E'
+                        },
+                        fontFamily: {
+                            sans: ['Poppins', 'sans-serif'],
+                            serif: ['Merriweather', 'serif'],
                         }
-                    },
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                        serif: ['Merriweather', 'serif'],
                     }
                 }
             }
@@ -33,7 +33,6 @@
     </script>
 
     <style>
-        /* SMOOTH BACKGROUND ANIMATION */
         body { 
             background: linear-gradient(300deg, #fdfbf7, #e8f5e9, #fff3e0, #f0fdfa);
             background-size: 240% 240%;
@@ -47,9 +46,26 @@
         }
         
         .logo-text { font-family: 'Merriweather', serif; letter-spacing: 1px; }
-
         .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+
+        /* Custom Horizontal Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 0 20px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
 
         .pill-nav { box-shadow: 0 10px 40px -10px rgba(46, 125, 50, 0.15); transition: all 0.3s ease; }
         .pill-nav:hover { transform: translateY(2px); box-shadow: 0 5px 20px -5px rgba(46, 125, 50, 0.1); }
@@ -57,10 +73,36 @@
         .drawer { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
         .drawer.open { transform: translateX(0); }
         .glass-drawer { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); }
+
+        /* Loader Styles */
+        .loader-text-char { display: inline-block; opacity: 0; transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1); }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen">
+<body class="text-gray-800 antialiased min-h-screen overflow-hidden" onload="startLoader()">
 
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 z-[9999] flex items-center justify-center">
+        <div id="loader-top" class="absolute top-0 left-0 w-full h-1/2 bg-[#fdfbf7] z-0 transition-transform duration-1000 ease-in-out delay-100" style="transform-origin: top;"></div>
+        <div id="loader-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-[#fdfbf7] z-0 transition-transform duration-1000 ease-in-out delay-100" style="transform-origin: bottom;"></div>
+        
+        <div id="loader-content" class="relative z-10 flex flex-col items-center justify-center overflow-hidden">
+             <div class="text-6xl md:text-9xl font-serif font-bold flex gap-4 md:gap-8 items-center justify-center overflow-hidden py-4">
+                <span id="text-ayu" class="text-ayu-green translate-x-[-150%] opacity-0 transition-all duration-1000 ease-out">AYU</span>
+                <span id="text-setu" class="text-ayu-orange translate-x-[150%] opacity-0 transition-all duration-1000 ease-out">SETU</span>
+             </div>
+             <div id="loading-line" class="w-0 h-[2px] bg-gray-800 mt-2 transition-all duration-700 ease-in-out opacity-0"></div>
+        </div>
+    </div>
+
+    <script>
+        if (sessionStorage.getItem('visited')) {
+            const pre = document.getElementById('preloader');
+            if(pre) pre.style.display = 'none';
+            document.body.classList.remove('overflow-hidden');
+        }
+    </script>
+
+    <!-- Navigation -->
     <nav class="fixed top-6 left-0 right-0 z-50 px-4">
         <div class="pill-nav max-w-6xl mx-auto bg-white/90 backdrop-blur-md rounded-full py-2 px-6 md:px-8 flex justify-between items-center relative border border-white/50">
             
@@ -68,13 +110,16 @@
                 <img src="1-removebg-preview.png" onerror="this.src='https://via.placeholder.com/150x60?text=AYUSETU'" alt="Ayusetu Logo" class="h-14 w-auto object-contain mix-blend-multiply">
             </div>
 
-            <div class="flex items-center gap-6 md:gap-8">
-                <a href="index.html" class="hidden md:block text-gray-600 font-medium hover:text-ayu-green transition text-sm">Home</a>
-                <a href="#" class="hidden md:block text-ayu-green font-bold text-sm">Offline Centers</a>
-                
-                <a href="#consultation" class="bg-ayu-green text-white px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg shadow-green-900/20">
-                    Login
-                </a>
+            <div class="flex items-center gap-2 md:gap-8">
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">Home</a>
+                    <a href="index.html#about" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">About</a>
+                    <span class="text-ayu-green font-bold text-sm cursor-default">Offline Centers</span>
+                    <!-- Login Button calls openLogin() -->
+                    <button onclick="openLogin()" class="bg-ayu-green text-white px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg shadow-green-900/20 cursor-pointer">
+                        Login
+                    </button>
+                </div>
 
                 <button onclick="toggleDrawer()" class="text-ayu-green text-2xl hover:scale-110 transition p-1 focus:outline-none cursor-pointer">
                     <i class="fas fa-ellipsis-v"></i>
@@ -85,29 +130,54 @@
 
     <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
     
-    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100">
+    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100 overflow-y-auto">
         <button onclick="toggleDrawer()" class="absolute top-8 right-8 text-2xl text-ayu-green hover:rotate-90 transition duration-300">
             <i class="fas fa-times"></i>
         </button>
 
         <div class="mt-16 space-y-8">
-            <h3 class="font-serif text-3xl text-ayu-green border-b border-gray-100 pb-4">Wellness Menu</h3>
-            
-            <div class="group cursor-pointer" onclick="window.location.href='index.html';">
-                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
-                    <span class="text-sm bg-gray-100 text-gray-600 px-2 py-1 rounded">00</span> Home
-                </h4>
-                <p class="text-gray-500 mt-2 pl-9 text-sm">Return to main page.</p>
+            <div class="md:hidden space-y-4 border-b border-gray-100 pb-6">
+                <!-- Login Button in Drawer calls openLogin() -->
+                <button onclick="toggleDrawer(); openLogin();" class="block w-full bg-ayu-green text-white text-center py-3 rounded-full font-bold shadow-md hover:bg-[#1e5c22] transition">Login</button>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="index.html" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">Home</a>
+                    <a href="index.html#about" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">About</a>
+                </div>
             </div>
 
-            <div class="group cursor-pointer" onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'}); toggleDrawer();">
+            <h3 class="font-serif text-3xl text-ayu-green border-b border-gray-100 pb-4">Wellness Menu</h3>
+            
+            <div class="group cursor-pointer" onclick="window.location.href='index.html#doctors';">
                 <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
-                    <span class="text-sm bg-green-100 text-ayu-green px-2 py-1 rounded">01</span> Book Now
+                    <span class="text-sm bg-green-100 text-ayu-green px-2 py-1 rounded">01</span> Consult Doctors
                 </h4>
+                <p class="text-gray-500 mt-2 pl-9 text-sm">Video consultation with top Naturopaths.</p>
             </div>
+
+            <div class="group cursor-pointer" onclick="window.location.href='index.html#consultation';">
+                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                    <span class="text-sm bg-orange-100 text-ayu-orange px-2 py-1 rounded">02</span> Online Yoga Session
+                </h4>
+                <p class="text-gray-500 mt-2 pl-9 text-sm">Daily live sessions for Anxiety & Stress.</p>
+            </div>
+
+            <div class="group cursor-pointer" onclick="toggleDrawer()">
+                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                    <span class="text-sm bg-blue-100 text-blue-600 px-2 py-1 rounded">03</span> Residential Therapy
+                </h4>
+                <p class="text-gray-500 mt-2 pl-9 text-sm">Offline healing at our centers.</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 p-6 rounded-2xl mt-8">
+            <p class="text-ayu-green font-serif italic mb-4">"Balance your energy, balance your life."</p>
+            <button onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'}); toggleDrawer();" class="w-full bg-ayu-green text-white py-3 rounded-xl font-bold hover:bg-[#1e5c22] transition">
+                Register Now
+            </button>
         </div>
     </div>
 
+    <!-- Hero / Centers Section -->
     <section id="centers" class="pt-40 pb-24 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-green-50/50 to-white/20 -z-10"></div>
 
@@ -115,6 +185,7 @@
             <div class="text-center mb-16">
                 <span class="text-ayu-green font-bold uppercase text-xs tracking-widest">Offline Centers</span>
                 <h2 class="text-4xl font-serif font-bold text-gray-900 mt-2">Residential Therapy Packages</h2>
+                <div class="w-24 h-1 bg-ayu-green mx-auto mt-4 rounded-full"></div>
                 <p class="text-gray-600 mt-4 max-w-2xl mx-auto">
                     Immersive healing at our dedicated centers. Packages include expert therapy, comfortable accommodation, and nutritious sattvic meals.
                 </p>
@@ -167,24 +238,40 @@
                 </div>
             </div>
 
+            <!-- Locations Classified by State -->
             <div class="bg-white/60 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white shadow-sm">
                 <div class="grid md:grid-cols-2 gap-8 items-center">
                     <div>
-                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-4">Our Centers</h3>
-                        <p class="text-gray-600 mb-6">Visit our dedicated centers across Bihar for a peaceful and immersive healing experience.</p>
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-4">Our Locations</h3>
+                        <p class="text-gray-600 mb-6">Visit our dedicated centers across India for a peaceful and immersive healing experience.</p>
                         
-                        <div class="flex flex-wrap gap-3">
-                            <span class="px-4 py-2 bg-green-100 text-ayu-green rounded-full text-sm font-semibold hover:bg-green-200 transition cursor-default"><i class="fas fa-map-pin mr-2"></i>Banmankhi</span>
-                            <span class="px-4 py-2 bg-green-100 text-ayu-green rounded-full text-sm font-semibold hover:bg-green-200 transition cursor-default"><i class="fas fa-map-pin mr-2"></i>Purnea</span>
-                            <span class="px-4 py-2 bg-green-100 text-ayu-green rounded-full text-sm font-semibold hover:bg-green-200 transition cursor-default"><i class="fas fa-map-pin mr-2"></i>Saharsa</span>
-                            <span class="px-4 py-2 bg-green-100 text-ayu-green rounded-full text-sm font-semibold hover:bg-green-200 transition cursor-default"><i class="fas fa-map-pin mr-2"></i>Madhepura</span>
-                            <span class="px-4 py-2 bg-green-100 text-ayu-green rounded-full text-sm font-semibold hover:bg-green-200 transition cursor-default"><i class="fas fa-map-pin mr-2"></i>Khagaria</span>
-                            <span class="px-4 py-2 bg-green-100 text-ayu-green rounded-full text-sm font-semibold hover:bg-green-200 transition cursor-default"><i class="fas fa-map-pin mr-2"></i>Gaya</span>
-                            <span class="px-4 py-2 bg-green-100 text-ayu-green rounded-full text-sm font-semibold hover:bg-green-200 transition cursor-default"><i class="fas fa-map-pin mr-2"></i>Paschim Champaran</span>
+                        <div class="space-y-6">
+                            <!-- BIHAR -->
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 border-b border-gray-100 pb-1">Bihar</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1.5 bg-white border border-green-100 text-ayu-green rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition cursor-default">Banmankhi</span>
+                                    <span class="px-3 py-1.5 bg-white border border-green-100 text-ayu-green rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition cursor-default">Purnea</span>
+                                    <span class="px-3 py-1.5 bg-white border border-green-100 text-ayu-green rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition cursor-default">Saharsa</span>
+                                    <span class="px-3 py-1.5 bg-white border border-green-100 text-ayu-green rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition cursor-default">Madhepura</span>
+                                    <span class="px-3 py-1.5 bg-white border border-green-100 text-ayu-green rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition cursor-default">Khagaria</span>
+                                    <span class="px-3 py-1.5 bg-white border border-green-100 text-ayu-green rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition cursor-default">Gaya</span>
+                                    <span class="px-3 py-1.5 bg-white border border-green-100 text-ayu-green rounded-lg text-sm font-medium shadow-sm hover:shadow-md transition cursor-default">Paschim Champaran</span>
+                                </div>
+                            </div>
+
+                            <!-- JHARKHAND (Example/Placeholder) -->
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 border-b border-gray-100 pb-1">Jharkhand</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1.5 bg-gray-50 border border-gray-100 text-gray-500 rounded-lg text-sm font-medium">Ranchi (Coming Soon)</span>
+                                </div>
+                            </div>
                         </div>
-                        <p class="mt-4 text-sm text-ayu-orange font-medium italic"><i class="fas fa-rocket mr-2"></i>Expanding soon to other states!</p>
+
+                        <p class="mt-6 text-sm text-ayu-orange font-medium italic"><i class="fas fa-rocket mr-2"></i>Expanding soon to other states!</p>
                     </div>
-                    <div class="relative h-64 rounded-2xl overflow-hidden shadow-lg group">
+                    <div class="relative h-80 rounded-2xl overflow-hidden shadow-lg group">
                         <img src="https://images.unsplash.com/photo-1570211776045-af3a51026f4a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Center Location" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
                             <div class="text-white">
@@ -198,6 +285,7 @@
         </div>
     </section>
 
+    <!-- Consultation / Booking Section -->
     <section id="consultation" class="py-24 bg-white/30 backdrop-blur-sm">
         <div class="max-w-4xl mx-auto px-6">
             <div class="bg-white/95 rounded-2xl shadow-2xl overflow-hidden border-t-8 border-ayu-orange">
@@ -251,7 +339,7 @@
                             <span class="text-2xl font-bold text-ayu-orange">₹5,000</span>
                         </div>
 
-                        <button type="button" class="w-full bg-ayu-green text-white font-bold py-4 rounded text-lg hover:bg-green-800 transition shadow-lg">
+                        <button type="button" onclick="openLogin()" class="w-full bg-ayu-green text-white font-bold py-4 rounded text-lg hover:bg-green-800 transition shadow-lg">
                             Proceed to Payment
                         </button>
                     </form>
@@ -308,29 +396,179 @@
         </div>
     </footer>
 
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAuthModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="flex">
+                <div class="w-2 bg-ayu-orange"></div>
+                <div class="p-8 w-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-serif font-bold text-gray-800" id="modalTitle">Welcome Back</h2>
+                        <button onclick="closeAuthModal()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+                    </div>
+
+                    <div id="authError" class="hidden bg-red-100 text-red-700 p-3 rounded text-sm mb-4"></div>
+
+                    <form id="authForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label>
+                            <input type="email" id="authEmail" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green" placeholder="you@ayusetu.com" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Password</label>
+                            <input type="password" id="authPassword" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div id="roleSelectContainer" class="hidden">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">I am a:</label>
+                            <select id="authRole" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green">
+                                <option value="user">Patient / User</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full bg-ayu-green text-white font-bold py-3 rounded-lg hover:bg-[#1e5c22] transition shadow-lg">
+                            <span id="btnText">Login</span>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center text-sm text-gray-500">
+                        <p id="toggleText">New to Ayusetu? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Existing Scripts
+        function startLoader() {
+            if (sessionStorage.getItem('visited')) return;
+            sessionStorage.setItem('visited', 'true');
+            const textAyu = document.getElementById('text-ayu');
+            const textSetu = document.getElementById('text-setu');
+            const line = document.getElementById('loading-line');
+            const loaderTop = document.getElementById('loader-top');
+            const loaderBottom = document.getElementById('loader-bottom');
+            const loaderContent = document.getElementById('loader-content');
+            const preloader = document.getElementById('preloader');
+
+            setTimeout(() => { textAyu.classList.remove('translate-x-[-150%]', 'opacity-0'); textSetu.classList.remove('translate-x-[150%]', 'opacity-0'); }, 300);
+            setTimeout(() => { line.classList.remove('opacity-0', 'w-0'); line.classList.add('w-full'); }, 1200);
+            setTimeout(() => {
+                loaderContent.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                loaderTop.style.transform = "translateY(-100%)";
+                loaderBottom.style.transform = "translateY(100%)";
+                document.body.classList.remove('overflow-hidden');
+            }, 2000);
+            setTimeout(() => { preloader.style.display = 'none'; }, 3000);
+        }
+
         function toggleDrawer() {
             const drawer = document.getElementById('sideDrawer');
             const overlay = document.getElementById('drawerOverlay');
-            
             if (drawer.classList.contains('open')) {
-                // Close Drawer
                 drawer.classList.remove('open');
                 overlay.classList.add('opacity-0');
-                setTimeout(() => {
-                    overlay.classList.add('hidden');
-                }, 300); // Match transition duration
+                setTimeout(() => { overlay.classList.add('hidden'); }, 300);
             } else {
-                // Open Drawer
                 overlay.classList.remove('hidden');
-                // Small timeout to allow the 'hidden' removal to register before opacity transition
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    drawer.classList.add('open');
-                }, 10);
+                setTimeout(() => { overlay.classList.remove('opacity-0'); drawer.classList.add('open'); }, 10);
             }
         }
     </script>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // ============================================
+        // PASTE YOUR FIREBASE CONFIG HERE
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
+            authDomain: "ayusetu-cd9bb.firebaseapp.com",
+            projectId: "ayusetu-cd9bb",
+            storageBucket: "ayusetu-cd9bb.firebasestorage.app",
+            messagingSenderId: "641194205830",
+            appId: "1:641194205830:web:ceb2e083ec77920a716707",
+            measurementId: "G-JLYGFR8QCF"
+        };
+
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let isLogin = true;
+
+        // Make functions accessible globally
+        window.openLogin = function() { document.getElementById('authModal').classList.remove('hidden'); }
+        window.closeAuthModal = function() { document.getElementById('authModal').classList.add('hidden'); }
+
+        window.toggleAuthMode = function() {
+            isLogin = !isLogin;
+            const title = document.getElementById('modalTitle');
+            const btn = document.getElementById('btnText');
+            const toggle = document.getElementById('toggleText');
+            const roleDiv = document.getElementById('roleSelectContainer');
+
+            if(isLogin) {
+                title.innerText = "Welcome Back";
+                btn.innerText = "Login";
+                toggle.innerHTML = 'New to Ayusetu? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a>';
+                roleDiv.classList.add('hidden');
+            } else {
+                title.innerText = "Join Ayusetu";
+                btn.innerText = "Sign Up";
+                toggle.innerHTML = 'Already have an account? <a href="#" onclick="toggleAuthMode()" class="text-ayu-green font-bold hover:underline">Login here</a>';
+                roleDiv.classList.remove('hidden');
+            }
+        }
+
+        // Auth Logic
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const errorDiv = document.getElementById('authError');
+            errorDiv.classList.add('hidden');
+
+            try {
+                if (isLogin) {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const uid = userCredential.user.uid;
+                    const docRef = doc(db, "users", uid);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        redirectBasedOnRole(docSnap.data().role);
+                    } else {
+                        redirectBasedOnRole('user');
+                    }
+                } else {
+                    const role = document.getElementById('authRole').value;
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    await setDoc(doc(db, "users", userCredential.user.uid), {
+                        email: email,
+                        role: role,
+                        createdAt: new Date()
+                    });
+                    redirectBasedOnRole(role);
+                }
+            } catch (error) {
+                errorDiv.innerText = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        });
+
+        function redirectBasedOnRole(role) {
+            if(role === 'admin') window.location.href = 'admin-dashboard.html';
+            else if(role === 'doctor') window.location.href = 'doctor-dashboard.html';
+            else window.location.href = 'user-dashboard.html';
+        }
+    </script>
 </body>
 </html>

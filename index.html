@@ -17,15 +17,15 @@
                 extend: {
                     colors: {
                         ayu: {
-                            orange: '#C85226', // From "AYU" text
-                            green: '#2E7D32',  // From "SETU" swoosh
-                            light: '#F3F8F4',  // Background
+                            orange: '#C85226',
+                            green: '#2E7D32',
+                            light: '#F3F8F4',
                             dark: '#1B4D3E'
+                        },
+                        fontFamily: {
+                            sans: ['Poppins', 'sans-serif'],
+                            serif: ['Merriweather', 'serif'],
                         }
-                    },
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                        serif: ['Merriweather', 'serif'],
                     }
                 }
             }
@@ -33,7 +33,6 @@
     </script>
 
     <style>
-        /* SMOOTH BACKGROUND ANIMATION */
         body { 
             background: linear-gradient(300deg, #fdfbf7, #e8f5e9, #fff3e0, #f0fdfa);
             background-size: 240% 240%;
@@ -41,110 +40,88 @@
         }
 
         @keyframes gradient-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
-        .logo-text {
-            font-family: 'Merriweather', serif;
-            letter-spacing: 1px;
+        .logo-text { font-family: 'Merriweather', serif; letter-spacing: 1px; }
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+
+        /* Custom Horizontal Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 0 20px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
 
-        /* CARD HOVER EFFECTS */
-        .hover-lift {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-        }
-
-        /* HERO ANIMATION */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-15px); }
             100% { transform: translateY(0px); }
         }
-        .hero-img { animation: float 6s ease-in-out infinite; }
+        .hero-img img { animation: float 6s ease-in-out infinite; }
 
-        /* FLOATING PILL NAVBAR STYLE */
-        .pill-nav {
-            box-shadow: 0 10px 40px -10px rgba(46, 125, 50, 0.15);
-            transition: all 0.3s ease;
-        }
-        .pill-nav:hover {
-            transform: translateY(2px);
-            box-shadow: 0 5px 20px -5px rgba(46, 125, 50, 0.1);
-        }
+        .hero-element { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .run-hero-anim .hero-element { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+        .delay-500 { transition-delay: 0.5s; }
 
-        /* SIDE DRAWER ANIMATION */
-        .drawer {
-            transform: translateX(100%);
-            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        .drawer.open {
-            transform: translateX(0);
-        }
-        .glass-drawer {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-        }
+        .pill-nav { box-shadow: 0 10px 40px -10px rgba(46, 125, 50, 0.15); transition: all 0.3s ease; }
+        .pill-nav:hover { transform: translateY(2px); box-shadow: 0 5px 20px -5px rgba(46, 125, 50, 0.1); }
 
-        /* BLOB ANIMATION FOR SERVICES BG */
+        .drawer { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .drawer.open { transform: translateX(0); }
+        .glass-drawer { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); }
+
         @keyframes blob {
             0% { transform: translate(0px, 0px) scale(1); }
             33% { transform: translate(30px, -50px) scale(1.1); }
             66% { transform: translate(-20px, 20px) scale(0.9); }
             100% { transform: translate(0px, 0px) scale(1); }
         }
-        .animate-blob {
-            animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-            animation-delay: 2s;
-        }
+        .animate-blob { animation: blob 7s infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
 
-        /* LOADING SCREEN STYLES */
-        .loader-text-char {
-            display: inline-block;
-            opacity: 0;
-            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-        }
+        .loader-text-char { display: inline-block; opacity: 0; transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1); }
     </style>
 </head>
 <body class="text-gray-800 antialiased min-h-screen overflow-hidden" onload="startLoader()">
 
-    <!-- PRELOADER -->
     <div id="preloader" class="fixed inset-0 z-[9999] flex items-center justify-center">
-        <!-- Split Background Panels -->
         <div id="loader-top" class="absolute top-0 left-0 w-full h-1/2 bg-[#fdfbf7] z-0 transition-transform duration-1000 ease-in-out delay-100" style="transform-origin: top;"></div>
         <div id="loader-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-[#fdfbf7] z-0 transition-transform duration-1000 ease-in-out delay-100" style="transform-origin: bottom;"></div>
         
-        <!-- Text Container -->
         <div id="loader-content" class="relative z-10 flex flex-col items-center justify-center overflow-hidden">
              <div class="text-6xl md:text-9xl font-serif font-bold flex gap-4 md:gap-8 items-center justify-center overflow-hidden py-4">
-                <!-- Text starts separated and comes together -->
                 <span id="text-ayu" class="text-ayu-green translate-x-[-150%] opacity-0 transition-all duration-1000 ease-out">AYU</span>
                 <span id="text-setu" class="text-ayu-orange translate-x-[150%] opacity-0 transition-all duration-1000 ease-out">SETU</span>
              </div>
-             <!-- The expanding line -->
              <div id="loading-line" class="w-0 h-[2px] bg-gray-800 mt-2 transition-all duration-700 ease-in-out opacity-0"></div>
         </div>
     </div>
     
     <script>
-        // Immediate check to prevent flash of preloader on revisit/back navigation
         if (sessionStorage.getItem('visited')) {
             const pre = document.getElementById('preloader');
             if(pre) pre.style.display = 'none';
             document.body.classList.remove('overflow-hidden');
+            document.body.classList.add('run-hero-anim');
         }
     </script>
 
@@ -155,12 +132,14 @@
                 <img src="1-removebg-preview.png" onerror="this.src='https://via.placeholder.com/150x60?text=AYUSETU'" alt="Ayusetu Logo" class="h-14 w-auto object-contain mix-blend-multiply">
             </div>
 
-            <div class="flex items-center gap-6 md:gap-8">
-                <a href="centers.html" class="hidden md:block text-gray-600 font-medium hover:text-ayu-green transition text-sm">Offline Centers</a>
-                
-                <a href="#consultation" class="bg-ayu-green text-white px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg shadow-green-900/20">
-                    Login
-                </a>
+            <div class="flex items-center gap-2 md:gap-8">
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#about" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">About</a>
+                    <a href="centers.html" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm whitespace-nowrap">Offline Centers</a>
+                    <button onclick="openLogin()" class="bg-ayu-green text-white px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg shadow-green-900/20 cursor-pointer">
+                        Login
+                    </button>
+                </div>
 
                 <button onclick="toggleDrawer()" class="text-ayu-green text-2xl hover:scale-110 transition p-1 focus:outline-none cursor-pointer">
                     <i class="fas fa-ellipsis-v"></i>
@@ -171,12 +150,20 @@
 
     <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
     
-    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100">
+    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100 overflow-y-auto">
         <button onclick="toggleDrawer()" class="absolute top-8 right-8 text-2xl text-ayu-green hover:rotate-90 transition duration-300">
             <i class="fas fa-times"></i>
         </button>
 
         <div class="mt-16 space-y-8">
+            <div class="md:hidden space-y-4 border-b border-gray-100 pb-6">
+                <button onclick="toggleDrawer(); openLogin();" class="block w-full bg-ayu-green text-white text-center py-3 rounded-full font-bold shadow-md hover:bg-[#1e5c22] transition">Login</button>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="#about" onclick="toggleDrawer()" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">About</a>
+                    <a href="centers.html" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">Offline Centers</a>
+                </div>
+            </div>
+
             <h3 class="font-serif text-3xl text-ayu-green border-b border-gray-100 pb-4">Wellness Menu</h3>
             
             <div class="group cursor-pointer" onclick="document.getElementById('doctors').scrollIntoView({behavior: 'smooth'}); toggleDrawer();">
@@ -204,7 +191,7 @@
             </div>
         </div>
 
-        <div class="bg-gray-50 p-6 rounded-2xl">
+        <div class="bg-gray-50 p-6 rounded-2xl mt-8">
             <p class="text-ayu-green font-serif italic mb-4">"Balance your energy, balance your life."</p>
             <button onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'}); toggleDrawer();" class="w-full bg-ayu-green text-white py-3 rounded-xl font-bold hover:bg-[#1e5c22] transition">
                 Register Now
@@ -212,20 +199,18 @@
         </div>
     </div>
 
-    <!-- Header: Made background transparent to show animation -->
     <header class="relative overflow-hidden pt-40 pb-20"> 
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            
             <div class="z-10 relative">
-                <span class="bg-white/60 backdrop-blur-md border border-green-100 text-ayu-green px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block shadow-sm">Natural Healing</span>
-                <h1 class="text-5xl md:text-6xl font-serif font-bold text-gray-900 leading-tight mb-6">
+                <span class="hero-element delay-100 bg-white/60 backdrop-blur-md border border-green-100 text-ayu-green px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block shadow-sm">Natural Healing</span>
+                <h1 class="hero-element delay-200 text-5xl md:text-6xl font-serif font-bold text-gray-900 leading-tight mb-6">
                     Your Trusted <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-ayu-orange to-red-600">Wellness Partners</span>
                 </h1>
-                <p class="text-lg text-gray-600 mb-8 leading-relaxed mix-blend-multiply">
+                <p class="hero-element delay-300 text-lg text-gray-600 mb-8 leading-relaxed mix-blend-multiply">
                     Combining ancient wisdom with modern expertise. From <strong>AI Body Diagnosis</strong> to <strong>Residential Therapy Centers</strong>, we provide a holistic healing experience.
                 </p>
                 
-                <div class="flex flex-wrap gap-4">
+                <div class="hero-element delay-400 flex flex-wrap gap-4">
                     <a href="#consultation" class="bg-ayu-orange text-white px-8 py-4 rounded hover:bg-orange-700 transition shadow-xl hover:shadow-orange-200 font-semibold">
                         Start Healing Journey
                     </a>
@@ -235,7 +220,7 @@
                 </div>
             </div>
 
-            <div class="relative hero-img">
+            <div class="relative hero-img hero-element delay-500">
                 <div class="absolute inset-0 bg-ayu-green opacity-10 rounded-[3rem] transform rotate-6"></div>
                 <img src="https://images.unsplash.com/photo-1599447421405-0c325d26d77e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Yoga Woman" class="relative rounded-[3rem] shadow-2xl object-cover w-full h-[500px]">
                 
@@ -252,58 +237,36 @@
         </div>
     </header>
 
-    <!-- Stats Section: Added semi-transparent white background -->
     <section class="bg-white/80 backdrop-blur-sm py-10 shadow-sm border-b border-gray-100 relative z-20">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-                <h3 class="text-3xl font-bold text-ayu-green">500+</h3>
-                <p class="text-gray-500 text-sm">Happy Patients</p>
-            </div>
-            <div>
-                <h3 class="text-3xl font-bold text-ayu-green">7+</h3>
-                <p class="text-gray-500 text-sm">Offline Centers</p>
-            </div>
-            <div>
-                <h3 class="text-3xl font-bold text-ayu-green">15+</h3>
-                <p class="text-gray-500 text-sm">Expert Doctors</p>
-            </div>
-            <div>
-                <h3 class="text-3xl font-bold text-ayu-green">4.9</h3>
-                <p class="text-gray-500 text-sm">Average Rating</p>
-            </div>
+            <div><h3 class="text-3xl font-bold text-ayu-green">500+</h3><p class="text-gray-500 text-sm">Happy Patients</p></div>
+            <div><h3 class="text-3xl font-bold text-ayu-green">7+</h3><p class="text-gray-500 text-sm">Offline Centers</p></div>
+            <div><h3 class="text-3xl font-bold text-ayu-green">15+</h3><p class="text-gray-500 text-sm">Expert Doctors</p></div>
+            <div><h3 class="text-3xl font-bold text-ayu-green">4.9</h3><p class="text-gray-500 text-sm">Average Rating</p></div>
         </div>
     </section>
 
-    <!-- NEW ABOUT SECTION -->
     <section id="about" class="py-24 bg-white/50 backdrop-blur-sm relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">About Ayusetu</span>
                 <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mt-2 mb-6">Bridging Ancient Wisdom & Modern Lifestyle</h2>
                 <div class="w-20 h-1 bg-ayu-green mb-6 rounded-full"></div>
-                
                 <p class="text-gray-600 mb-6 leading-relaxed">
                     Ayusetu was born from a simple yet powerful vision: to make authentic holistic healing accessible to everyone, everywhere. We believe that true wellness comes from the perfect balance of mind, body, and spirit.
                 </p>
-                
                 <p class="text-gray-600 mb-8 leading-relaxed">
                     By combining the time-tested traditions of Ayurveda and Naturopathy with modern technology, we bring expert care directly to your home. Whether you need a digital consultation or an immersive residential retreat, we are your partners in this journey of healing.
                 </p>
-                
                 <div class="flex gap-4">
-                    <div class="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                        <i class="fas fa-leaf text-ayu-green"></i> 100% Natural
-                    </div>
-                    <div class="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                        <i class="fas fa-user-shield text-ayu-green"></i> Verified Experts
-                    </div>
+                    <div class="flex items-center gap-2 text-sm font-semibold text-gray-700"><i class="fas fa-leaf text-ayu-green"></i> 100% Natural</div>
+                    <div class="flex items-center gap-2 text-sm font-semibold text-gray-700"><i class="fas fa-user-shield text-ayu-green"></i> Verified Experts</div>
                 </div>
             </div>
             
             <div class="relative">
                 <div class="absolute -top-4 -left-4 w-2/3 h-2/3 bg-orange-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
                 <div class="absolute -bottom-4 -right-4 w-2/3 h-2/3 bg-green-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
-                
                 <div class="relative grid grid-cols-2 gap-4">
                     <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-lg transform translate-y-8" alt="Herbs">
                     <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-lg" alt="Meditation">
@@ -312,7 +275,7 @@
         </div>
     </section>
 
-    <!-- Services: Semi-transparent background -->
+    <!-- DYNAMIC SERVICES SECTION -->
     <section id="services" class="py-24 bg-white/60 backdrop-blur-sm relative">
         <div class="absolute top-0 left-0 w-64 h-64 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
         <div class="absolute top-0 right-0 w-64 h-64 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -324,116 +287,23 @@
                 <div class="w-24 h-1 bg-ayu-green mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="group bg-white/90 backdrop-blur border border-white/50 rounded-2xl p-8 hover-lift shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-green-100"></div>
-                    <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center text-ayu-green text-3xl mb-6">
-                        <i class="fas fa-stethoscope"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 text-gray-900">Expert Consultation</h3>
-                    <p class="text-gray-500 text-sm mb-6 leading-relaxed">
-                        Connect with expert Naturopathy & Ayurveda doctors via video call. We treat the root cause, not just symptoms.
-                    </p>
-                    <ul class="text-sm text-gray-500 space-y-2 mb-6">
-                        <li><i class="fas fa-check text-ayu-orange mr-2"></i> Video Calls</li>
-                        <li><i class="fas fa-check text-ayu-orange mr-2"></i> Diet Therapy</li>
-                        <li><i class="fas fa-check text-ayu-orange mr-2"></i> Prescription Upload</li>
-                    </ul>
-                    <a href="#consultation" class="w-full block text-center bg-ayu-green text-white py-3 rounded hover:bg-green-800 transition">Book Now</a>
-                </div>
-
-                <div class="group bg-ayu-dark rounded-2xl p-8 hover-lift shadow-xl relative text-white overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-bl-full -mr-4 -mt-4"></div>
-                    <div class="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center text-white text-3xl mb-6">
-                        <i class="fas fa-om"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Yoga Therapy</h3>
-                    <p class="text-gray-300 text-sm mb-6 leading-relaxed">
-                        Transform your mind and body. Specialized sessions for Stress, Anxiety, and Weight Management.
-                    </p>
-                    <div class="bg-white/10 p-4 rounded-lg mb-6 backdrop-blur-sm">
-                        <p class="text-xs uppercase tracking-wide text-gray-400">Monthly Pass</p>
-                        <div class="flex items-baseline gap-2">
-                            <span class="text-3xl font-bold">₹1500</span>
-                            <span class="text-sm line-through text-gray-400">₹2500</span>
-                        </div>
-                    </div>
-                    <a href="#consultation" class="w-full block text-center bg-ayu-orange text-white py-3 rounded hover:bg-orange-600 transition">Subscribe</a>
-                </div>
-
-                <div class="group bg-white/90 backdrop-blur border border-white/50 rounded-2xl p-8 hover-lift shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-orange-100"></div>
-                    <div class="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center text-ayu-orange text-3xl mb-6">
-                        <i class="fas fa-fingerprint"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 text-gray-900">Body Diagnosis</h3>
-                    <p class="text-gray-500 text-sm mb-6 leading-relaxed">
-                        Experience the 5000-year-old science. AI-driven Prakriti Analysis (Dosha) to understand your body type.
-                    </p>
-                    <ul class="text-sm text-gray-500 space-y-2 mb-6">
-                        <li><i class="fas fa-check text-ayu-green mr-2"></i> Dosha Analysis</li>
-                        <li><i class="fas fa-check text-ayu-green mr-2"></i> Herbal Advice</li>
-                        <li><i class="fas fa-check text-ayu-green mr-2"></i> Lifestyle Plan</li>
-                    </ul>
-                    <a href="#consultation" class="w-full block text-center border border-ayu-orange text-ayu-orange py-3 rounded hover:bg-orange-50 transition">Book Now</a>
-                </div>
+            <!-- Dynamic Horizontal Scroll Container for Services -->
+            <div id="services-container" class="flex overflow-x-auto gap-8 pb-10 snap-x custom-scrollbar" style="scroll-behavior: smooth;">
+                <!-- Loading State (Replaced by JS) -->
+                <div class="w-full text-center text-gray-400 py-10">Loading Services...</div>
             </div>
         </div>
     </section>
 
-    <!-- Doctors: Removed background to let gradient show -->
+    <!-- DYNAMIC DOCTORS SECTION -->
     <section id="doctors" class="py-24 bg-transparent">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-3xl font-serif font-bold text-center mb-16">Meet Our Expert Team</h2>
             
-            <div class="grid md:grid-cols-4 gap-6">
-                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Doctor" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h4 class="font-bold text-lg">Dr. Sarah Mitchell</h4>
-                        <p class="text-ayu-green text-sm font-medium mb-2">Naturopathy Specialist</p>
-                        <div class="flex justify-between text-xs text-gray-500 border-t pt-3 mt-3">
-                            <span>ND, PhD</span>
-                            <span>12 Years Exp</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Doctor" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h4 class="font-bold text-lg">Dr. Rajesh Kumar</h4>
-                        <p class="text-ayu-green text-sm font-medium mb-2">Ayurveda Expert</p>
-                        <div class="flex justify-between text-xs text-gray-500 border-t pt-3 mt-3">
-                            <span>BAMS, MD</span>
-                            <span>15 Years Exp</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Yoga" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h4 class="font-bold text-lg">Maya Patel</h4>
-                        <p class="text-ayu-green text-sm font-medium mb-2">Yoga Therapist</p>
-                        <div class="flex justify-between text-xs text-gray-500 border-t pt-3 mt-3">
-                            <span>E-RYT 500</span>
-                            <span>10 Years Exp</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Doctor" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h4 class="font-bold text-lg">Dr. James Chen</h4>
-                        <p class="text-ayu-green text-sm font-medium mb-2">Holistic Medicine</p>
-                        <div class="flex justify-between text-xs text-gray-500 border-t pt-3 mt-3">
-                            <span>MD, ABIHM</span>
-                            <span>18 Years Exp</span>
-                        </div>
-                    </div>
-                </div>
+            <!-- Dynamic Horizontal Scroll Container for Doctors -->
+            <div id="doctors-container" class="flex overflow-x-auto gap-6 pb-10 snap-x custom-scrollbar" style="scroll-behavior: smooth;">
+                 <!-- Loading State (Replaced by JS) -->
+                 <div class="w-full text-center text-gray-400 py-10">Loading Experts...</div>
             </div>
         </div>
     </section>
@@ -441,42 +311,27 @@
     <section class="py-20 bg-ayu-dark text-white relative overflow-hidden">
         <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
             <h2 class="text-3xl font-serif font-bold mb-12">Your Path to Wellness</h2>
-            
             <div class="grid md:grid-cols-4 gap-8">
                 <div class="relative">
-                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 border-2 border-ayu-orange backdrop-blur-sm">
-                        <i class="fas fa-file-signature"></i>
-                    </div>
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 border-2 border-ayu-orange backdrop-blur-sm"><i class="fas fa-file-signature"></i></div>
                     <h4 class="font-bold text-xl">1. Register</h4>
                     <p class="text-sm opacity-70 mt-2">Fill details, upload reports & pay ₹1000.</p>
                 </div>
-
                 <div class="hidden md:block absolute top-10 left-[20%] w-[15%] border-t-2 border-dashed border-white/30"></div>
-
                 <div class="relative">
-                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm">
-                        <i class="fas fa-video"></i>
-                    </div>
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm"><i class="fas fa-video"></i></div>
                     <h4 class="font-bold text-xl">2. Consult</h4>
                     <p class="text-sm opacity-70 mt-2">Video call with expert within 7 days.</p>
                 </div>
-
                 <div class="hidden md:block absolute top-10 left-[45%] w-[15%] border-t-2 border-dashed border-white/30"></div>
-
                 <div class="relative">
-                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm">
-                        <i class="fas fa-spa"></i>
-                    </div>
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm"><i class="fas fa-spa"></i></div>
                     <h4 class="font-bold text-xl">3. Heal</h4>
                     <p class="text-sm opacity-70 mt-2">Visit assigned Therapy Center.</p>
                 </div>
-
                  <div class="hidden md:block absolute top-10 left-[70%] w-[15%] border-t-2 border-dashed border-white/30"></div>
-
                 <div class="relative">
-                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm">
-                         <i class="fas fa-smile"></i>
-                    </div>
+                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm"><i class="fas fa-smile"></i></div>
                     <h4 class="font-bold text-xl">4. Recover</h4>
                     <p class="text-sm opacity-70 mt-2">Follow up & stay healthy.</p>
                 </div>
@@ -484,7 +339,6 @@
         </div>
     </section>
 
-    <!-- Consultation: Uses semi-transparent gray -->
     <section id="consultation" class="py-24 bg-white/30 backdrop-blur-sm">
         <div class="max-w-4xl mx-auto px-6">
             <div class="bg-white/95 rounded-2xl shadow-2xl overflow-hidden border-t-8 border-ayu-orange">
@@ -492,7 +346,6 @@
                     <h2 class="text-3xl font-serif font-bold text-ayu-green">Start Your Healing Journey</h2>
                     <p class="text-gray-600 mt-2">Fill in your details and we'll get back to you within 24 hours.</p>
                 </div>
-                
                 <div class="p-8 md:p-12">
                     <form class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-6">
@@ -505,7 +358,6 @@
                                 <input type="email" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange focus:ring-1 focus:ring-ayu-orange outline-none" placeholder="you@example.com">
                             </div>
                         </div>
-
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
@@ -517,13 +369,10 @@
                                     <option>Doctor Consultation (₹1000)</option>
                                     <option>Yoga Therapy Session (₹1500/mo)</option>
                                     <option>Body Diagnosis</option>
-                                    <option>10-Day Residential Program (₹25,000)</option>
-                                    <option>15-Day Residential Program (₹30,000)</option>
-                                    <option>30-Day Residential Program (₹50,000)</option>
+                                    <option>Residential Program</option>
                                 </select>
                             </div>
                         </div>
-
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Upload Past Reports</label>
                             <div class="border-2 border-dashed border-gray-300 rounded p-6 text-center bg-gray-50 hover:bg-white transition cursor-pointer group">
@@ -531,7 +380,6 @@
                                 <p class="text-sm text-gray-500">Click to upload PDF or Images</p>
                             </div>
                         </div>
-
                         <div class="flex items-center justify-between bg-ayu-light p-4 rounded border border-green-200">
                             <div>
                                 <p class="font-bold text-ayu-dark">Total Payable</p>
@@ -539,8 +387,7 @@
                             </div>
                             <span class="text-2xl font-bold text-ayu-orange">₹1000</span>
                         </div>
-
-                        <button type="button" class="w-full bg-ayu-green text-white font-bold py-4 rounded text-lg hover:bg-green-800 transition shadow-lg">
+                        <button type="button" onclick="openLogin()" class="w-full bg-ayu-green text-white font-bold py-4 rounded text-lg hover:bg-green-800 transition shadow-lg">
                             Proceed to Payment
                         </button>
                     </form>
@@ -549,7 +396,6 @@
         </div>
     </section>
 
-    <!-- Blog: Semi transparent background -->
     <section id="blog" class="py-24 bg-white/70 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between items-end mb-12">
@@ -559,7 +405,6 @@
                 </div>
                 <a href="#" class="hidden md:inline-block text-ayu-orange font-bold hover:underline">View All Articles</a>
             </div>
-
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="group cursor-pointer">
                     <div class="overflow-hidden rounded-xl mb-4 h-56">
@@ -569,7 +414,6 @@
                     <h3 class="font-bold text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">10 Natural Remedies for Better Sleep</h3>
                     <p class="text-gray-500 text-sm line-clamp-2">Discover time-tested natural approaches to improve your sleep quality without medication.</p>
                 </div>
-
                 <div class="group cursor-pointer">
                     <div class="overflow-hidden rounded-xl mb-4 h-56">
                         <img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Yoga" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
@@ -578,7 +422,6 @@
                     <h3 class="font-bold text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">Yoga Poses for Stress Relief</h3>
                     <p class="text-gray-500 text-sm line-clamp-2">Learn essential yoga asanas that can help reduce stress and anxiety in daily life.</p>
                 </div>
-
                 <div class="group cursor-pointer">
                     <div class="overflow-hidden rounded-xl mb-4 h-56">
                         <img src="https://images.unsplash.com/photo-1606902965551-dce093cda6e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Ayurveda" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
@@ -591,51 +434,32 @@
         </div>
     </section>
 
-    <!-- Testimonials: Transparent -->
     <section class="py-24 bg-transparent">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-3xl font-serif font-bold text-center mb-16">Stories of Transformation</h2>
-            
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-gray-100 hover-lift">
                     <div class="flex items-center gap-4 mb-4">
                         <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="User" class="w-12 h-12 rounded-full">
-                        <div>
-                            <h4 class="font-bold text-sm">Emily Johnson</h4>
-                            <p class="text-xs text-gray-400">Chronic Pain Relief</p>
-                        </div>
+                        <div><h4 class="font-bold text-sm">Emily Johnson</h4><p class="text-xs text-gray-400">Chronic Pain Relief</p></div>
                     </div>
-                    <div class="text-yellow-400 text-xs mb-3">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
+                    <div class="text-yellow-400 text-xs mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p class="text-sm text-gray-600 italic">"After years of chronic back pain, the naturopathy treatments here changed my life. The online consultations made it so convenient."</p>
                 </div>
-
                 <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-gray-100 hover-lift">
                     <div class="flex items-center gap-4 mb-4">
                         <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-12 h-12 rounded-full">
-                        <div>
-                            <h4 class="font-bold text-sm">Michael Chen</h4>
-                            <p class="text-xs text-gray-400">Stress Management</p>
-                        </div>
+                        <div><h4 class="font-bold text-sm">Michael Chen</h4><p class="text-xs text-gray-400">Stress Management</p></div>
                     </div>
-                    <div class="text-yellow-400 text-xs mb-3">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
+                    <div class="text-yellow-400 text-xs mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p class="text-sm text-gray-600 italic">"The yoga therapy sessions helped me manage work stress better than anything else. Maya is an incredible instructor."</p>
                 </div>
-
                 <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-gray-100 hover-lift">
                     <div class="flex items-center gap-4 mb-4">
                         <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User" class="w-12 h-12 rounded-full">
-                        <div>
-                            <h4 class="font-bold text-sm">Priya Sharma</h4>
-                            <p class="text-xs text-gray-400">Digestive Health</p>
-                        </div>
+                        <div><h4 class="font-bold text-sm">Priya Sharma</h4><p class="text-xs text-gray-400">Digestive Health</p></div>
                     </div>
-                    <div class="text-yellow-400 text-xs mb-3">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
+                    <div class="text-yellow-400 text-xs mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p class="text-sm text-gray-600 italic">"Dr. Kumar's Ayurvedic approach to my digestive issues was life-changing. Personalized diet plans worked wonders."</p>
                 </div>
             </div>
@@ -646,16 +470,13 @@
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 mb-12">
             <div>
                 <h1 class="text-2xl font-bold text-ayu-orange mb-4">AYUSETU</h1>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    Bridging tradition and technology to provide the best natural healing experience.
-                </p>
+                <p class="text-gray-400 text-sm leading-relaxed">Bridging tradition and technology to provide the best natural healing experience.</p>
                 <div class="flex gap-4 mt-6">
                     <a href="#" class="bg-gray-800 w-10 h-10 flex items-center justify-center rounded-full hover:bg-ayu-green transition"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="bg-gray-800 w-10 h-10 flex items-center justify-center rounded-full hover:bg-ayu-green transition"><i class="fab fa-instagram"></i></a>
                     <a href="#" class="bg-gray-800 w-10 h-10 flex items-center justify-center rounded-full hover:bg-ayu-green transition"><i class="fab fa-twitter"></i></a>
                 </div>
             </div>
-
             <div>
                 <h4 class="font-bold mb-4">Quick Links</h4>
                 <ul class="text-sm text-gray-400 space-y-2">
@@ -665,7 +486,6 @@
                     <li><a href="#contact" class="hover:text-white">Contact</a></li>
                 </ul>
             </div>
-
             <div>
                 <h4 class="font-bold mb-4">Services</h4>
                 <ul class="text-sm text-gray-400 space-y-2">
@@ -675,7 +495,6 @@
                     <li><a href="#" class="hover:text-white">Online Consult</a></li>
                 </ul>
             </div>
-
             <div>
                 <h4 class="font-bold mb-4">Contact Us</h4>
                 <ul class="text-sm text-gray-400 space-y-2">
@@ -690,16 +509,56 @@
         </div>
     </footer>
 
-    <script>
-        // LOADING ANIMATION SCRIPT
-        function startLoader() {
-            // Check if visited session storage is set
-            if (sessionStorage.getItem('visited')) {
-                return;
-            }
-            // If not, set it
-            sessionStorage.setItem('visited', 'true');
+    <div id="authModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAuthModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="flex">
+                <div class="w-2 bg-ayu-orange"></div>
+                <div class="p-8 w-full">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-serif font-bold text-gray-800" id="modalTitle">Welcome Back</h2>
+                        <button onclick="closeAuthModal()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+                    </div>
 
+                    <div id="authError" class="hidden bg-red-100 text-red-700 p-3 rounded text-sm mb-4"></div>
+
+                    <form id="authForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label>
+                            <input type="email" id="authEmail" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green" placeholder="you@ayusetu.com" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Password</label>
+                            <input type="password" id="authPassword" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div id="roleSelectContainer" class="hidden">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">I am a:</label>
+                            <select id="authRole" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green">
+                                <option value="user">Patient / User</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full bg-ayu-green text-white font-bold py-3 rounded-lg hover:bg-[#1e5c22] transition shadow-lg">
+                            <span id="btnText">Login</span>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center text-sm text-gray-500">
+                        <p id="toggleText">New to Ayusetu? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Existing Scripts
+        function startLoader() {
+            if (sessionStorage.getItem('visited')) return;
+            sessionStorage.setItem('visited', 'true');
             const textAyu = document.getElementById('text-ayu');
             const textSetu = document.getElementById('text-setu');
             const line = document.getElementById('loading-line');
@@ -708,59 +567,216 @@
             const loaderContent = document.getElementById('loader-content');
             const preloader = document.getElementById('preloader');
 
-            // 1. Animate text in (Convergence)
+            setTimeout(() => { textAyu.classList.remove('translate-x-[-150%]', 'opacity-0'); textSetu.classList.remove('translate-x-[150%]', 'opacity-0'); }, 300);
+            setTimeout(() => { line.classList.remove('opacity-0', 'w-0'); line.classList.add('w-full'); }, 1200);
             setTimeout(() => {
-                textAyu.classList.remove('translate-x-[-150%]', 'opacity-0');
-                textSetu.classList.remove('translate-x-[150%]', 'opacity-0');
-            }, 300);
-
-            // 2. Expand the line
-            setTimeout(() => {
-                line.classList.remove('opacity-0', 'w-0');
-                line.classList.add('w-full');
-            }, 1200);
-
-            // 3. Split screen animation (Reveal)
-            setTimeout(() => {
-                // Fade out content slightly before split
                 loaderContent.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                
-                // Split panels
                 loaderTop.style.transform = "translateY(-100%)";
                 loaderBottom.style.transform = "translateY(100%)";
-                
-                // Allow scrolling again
+                document.body.classList.add('run-hero-anim');
                 document.body.classList.remove('overflow-hidden');
             }, 2000);
-
-            // 4. Remove loader from DOM
-            setTimeout(() => {
-                preloader.style.display = 'none';
-            }, 3000);
+            setTimeout(() => { preloader.style.display = 'none'; }, 3000);
         }
 
         function toggleDrawer() {
             const drawer = document.getElementById('sideDrawer');
             const overlay = document.getElementById('drawerOverlay');
-            
             if (drawer.classList.contains('open')) {
-                // Close Drawer
                 drawer.classList.remove('open');
                 overlay.classList.add('opacity-0');
-                setTimeout(() => {
-                    overlay.classList.add('hidden');
-                }, 300); // Match transition duration
+                setTimeout(() => { overlay.classList.add('hidden'); }, 300);
             } else {
-                // Open Drawer
                 overlay.classList.remove('hidden');
-                // Small timeout to allow the 'hidden' removal to register before opacity transition
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    drawer.classList.add('open');
-                }, 10);
+                setTimeout(() => { overlay.classList.remove('opacity-0'); drawer.classList.add('open'); }, 10);
             }
         }
     </script>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // ============================================
+        // PASTE YOUR FIREBASE CONFIG HERE
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
+            authDomain: "ayusetu-cd9bb.firebaseapp.com",
+            projectId: "ayusetu-cd9bb",
+            storageBucket: "ayusetu-cd9bb.firebasestorage.app",
+            messagingSenderId: "641194205830",
+            appId: "1:641194205830:web:ceb2e083ec77920a716707",
+            measurementId: "G-JLYGFR8QCF"
+        };
+
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let isLogin = true;
+
+        // Make functions accessible globally
+        window.openLogin = function() { document.getElementById('authModal').classList.remove('hidden'); }
+        window.closeAuthModal = function() { document.getElementById('authModal').classList.add('hidden'); }
+
+        window.toggleAuthMode = function() {
+            isLogin = !isLogin;
+            const title = document.getElementById('modalTitle');
+            const btn = document.getElementById('btnText');
+            const toggle = document.getElementById('toggleText');
+            const roleDiv = document.getElementById('roleSelectContainer');
+
+            if(isLogin) {
+                title.innerText = "Welcome Back";
+                btn.innerText = "Login";
+                toggle.innerHTML = 'New to Ayusetu? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a>';
+                roleDiv.classList.add('hidden');
+            } else {
+                title.innerText = "Join Ayusetu";
+                btn.innerText = "Sign Up";
+                toggle.innerHTML = 'Already have an account? <a href="#" onclick="toggleAuthMode()" class="text-ayu-green font-bold hover:underline">Login here</a>';
+                roleDiv.classList.remove('hidden');
+            }
+        }
+
+        // Auth Logic
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const errorDiv = document.getElementById('authError');
+            errorDiv.classList.add('hidden');
+
+            try {
+                if (isLogin) {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const uid = userCredential.user.uid;
+                    const docRef = doc(db, "users", uid);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        redirectBasedOnRole(docSnap.data().role);
+                    } else {
+                        redirectBasedOnRole('user');
+                    }
+                } else {
+                    const role = document.getElementById('authRole').value;
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    await setDoc(doc(db, "users", userCredential.user.uid), {
+                        email: email,
+                        role: role,
+                        createdAt: new Date()
+                    });
+                    redirectBasedOnRole(role);
+                }
+            } catch (error) {
+                errorDiv.innerText = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        });
+
+        function redirectBasedOnRole(role) {
+            if(role === 'admin') window.location.href = 'admin-dashboard.html';
+            else if(role === 'doctor') window.location.href = 'doctor-dashboard.html';
+            else window.location.href = 'user-dashboard.html';
+        }
+        
+        // --- UPDATED DYNAMIC FETCH CONTENT FUNCTION ---
+        async function fetchContent() {
+             try {
+                const docRef = doc(db, "site_content", "homepage");
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    // --- RENDER SERVICES ---
+                    const sContainer = document.getElementById('services-container');
+                    if (data.services && sContainer) {
+                        // 1. Convert Map to Array & Sort by key (s1, s2, s3...)
+                        const servicesList = [];
+                        Object.keys(data.services)
+                            .sort((a,b) => parseInt(a.slice(1)) - parseInt(b.slice(1)))
+                            .forEach(k => servicesList.push(data.services[k]));
+                        
+                        // 2. Generate HTML
+                        if (servicesList.length > 0) {
+                            sContainer.innerHTML = servicesList.map(s => {
+                                const isPricing = !!s.price; // Checks if it's a pricing card type
+                                
+                                if (isPricing) {
+                                    // PRICING CARD (Dark Theme)
+                                    return `
+                                    <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center group bg-ayu-dark rounded-2xl p-8 hover-lift shadow-xl relative text-white overflow-hidden flex flex-col h-auto">
+                                        <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-bl-full -mr-4 -mt-4"></div>
+                                        <div class="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center text-white text-3xl mb-6"><i class="fas fa-om"></i></div>
+                                        <h3 class="text-xl font-bold mb-3">${s.title || 'Service'}</h3>
+                                        <p class="text-gray-300 text-sm mb-6 leading-relaxed flex-grow">${s.desc || ''}</p>
+                                        <div class="bg-white/10 p-4 rounded-lg mb-6 backdrop-blur-sm">
+                                            <p class="text-xs uppercase tracking-wide text-gray-400">Pricing</p>
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-3xl font-bold">₹${s.price || '0'}</span>
+                                                ${s.old ? `<span class="text-sm line-through text-gray-400">₹${s.old}</span>` : ''}
+                                            </div>
+                                        </div>
+                                        <a href="#consultation" class="w-full block text-center bg-ayu-orange text-white py-3 rounded hover:bg-orange-600 transition mt-auto">Book Now</a>
+                                    </div>`;
+                                } else {
+                                    // STANDARD CARD (Light Theme)
+                                    return `
+                                    <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center group bg-white/90 backdrop-blur border border-white/50 rounded-2xl p-8 hover-lift shadow-sm relative overflow-hidden flex flex-col h-auto">
+                                        <div class="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-green-100"></div>
+                                        <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center text-ayu-green text-3xl mb-6"><i class="fas fa-leaf"></i></div>
+                                        <h3 class="text-xl font-bold mb-3 text-gray-900">${s.title || 'Service'}</h3>
+                                        <p class="text-gray-500 text-sm mb-6 leading-relaxed flex-grow">${s.desc || ''}</p>
+                                        <ul class="text-sm text-gray-500 space-y-2 mb-6">
+                                            ${s.f1 ? `<li><i class="fas fa-check text-ayu-orange mr-2"></i> ${s.f1}</li>` : ''}
+                                            ${s.f2 ? `<li><i class="fas fa-check text-ayu-orange mr-2"></i> ${s.f2}</li>` : ''}
+                                            ${s.f3 ? `<li><i class="fas fa-check text-ayu-orange mr-2"></i> ${s.f3}</li>` : ''}
+                                        </ul>
+                                        <a href="#consultation" class="w-full block text-center bg-ayu-green text-white py-3 rounded hover:bg-green-800 transition mt-auto">Book Now</a>
+                                    </div>`;
+                                }
+                            }).join('');
+                        } else {
+                            sContainer.innerHTML = `<div class="w-full text-center text-gray-500">No services currently listed.</div>`;
+                        }
+                    }
+
+                    // --- RENDER DOCTORS ---
+                    const dContainer = document.getElementById('doctors-container');
+                    if(data.doctors && dContainer) {
+                        const doctorsList = [];
+                        Object.keys(data.doctors)
+                            .sort((a,b) => parseInt(a.slice(3)) - parseInt(b.slice(3)))
+                            .forEach(k => doctorsList.push(data.doctors[k]));
+                        
+                        if (doctorsList.length > 0) {
+                            dContainer.innerHTML = doctorsList.map(d => `
+                                <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                                    <div class="h-64 overflow-hidden">
+                                        <img src="${d.img || 'https://via.placeholder.com/400x300'}" alt="${d.name}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                                    </div>
+                                    <div class="p-6">
+                                        <h4 class="font-bold text-lg text-gray-900">${d.name || 'Doctor Name'}</h4>
+                                        <p class="text-ayu-green text-sm font-medium mb-2">${d.spec || 'Specialist'}</p>
+                                        <div class="flex justify-between text-xs text-gray-500 border-t pt-3 mt-3">
+                                            <span class="bg-gray-100 px-2 py-1 rounded">${d.deg || 'MBBS'}</span>
+                                            <span class="flex items-center"><i class="fas fa-clock mr-1 text-ayu-orange"></i> ${d.exp || '5+ Yrs'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('');
+                        } else {
+                            dContainer.innerHTML = `<div class="w-full text-center text-gray-500">No experts currently listed.</div>`;
+                        }
+                    }
+                }
+             } catch(e) { console.log("Content not customized yet or error fetching", e); }
+        }
+        fetchContent();
+    </script>
 </body>
 </html>

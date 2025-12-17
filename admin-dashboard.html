@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Editor | Ayusetu Admin</title>
+    <!-- Note: The CDN warning in console is expected in this standalone environment. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ayu: { orange: '#C85226', green: '#2E7D32', dark: '#1B4D3E', light: '#F3F8F4' }
+                    },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'], serif: ['Merriweather', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* LIVE EDITOR STYLES */
+        body { background-color: #f8fafc; }
+        
+        .live-input {
+            background: transparent;
+            border: 1px dashed transparent;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 100%;
+            display: block;
+        }
+        .live-input:hover {
+            border-color: #cbd5e1;
+            background: rgba(255,255,255,0.5);
+            cursor: text;
+        }
+        .live-input:focus {
+            outline: none;
+            border-color: #C85226;
+            background: white;
+            color: #1e293b !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .dark-card .live-input { color: white; }
+        .dark-card .live-input:focus { color: black !important; }
+
+        .img-edit-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(2px);
+        }
+        .editable-img-container:hover .img-edit-overlay { opacity: 1; }
+
+        .nav-active { background-color: #fff7ed; color: #C85226; border-right: 4px solid #C85226; font-weight: 700; }
+        .tab-content { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .tab-content.active { display: block; opacity: 1; }
+        
+        #loading-overlay { display: flex; }
+
+        /* Custom Horizontal Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 0 20px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden font-sans text-gray-800">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col shadow-xl z-50">
+        <div class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-10 h-10 bg-ayu-green rounded-lg flex items-center justify-center text-white font-serif font-bold text-xl">A</div>
+            <div>
+                <h1 class="font-serif font-bold text-lg text-gray-800">Ayusetu</h1>
+                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Admin Panel</p>
+            </div>
+        </div>
+        
+        <nav class="flex-1 px-4 space-y-2 mt-6">
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase mb-2">Content Manager</p>
+            <button onclick="switchTab('home-editor')" id="btn-home-editor" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-gray-600 hover:bg-gray-50 transition-all nav-active">
+                <i class="fas fa-desktop w-5"></i> Homepage Visual Editor
+            </button>
+            
+            <p class="px-4 text-xs font-bold text-gray-400 uppercase mb-2 mt-6">Database</p>
+            <button onclick="switchTab('doctors-db')" id="btn-doctors-db" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fas fa-user-md w-5"></i> Doctor Accounts
+            </button>
+            <button onclick="switchTab('users-db')" id="btn-users-db" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fas fa-users w-5"></i> Patient Records
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100">
+            <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg transition font-medium">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto relative bg-[#fdfbf7]">
+        
+        <!-- Loading State -->
+        <div id="loading-overlay" class="absolute inset-0 bg-white/80 z-50 flex items-center justify-center">
+            <div class="flex flex-col items-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-ayu-green mb-4"></div>
+                <p id="loading-text" class="text-gray-500 text-sm font-medium">Loading CMS Data...</p>
+            </div>
+        </div>
+
+        <!-- TAB: VISUAL EDITOR -->
+        <div id="tab-home-editor" class="tab-content active pb-24">
+            
+            <!-- Sticky Header -->
+            <div class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 px-8 py-4 flex justify-between items-center shadow-sm">
+                <div>
+                    <h2 class="font-serif font-bold text-2xl text-ayu-dark">Visual Editor</h2>
+                    <p class="text-xs text-gray-500 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Live Mode: Click any text to edit
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="resetDefaults()" class="px-4 py-2 text-red-500 hover:bg-red-50 font-medium text-sm border border-red-200 rounded-lg transition" title="Restore default content">
+                        <i class="fas fa-undo-alt mr-2"></i> Reset
+                    </button>
+                    <a href="index.html" target="_blank" class="px-4 py-2 text-gray-600 hover:text-ayu-green font-medium text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-external-link-alt mr-2"></i> View Live Site
+                    </a>
+                    <button onclick="saveCMS()" class="bg-ayu-orange hover:bg-orange-700 text-white px-6 py-2 rounded-lg shadow-lg hover:shadow-orange-200 transition font-bold flex items-center gap-2 transform active:scale-95">
+                        <i class="fas fa-cloud-upload-alt"></i> Publish Changes
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-8 space-y-12 max-w-[90rem] mx-auto">
+                
+                <!-- Section 1: Services Editor (Carousel Layout) -->
+                <section class="relative group rounded-3xl border-2 border-dashed border-gray-200 p-8 hover:border-ayu-green transition-colors">
+                    <div class="absolute -top-3 left-8 bg-[#fdfbf7] px-2 text-xs font-bold text-gray-400 uppercase tracking-widest">Section: Services</div>
+                    
+                    <div class="flex overflow-x-auto gap-6 pb-6 snap-x custom-scrollbar" id="services-grid">
+                        <!-- Rendered via JS -->
+                    </div>
+                </section>
+
+                <!-- Section 2: Doctors Editor (Carousel Layout) -->
+                <section class="relative group rounded-3xl border-2 border-dashed border-gray-200 p-8 hover:border-ayu-green transition-colors">
+                    <div class="absolute -top-3 left-8 bg-[#fdfbf7] px-2 text-xs font-bold text-gray-400 uppercase tracking-widest">Section: Experts</div>
+                    
+                    <div class="flex overflow-x-auto gap-6 pb-6 snap-x custom-scrollbar" id="doctors-editor-grid">
+                        <!-- Rendered via JS -->
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- TAB: DOCTORS DB -->
+        <div id="tab-doctors-db" class="tab-content p-10 max-w-6xl mx-auto">
+            <h2 class="text-3xl font-serif font-bold text-gray-800 mb-2">Doctor Accounts</h2>
+            <p class="text-gray-500 mb-8">Manage registered medical practitioners.</p>
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-bold">
+                        <tr>
+                            <th class="p-4 border-b">Email / ID</th>
+                            <th class="p-4 border-b">Role</th>
+                            <th class="p-4 border-b text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="doctorsTableBody" class="divide-y divide-gray-100"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB: USERS DB -->
+        <div id="tab-users-db" class="tab-content p-10 max-w-6xl mx-auto">
+            <h2 class="text-3xl font-serif font-bold text-gray-800 mb-2">Patient Database</h2>
+            <p class="text-gray-500 mb-8">View and manage registered patients.</p>
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-bold">
+                        <tr>
+                            <th class="p-4 border-b">Email / ID</th>
+                            <th class="p-4 border-b">Signed Up</th>
+                            <th class="p-4 border-b text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody" class="divide-y divide-gray-100"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Success Toast -->
+    <div id="toast" class="fixed bottom-10 right-10 bg-gray-800 text-white px-6 py-4 rounded-lg shadow-2xl transform translate-y-32 transition-transform duration-300 z-50 flex items-center gap-3">
+        <i class="fas fa-check-circle text-ayu-green text-xl"></i>
+        <div>
+            <h4 class="font-bold text-sm">Success</h4>
+            <p class="text-xs text-gray-300">Website content updated successfully.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
+            authDomain: "ayusetu-cd9bb.firebaseapp.com",
+            projectId: "ayusetu-cd9bb",
+            storageBucket: "ayusetu-cd9bb.firebasestorage.app",
+            messagingSenderId: "641194205830",
+            appId: "1:641194205830:web:ceb2e083ec77920a716707",
+            measurementId: "G-JLYGFR8QCF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- GLOBAL STATE ---
+        let doctorsList = [];
+        let servicesList = [];
+
+        // --- HELPER FOR SAFE NAVIGATION ---
+        function safeRedirect(url) {
+            try { window.location.href = url; } 
+            catch (e) { console.warn("Redirect blocked", e); alert("Please navigate to " + url); }
+        }
+
+        // --- AUTH & LOAD ---
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) { safeRedirect("index.html"); return; } 
+            
+            const docSnap = await getDoc(doc(db, "users", user.uid));
+            if (!docSnap.exists() || docSnap.data().role !== 'admin') {
+                alert("Access Denied: Admins Only");
+                safeRedirect("index.html");
+                return;
+            }
+            
+            await loadCMSData(); 
+            document.getElementById('loading-overlay').style.display = 'none';
+        });
+
+        window.logout = () => signOut(auth).then(() => safeRedirect("index.html"));
+
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
+            document.getElementById(`btn-${tab}`).classList.add('nav-active');
+            
+            if(tab === 'users-db') loadUsers();
+            if(tab === 'doctors-db') loadDoctors();
+        }
+
+        // --- CMS LOGIC ---
+
+        // 1. Load Data
+        async function loadCMSData() {
+            try {
+                const docRef = doc(db, "site_content", "homepage");
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    // Convert Services Object to Array
+                    servicesList = [];
+                    const s = data.services || {};
+                    Object.keys(s).sort((a,b) => parseInt(a.slice(1)) - parseInt(b.slice(1))).forEach(k => {
+                        servicesList.push(s[k]);
+                    });
+                    
+                    // Convert Doctors Object to Array
+                    doctorsList = [];
+                    const d = data.doctors || {};
+                    Object.keys(d).sort((a,b) => parseInt(a.slice(3)) - parseInt(b.slice(3))).forEach(k => {
+                        doctorsList.push(d[k]);
+                    });
+                } 
+                
+                // --- DEFAULT FALLBACKS (If DB is empty or first run) ---
+                if(servicesList.length === 0) {
+                    servicesList = [
+                        {
+                            title: 'Expert Consultation', 
+                            desc: 'Connect with expert Naturopathy & Ayurveda doctors via video call. We treat the root cause, not just symptoms.',
+                            f1: 'Video Calls', f2: 'Diet Therapy', f3: 'Prescription Upload'
+                        },
+                        {
+                            title: 'Yoga Therapy',
+                            desc: 'Transform your mind and body. Specialized sessions for Stress, Anxiety, and Weight Management.',
+                            price: '1500', old: '2500'
+                        },
+                        {
+                            title: 'Body Diagnosis',
+                            desc: 'Experience the 5000-year-old science. AI-driven Prakriti Analysis (Dosha) to understand your body type.',
+                            f1: 'Dosha Analysis', f2: 'Herbal Advice', f3: 'Lifestyle Plan'
+                        },
+                        // --- NEW SERVICES REQUESTED ---
+                        {
+                            title: 'Panchakarma Detox',
+                            desc: 'Complete detoxification of the body using ancient Ayurvedic techniques to restore balance.',
+                            price: '5000', old: '7000'
+                        },
+                        {
+                            title: 'Garbh Sanskar',
+                            desc: 'Scientific and spiritual practices for pregnant women to ensure a healthy mother and baby.',
+                            price: '2500', old: '3500'
+                        }
+                    ];
+                }
+
+                if(doctorsList.length === 0) {
+                    doctorsList = [
+                        { name: 'Dr. Sarah Mitchell', spec: 'Naturopathy Specialist', deg: 'ND, PhD', exp: '12 Years', img: 'https://placehold.co/400x300' },
+                        { name: 'Dr. Rajesh Kumar', spec: 'Ayurveda Expert', deg: 'BAMS, MD', exp: '15 Years', img: 'https://placehold.co/400x300' },
+                        { name: 'Maya Patel', spec: 'Yoga Therapist', deg: 'E-RYT 500', exp: '10 Years', img: 'https://placehold.co/400x300' },
+                        { name: 'Dr. James Chen', spec: 'Holistic Medicine', deg: 'MD, ABIHM', exp: '18 Years', img: 'https://placehold.co/400x300' }
+                    ];
+                }
+
+                renderServices();
+                renderDoctors();
+
+            } catch (error) { console.error("Error loading CMS data:", error); }
+        }
+
+        // 2. Render Services
+        function renderServices() {
+            const grid = document.getElementById('services-grid');
+            const cardsHtml = servicesList.map((srv, i) => {
+                const isPricing = !!srv.price;
+                const cardClass = isPricing ? 'bg-ayu-dark text-white dark-card' : 'bg-white border border-gray-100 text-gray-800';
+                
+                return `
+                <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center">
+                    <div class="relative group h-full">
+                        <div class="${cardClass} rounded-2xl p-6 shadow-sm h-full flex flex-col relative transition hover:shadow-md">
+                             <button onclick="deleteService(${i})" class="absolute top-2 right-2 text-red-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition p-2"><i class="fas fa-trash-alt"></i></button>
+                            
+                            <!-- Icon -->
+                            <div class="w-12 h-12 ${isPricing ? 'bg-white/20' : 'bg-green-100 text-ayu-green'} rounded-lg flex items-center justify-center text-2xl mb-4">
+                                <i class="fas ${isPricing ? 'fa-om' : 'fa-spa'}"></i>
+                            </div>
+                            
+                            <input type="text" oninput="updateService(${i}, 'title', this.value)" class="live-input text-xl font-bold mb-2" value="${srv.title || ''}" placeholder="Service Title">
+                            <textarea oninput="updateService(${i}, 'desc', this.value)" rows="3" class="live-input text-sm mb-4 leading-relaxed resize-none opacity-80">${srv.desc || ''}</textarea>
+                            
+                            <!-- Toggle Content Area -->
+                            <div class="mt-auto space-y-2">
+                                 ${isPricing ? `
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-[10px] uppercase tracking-wide opacity-70">Pricing</p>
+                                        <div class="flex items-baseline gap-1 mt-1">
+                                            <span class="text-xl font-bold">₹</span>
+                                            <input type="text" oninput="updateService(${i}, 'price', this.value)" class="live-input text-2xl font-bold w-20 p-0" value="${srv.price}">
+                                            <span class="text-sm line-through opacity-50 flex items-center ml-2">₹<input type="text" oninput="updateService(${i}, 'old', this.value)" class="live-input w-12 text-sm p-0 line-through" value="${srv.old || ''}"></span>
+                                        </div>
+                                    </div>
+                                 ` : `
+                                    <div class="space-y-1">
+                                        <div class="flex items-center"><i class="fas fa-check text-ayu-orange mr-2 text-xs"></i> <input oninput="updateService(${i}, 'f1', this.value)" class="live-input text-sm opacity-70" value="${srv.f1 || ''}" placeholder="Feature 1"></div>
+                                        <div class="flex items-center"><i class="fas fa-check text-ayu-orange mr-2 text-xs"></i> <input oninput="updateService(${i}, 'f2', this.value)" class="live-input text-sm opacity-70" value="${srv.f2 || ''}" placeholder="Feature 2"></div>
+                                        <div class="flex items-center"><i class="fas fa-check text-ayu-orange mr-2 text-xs"></i> <input oninput="updateService(${i}, 'f3', this.value)" class="live-input text-sm opacity-70" value="${srv.f3 || ''}" placeholder="Feature 3"></div>
+                                    </div>
+                                 `}
+                            </div>
+
+                            <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition">
+                                 <button onclick="toggleServiceType(${i})" class="text-[10px] bg-gray-200 text-gray-600 px-2 py-1 rounded hover:bg-gray-300">
+                                    ${isPricing ? 'Switch to Features' : 'Switch to Pricing'}
+                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            const addBtn = `
+                <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center flex flex-col gap-4">
+                    <button onclick="addService('feature')" class="flex-1 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center p-4 text-gray-400 hover:border-ayu-green hover:text-ayu-green hover:bg-green-50 transition">
+                        <i class="fas fa-plus-circle text-2xl mb-2"></i>
+                        <span class="font-bold text-sm">Add Feature Card</span>
+                    </button>
+                    <button onclick="addService('pricing')" class="flex-1 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center p-4 text-gray-400 hover:border-ayu-dark hover:text-ayu-dark hover:bg-gray-100 transition">
+                        <i class="fas fa-tag text-2xl mb-2"></i>
+                        <span class="font-bold text-sm">Add Pricing Card</span>
+                    </button>
+                </div>
+            `;
+
+            grid.innerHTML = cardsHtml + addBtn;
+        }
+
+        // 3. Render Doctors
+        function renderDoctors() {
+            const grid = document.getElementById('doctors-editor-grid');
+            const cardsHtml = doctorsList.map((doc, i) => `
+                <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center">
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all relative group h-full">
+                        <button onclick="deleteDoctor(${i})" class="absolute top-2 right-2 z-30 bg-white/80 text-red-400 hover:text-red-600 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm"><i class="fas fa-trash-alt"></i></button>
+                        
+                        <div class="relative h-48 w-full bg-gray-100 editable-img-container">
+                            <img src="${doc.img || 'https://placehold.co/400x300'}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x300'">
+                            <div class="img-edit-overlay" onclick="updateDocImage(${i})">
+                                <span class="bg-white text-gray-800 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
+                                    <i class="fas fa-camera text-ayu-orange"></i> Change
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <label class="text-[10px] font-bold text-gray-300 uppercase">Name</label>
+                            <input type="text" oninput="updateDoctor(${i}, 'name', this.value)" class="live-input font-bold text-lg mb-1" value="${doc.name || ''}" placeholder="Dr. Name">
+                            
+                            <label class="text-[10px] font-bold text-gray-300 uppercase mt-2 block">Specialization</label>
+                            <input type="text" oninput="updateDoctor(${i}, 'spec', this.value)" class="live-input text-ayu-green text-sm font-medium mb-2" value="${doc.spec || ''}" placeholder="Specialization">
+                            
+                            <div class="flex justify-between items-center border-t border-gray-100 pt-3 mt-2 gap-2">
+                                <div class="w-1/2">
+                                    <label class="text-[10px] font-bold text-gray-300 uppercase">Degree</label>
+                                    <input type="text" oninput="updateDoctor(${i}, 'deg', this.value)" class="live-input text-xs text-gray-500" value="${doc.deg || ''}" placeholder="MBBS">
+                                </div>
+                                <div class="w-1/2 text-right">
+                                    <label class="text-[10px] font-bold text-gray-300 uppercase">Exp</label>
+                                    <input type="text" oninput="updateDoctor(${i}, 'exp', this.value)" class="live-input text-xs text-gray-500 text-right" value="${doc.exp || ''}" placeholder="5 Yrs">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            const addBtn = `
+                <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center">
+                    <button onclick="addDoctor()" class="w-full h-full border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center p-6 text-gray-400 hover:border-ayu-green hover:text-ayu-green hover:bg-green-50 transition min-h-[300px]">
+                        <i class="fas fa-user-plus text-3xl mb-2"></i>
+                        <span class="font-bold">Add Doctor</span>
+                    </button>
+                </div>
+            `;
+
+            grid.innerHTML = cardsHtml + addBtn;
+        }
+
+        // --- DATA MODIFICATION HANDLERS ---
+        window.updateService = (index, field, value) => { servicesList[index][field] = value; }
+        window.updateDoctor = (index, field, value) => { doctorsList[index][field] = value; }
+        
+        window.updateDocImage = (index) => {
+            const url = prompt("Paste new Image URL:");
+            if(url) {
+                doctorsList[index].img = url;
+                renderDoctors();
+            }
+        }
+
+        window.toggleServiceType = (index) => {
+            // Toggle between showing price or features
+            if(servicesList[index].price) {
+                // Was Pricing, make it standard
+                delete servicesList[index].price;
+                delete servicesList[index].old;
+                servicesList[index].f1 = "Feature 1";
+            } else {
+                // Was standard, make it Pricing
+                servicesList[index].price = "1000";
+                servicesList[index].old = "2000";
+                delete servicesList[index].f1;
+                delete servicesList[index].f2;
+                delete servicesList[index].f3;
+            }
+            renderServices();
+        }
+
+        window.addService = (type) => {
+            if(type === 'pricing') {
+                servicesList.push({ title: 'New Package', desc: 'Description...', price: '1000', old: '2000' });
+            } else {
+                servicesList.push({ title: 'New Service', desc: 'Description...', f1: 'Feature 1', f2: 'Feature 2' });
+            }
+            renderServices();
+        }
+        window.deleteService = (index) => {
+            if(confirm("Delete this service card?")) {
+                servicesList.splice(index, 1);
+                renderServices();
+            }
+        }
+
+        window.addDoctor = () => {
+            doctorsList.push({ name: 'New Name', spec: 'Specialist', deg: 'MBBS', exp: '1 Yr', img: 'https://placehold.co/400x300' });
+            renderDoctors();
+        }
+        window.deleteDoctor = (index) => {
+            if(confirm("Delete this doctor?")) {
+                doctorsList.splice(index, 1);
+                renderDoctors();
+            }
+        }
+
+        // --- SAVE FUNCTION ---
+        window.saveCMS = async function() {
+            try {
+                const btn = document.querySelector('button[onclick="saveCMS()"]');
+                const origText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                
+                // Convert arrays back to Object map for Firestore (s1, s2... doc1, doc2...)
+                const servicesObj = {};
+                servicesList.forEach((s, i) => { servicesObj[`s${i+1}`] = s; });
+
+                const doctorsObj = {};
+                doctorsList.forEach((d, i) => { doctorsObj[`doc${i+1}`] = d; });
+
+                await setDoc(doc(db, "site_content", "homepage"), { 
+                    services: servicesObj,
+                    doctors: doctorsObj
+                }, { merge: true });
+                
+                btn.innerHTML = origText;
+                const t = document.getElementById('toast');
+                t.classList.remove('translate-y-32');
+                setTimeout(() => t.classList.add('translate-y-32'), 3000);
+            } catch(e) { alert("Error saving: " + e.message); }
+        }
+
+        window.resetDefaults = async function() {
+            if(confirm("This will WIPE all saved changes and restore the default content from the code. Are you sure?")) {
+                try {
+                    await deleteDoc(doc(db, "site_content", "homepage"));
+                    location.reload();
+                } catch(e) { alert("Error resetting: " + e.message); }
+            }
+        }
+
+        // --- DATABASE TABLES ---
+        async function loadUsers() { renderTable('usersTableBody', 'user', 'No patients found'); }
+        async function loadDoctors() { renderTable('doctorsTableBody', 'doctor', 'No doctors registered'); }
+
+        async function renderTable(tableId, role, emptyMsg) {
+            const tbody = document.getElementById(tableId);
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-gray-400">Loading data...</td></tr>';
+            try {
+                const q = query(collection(db, "users"), where("role", "==", role));
+                const snap = await getDocs(q);
+                if(snap.empty) { tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-400">${emptyMsg}</td></tr>`; return; }
+                tbody.innerHTML = snap.docs.map(d => {
+                    const data = d.data();
+                    let dateStr = data.createdAt && data.createdAt.toDate ? data.createdAt.toDate().toLocaleDateString() : "N/A";
+                    return `<tr class="hover:bg-gray-50 transition"><td class="p-4"><div class="font-bold text-gray-800">${data.email}</div><div class="text-xs text-gray-400">ID: ${d.id}</div></td><td class="p-4 text-sm text-gray-500">${role === 'user' ? dateStr : '<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-bold">Doctor</span>'}</td><td class="p-4 text-right"><button onclick="deleteUser('${d.id}')" class="text-red-400 hover:text-red-600 hover:bg-red-50 px-3 py-1 rounded transition text-sm"><i class="fas fa-trash-alt"></i> Delete</button></td></tr>`;
+                }).join('');
+            } catch(e) { tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-red-500">Error loading data</td></tr>`; }
+        }
+
+        window.deleteUser = async (uid) => {
+            if(confirm("Are you sure you want to delete this account?")) {
+                await deleteDoc(doc(db, "users", uid));
+                if(document.getElementById('tab-users-db').classList.contains('active')) loadUsers(); else loadDoctors();
+            }
+        }
+    </script>
+</body>
+</html>
