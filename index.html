@@ -532,15 +532,6 @@
                             <input type="password" id="authPassword" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green" placeholder="••••••••" required>
                         </div>
                         
-                        <div id="roleSelectContainer" class="hidden">
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">I am a:</label>
-                            <select id="authRole" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green">
-                                <option value="user">Patient / User</option>
-                                <option value="doctor">Doctor</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-
                         <button type="submit" class="w-full bg-ayu-green text-white font-bold py-3 rounded-lg hover:bg-[#1e5c22] transition shadow-lg">
                             <span id="btnText">Login</span>
                         </button>
@@ -627,18 +618,15 @@
             const title = document.getElementById('modalTitle');
             const btn = document.getElementById('btnText');
             const toggle = document.getElementById('toggleText');
-            const roleDiv = document.getElementById('roleSelectContainer');
-
+            
             if(isLogin) {
                 title.innerText = "Welcome Back";
                 btn.innerText = "Login";
                 toggle.innerHTML = 'New to Ayusetu? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a>';
-                roleDiv.classList.add('hidden');
             } else {
                 title.innerText = "Join Ayusetu";
                 btn.innerText = "Sign Up";
                 toggle.innerHTML = 'Already have an account? <a href="#" onclick="toggleAuthMode()" class="text-ayu-green font-bold hover:underline">Login here</a>';
-                roleDiv.classList.remove('hidden');
             }
         }
 
@@ -662,7 +650,8 @@
                         redirectBasedOnRole('user');
                     }
                 } else {
-                    const role = document.getElementById('authRole').value;
+                    // Force role to 'user' for new signups
+                    const role = 'user';
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await setDoc(doc(db, "users", userCredential.user.uid), {
                         email: email,
