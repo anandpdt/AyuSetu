@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Centers & Residential Packages | Ayusetu</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ayu: {
+                            orange: '#C85226',
+                            green: '#2E7D32',
+                            light: '#F3F8F4',
+                            dark: '#1B4D3E',
+                            accent: '#F97316'
+                        },
+                        fontFamily: {
+                            sans: ['Poppins', 'sans-serif'],
+                            serif: ['Merriweather', 'serif'],
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'blob': 'blob 7s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            background: linear-gradient(300deg, #fdfbf7, #e8f5e9, #fff3e0, #f0fdfa);
+            background-size: 240% 240%;
+            animation: gradient-animation 20s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2E7D32; border-radius: 10px; }
+
+        .drawer { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .drawer.open { transform: translateX(0); }
+
+        .hero-element { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .run-hero-anim .hero-element { opacity: 1; transform: translateY(0); }
+
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .logo-text { font-family: 'Merriweather', serif; }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen overflow-hidden" onload="startLoader()">
+
+    <!-- PRELOADER -->
+    <div id="preloader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#fdfbf7]">
+        <div id="loader-content" class="relative z-10 flex flex-col items-center">
+             <div class="text-6xl md:text-8xl font-serif font-bold flex gap-4 overflow-hidden">
+                <span id="text-ayu" class="text-ayu-green translate-x-[-150%] opacity-0 transition-all duration-1000 ease-out">AYU</span>
+                <span id="text-setu" class="text-ayu-orange translate-x-[150%] opacity-0 transition-all duration-1000 ease-out">SETU</span>
+             </div>
+             <div id="loading-line" class="w-0 h-[3px] bg-ayu-green mt-4 transition-all duration-1000 ease-in-out opacity-0"></div>
+             <p class="mt-4 text-ayu-dark tracking-widest text-sm opacity-60 uppercase">Finding Your Sanctuary...</p>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-6 left-0 right-0 z-50 px-4">
+        <div class="max-w-7xl mx-auto bg-white/80 backdrop-blur-lg rounded-full py-3 px-8 flex justify-between items-center border border-white/50 shadow-xl">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='./index.html'">
+                <div class="bg-ayu-green p-2 rounded-full">
+                    <i class="fas fa-leaf text-white text-xs"></i>
+                </div>
+                <span class="logo-text text-2xl font-bold tracking-tight">
+                    <span class="text-ayu-green">AYU</span><span class="text-ayu-orange">SETU</span>
+                </span>
+            </div>
+
+            <div class="hidden lg:flex items-center gap-10">
+                <a href="./index.html" class="text-gray-600 font-medium hover:text-ayu-green transition">Home</a>
+                <a href="./index.html#services" class="text-gray-600 font-medium hover:text-ayu-green transition">Online Programs</a>
+                <span class="text-ayu-green font-bold border-b-2 border-ayu-green">Offline Centers</span>
+                <button id="navLoginBtn" onclick="openLogin()" class="bg-ayu-green text-white px-10 py-3 rounded-full font-semibold hover:bg-[#1e5c22] transition shadow-lg transform active:scale-95">
+                    Login
+                </button>
+            </div>
+
+            <button onclick="toggleDrawer()" class="lg:hidden text-ayu-green text-2xl p-2 focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- SIDE DRAWER -->
+    <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
+    <div id="sideDrawer" class="drawer fixed top-0 right-0 h-full w-[300px] md:w-[400px] bg-white z-[70] shadow-2xl p-10 flex flex-col border-l border-gray-100">
+        <button onclick="toggleDrawer()" class="self-end text-3xl text-gray-400 hover:text-ayu-green transition mb-10">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="flex flex-col gap-8">
+            <button id="drawerLoginBtn" onclick="toggleDrawer(); openLogin();" class="w-full bg-ayu-green text-white py-4 rounded-xl font-bold shadow-md">Member Login</button>
+            <nav class="flex flex-col gap-6 text-xl font-serif">
+                <a href="./index.html" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">Home</a>
+                <a href="./index.html#services" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">Online Programs</a>
+                <a href="#consultation" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">Book Residential</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- PACKAGES SECTION -->
+    <section class="pt-48 pb-24 relative overflow-hidden px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 hero-element delay-100">
+                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest bg-orange-50 px-4 py-2 rounded-full border border-orange-100">Intensive Healing</span>
+                <h2 class="text-5xl font-serif font-bold text-gray-900 mt-6">Residential Packages</h2>
+                <div class="w-24 h-1.5 bg-ayu-green mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10 mb-24 hero-element delay-300">
+                
+                <!-- Short Cleanse -->
+                <div class="bg-white rounded-[2.5rem] p-10 hover-lift border border-gray-100 relative overflow-hidden flex flex-col h-auto">
+                    <div class="absolute top-0 right-0 bg-green-50 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-green-100"></div>
+                    <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center text-ayu-green text-3xl mb-8">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Short Cleanse</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">A perfect reset for busy professionals looking to detoxify and reboot their energy.</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold text-ayu-green">25k</span>
+                        <span class="text-sm text-gray-400 font-medium">/ 10 Days</span>
+                    </div>
+                    <ul class="space-y-4 text-gray-600 mb-10 text-sm">
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> Standard Private Room</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> 3 Sattvic Meals</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> Daily Hydrotherapy</li>
+                    </ul>
+                    <button onclick="selectPackage('10-Day Cleanse', '25000')" class="w-full py-4 bg-ayu-green text-white font-bold rounded-2xl hover:bg-ayu-dark transition shadow-lg">Select Stay</button>
+                </div>
+
+                <!-- Deep Healing (Featured) -->
+                <div class="bg-ayu-dark text-white rounded-[2.5rem] p-10 hover-lift relative shadow-2xl scale-105 border-4 border-ayu-orange flex flex-col h-auto">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-ayu-orange text-white text-[10px] font-black tracking-[0.2em] px-6 py-2 rounded-full shadow-lg uppercase">Best Transformation</div>
+                    <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-white text-3xl mb-8">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Deep Healing</h3>
+                    <p class="text-gray-300 text-sm mb-6 flex-grow">Intensive supervision for chronic ailments including metabolic and digestive issues.</p>
+                    <div class="mb-8">
+                        <span class="text-5xl font-bold text-white">35k</span>
+                        <span class="text-sm text-white/50 font-medium">/ 15 Days</span>
+                    </div>
+                    <ul class="space-y-4 text-white/70 mb-10 text-sm">
+                        <li class="flex items-center gap-3"><i class="fas fa-star text-ayu-orange"></i> Premium Garden Suite</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-star text-ayu-orange"></i> Personalized Wellness Plan</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-star text-ayu-orange"></i> Daily Healer Supervision</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-star text-ayu-orange"></i> Advanced Detox Rituals</li>
+                    </ul>
+                    <button onclick="selectPackage('15-Day Deep Healing', '35000')" class="w-full py-4 bg-ayu-orange text-white font-bold rounded-2xl hover:bg-white hover:text-ayu-dark transition shadow-xl">Book Premium</button>
+                </div>
+
+                <!-- Rejuvenation -->
+                <div class="bg-white rounded-[2.5rem] p-10 hover-lift border border-gray-100 relative overflow-hidden flex flex-col h-auto">
+                    <div class="absolute top-0 right-0 bg-green-50 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-green-100"></div>
+                    <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center text-ayu-green text-3xl mb-8">
+                        <i class="fas fa-peace"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Rejuvenation</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">A complete life-changing transformation. Ideal for post-recovery and mental health.</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold text-ayu-green">55k</span>
+                        <span class="text-sm text-gray-400 font-medium">/ 30 Days</span>
+                    </div>
+                    <ul class="space-y-4 text-gray-600 mb-10 text-sm">
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> Luxury Mountain View Room</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> Panchakarma Series</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> Lifetime Lifestyle Training</li>
+                    </ul>
+                    <button onclick="selectPackage('30-Day Rejuvenation', '55000')" class="w-full py-4 bg-ayu-green text-white font-bold rounded-2xl hover:bg-ayu-dark transition shadow-lg">Select Stay</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CENTER LOCATIONS -->
+    <section class="py-24 bg-ayu-light/40 border-y border-ayu-green/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-white rounded-[3rem] p-12 md:p-20 shadow-xl border border-white overflow-hidden relative">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-ayu-green/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+                
+                <div class="grid lg:grid-cols-2 gap-20 items-start">
+                    <div>
+                        <h3 class="text-4xl font-serif font-bold text-ayu-dark mb-6 tracking-tight">Our Verified Centers</h3>
+                        <p class="text-gray-500 mb-12 text-lg leading-relaxed">Escape to one of our tranquil locations where nature meets traditional science. All centers follow unified hygiene and healing protocols.</p>
+                        
+                        <div class="space-y-12">
+                            <div>
+                                <div class="flex items-center gap-4 mb-8">
+                                    <div class="h-px flex-grow bg-gray-100"></div>
+                                    <h4 class="text-[10px] font-black text-ayu-orange uppercase tracking-[0.3em] px-4">Bihar Region</h4>
+                                    <div class="h-px flex-grow bg-gray-100"></div>
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 text-center">
+                                    <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 hover:border-ayu-green transition group">
+                                        <p class="font-bold text-ayu-dark text-sm group-hover:text-ayu-green transition">Purnea</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 hover:border-ayu-green transition group">
+                                        <p class="font-bold text-ayu-dark text-sm group-hover:text-ayu-green transition">Gaya</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 hover:border-ayu-green transition group">
+                                        <p class="font-bold text-ayu-dark text-sm group-hover:text-ayu-green transition">Saharsa</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 hover:border-ayu-green transition group">
+                                        <p class="font-bold text-ayu-dark text-sm group-hover:text-ayu-green transition">Madhepura</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 hover:border-ayu-green transition group">
+                                        <p class="font-bold text-ayu-dark text-sm group-hover:text-ayu-green transition">Banmankhi</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 hover:border-ayu-green transition group">
+                                        <p class="font-bold text-ayu-dark text-sm group-hover:text-ayu-green transition">Patna</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="opacity-40">
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="h-px flex-grow bg-gray-100"></div>
+                                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] px-4">Upcoming Expansion</h4>
+                                    <div class="h-px flex-grow bg-gray-100"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-xs font-bold text-gray-400 uppercase italic tracking-widest text-center">
+                                    <div class="p-4 border-2 border-dashed border-gray-100 rounded-2xl">Ranchi, JH</div>
+                                    <div class="p-4 border-2 border-dashed border-gray-100 rounded-2xl">Kolkata, WB</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="absolute -inset-6 bg-ayu-orange/5 rounded-[4rem] rotate-3"></div>
+                        <div class="rounded-[3rem] overflow-hidden shadow-2xl relative">
+                            <img src="https://images.unsplash.com/photo-1570211776045-af3a51026f4a?auto=format&fit=crop&w=1000&q=80" class="w-full h-[550px] object-cover" alt="Banmankhi Center">
+                            <div class="absolute bottom-10 left-10 right-10 glass-card p-8 rounded-3xl border-white shadow-2xl">
+                                <p class="text-ayu-dark font-serif italic text-lg leading-relaxed">"A sanctuary where I finally found the silence my soul needed to heal."</p>
+                                <div class="mt-4 flex items-center gap-3">
+                                    <div class="w-8 h-1 bg-ayu-orange rounded-full"></div>
+                                    <p class="text-[10px] font-black text-ayu-orange uppercase tracking-widest">Our Banmankhi Retreat</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING FORM -->
+    <section id="consultation" class="py-32 bg-white px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-ayu-dark rounded-[3rem] shadow-2xl border border-ayu-dark overflow-hidden text-white">
+                <div class="bg-ayu-green p-12 text-center">
+                    <h2 class="text-4xl font-serif font-bold mb-4">Reservation Desk</h2>
+                    <p class="text-green-100 opacity-80">Our coordinator will call you to confirm health eligibility.</p>
+                </div>
+                <div class="p-12 md:p-20">
+                    <form id="bookingForm" class="space-y-10">
+                        <div class="grid md:grid-cols-2 gap-10">
+                            <div class="space-y-2 border-b border-white/10 pb-2">
+                                <label class="text-[10px] font-black uppercase text-white/40 tracking-[0.2em]">Patient Name</label>
+                                <input type="text" id="patientName" class="w-full bg-transparent p-2 outline-none text-white focus:text-ayu-orange transition" placeholder="John Doe" required>
+                            </div>
+                            <div class="space-y-2 border-b border-white/10 pb-2">
+                                <label class="text-[10px] font-black uppercase text-white/40 tracking-[0.2em]">Contact Email</label>
+                                <input type="email" id="patientEmail" class="w-full bg-transparent p-2 outline-none text-white focus:text-ayu-orange transition" placeholder="john@example.com" required>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-10">
+                            <div class="space-y-2 border-b border-white/10 pb-2">
+                                <label class="text-[10px] font-black uppercase text-white/40 tracking-[0.2em]">Phone Number</label>
+                                <input type="tel" id="patientPhone" class="w-full bg-transparent p-2 outline-none text-white focus:text-ayu-orange transition" placeholder="+91 00000 00000" required>
+                            </div>
+                            <div class="space-y-2 border-b border-white/10 pb-2">
+                                <label class="text-[10px] font-black uppercase text-white/40 tracking-[0.2em]">Package Choice</label>
+                                <select id="packageType" class="w-full bg-transparent p-2 outline-none text-white transition cursor-pointer">
+                                    <option class="text-gray-900" value="10-Day Cleanse">10-Day Cleanse (₹25,000)</option>
+                                    <option class="text-gray-900" value="15-Day Deep Healing">15-Day Deep Healing (₹35,000)</option>
+                                    <option class="text-gray-900" value="30-Day Rejuvenation">30-Day Rejuvenation (₹55,000)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-2 border-b border-white/10 pb-2">
+                            <label class="text-[10px] font-black uppercase text-white/40 tracking-[0.2em]">Medical Context</label>
+                            <textarea id="healthConcern" rows="3" class="w-full bg-transparent p-2 outline-none text-white focus:text-ayu-orange transition resize-none" placeholder="Briefly describe your symptoms or recovery goal..."></textarea>
+                        </div>
+                        
+                        <div class="bg-white/5 p-6 rounded-2xl border border-white/10 flex items-center gap-4">
+                            <div class="w-10 h-10 bg-ayu-orange rounded-full flex items-center justify-center text-white shrink-0"><i class="fas fa-info"></i></div>
+                            <p class="text-xs text-white/60 leading-relaxed italic">Payment verification occurs after our medical screening call. Your request is currently a "Reservation Interest".</p>
+                        </div>
+
+                        <button type="button" onclick="submitBooking()" id="bookBtn" class="w-full bg-ayu-orange text-white py-6 rounded-2xl font-bold text-xl hover:shadow-2xl transition transform active:scale-95 shadow-orange-500/20">
+                            Confirm Stay Reservation
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-ayu-dark text-white pt-24 pb-12 overflow-hidden relative">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-ayu-green via-ayu-orange to-red-500"></div>
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="logo-text text-4xl font-bold mb-8">AYUSETU</h2>
+            <div class="flex justify-center gap-10 mb-12 text-gray-400 font-bold uppercase text-[10px] tracking-widest">
+                <a href="./index.html" class="hover:text-white transition">Home</a>
+                <a href="./index.html#about" class="hover:text-white transition">About</a>
+                <a href="./index.html#services" class="hover:text-white transition">Online Services</a>
+            </div>
+            <p class="text-gray-600 text-[10px] font-bold uppercase tracking-[0.3em]">&copy; 2025 Ayusetu Wellness Pvt Ltd. Integrated Healthcare.</p>
+        </div>
+    </footer>
+
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-ayu-dark/80 backdrop-blur-md" onclick="closeAuthModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl overflow-hidden">
+            <div class="flex">
+                <div class="w-3 bg-ayu-orange"></div>
+                <div class="p-12 w-full">
+                    <div class="flex justify-between items-center mb-10">
+                        <h2 class="text-4xl font-serif font-bold text-ayu-dark" id="modalTitle">Welcome</h2>
+                        <button onclick="closeAuthModal()" class="text-gray-300 hover:text-red-500 transition text-2xl"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div id="authError" class="hidden bg-red-50 text-red-600 p-4 rounded-xl text-sm mb-6 border border-red-100 italic"></div>
+                    <form id="authForm" class="space-y-6">
+                        <input type="email" id="authEmail" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 focus:ring-2 focus:ring-ayu-green/20 outline-none transition" placeholder="Email" required>
+                        <input type="password" id="authPassword" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 focus:ring-2 focus:ring-ayu-green/20 outline-none transition" placeholder="Password" required>
+                        <button type="submit" class="w-full bg-ayu-green text-white py-5 rounded-2xl font-bold text-lg hover:shadow-xl transition transform active:scale-95">
+                            <span id="btnText">Enter Portal</span>
+                        </button>
+                    </form>
+                    <div class="mt-8 text-center">
+                        <p id="toggleText" class="text-gray-500 text-sm font-medium">New? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold underline">Create Account</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startLoader() {
+            const pre = document.getElementById('preloader');
+            if (sessionStorage.getItem('v_ayusetu_centers')) {
+                pre.style.display = 'none';
+                document.body.classList.remove('overflow-hidden');
+                document.body.classList.add('run-hero-anim');
+                return;
+            }
+            setTimeout(() => { 
+                document.getElementById('text-ayu').classList.remove('translate-x-[-150%]', 'opacity-0'); 
+                document.getElementById('text-setu').classList.remove('translate-x-[150%]', 'opacity-0'); 
+            }, 300);
+            setTimeout(() => { 
+                const line = document.getElementById('loading-line');
+                line.classList.remove('opacity-0', 'w-0'); 
+                line.classList.add('w-full'); 
+            }, 1200);
+            setTimeout(() => {
+                pre.style.transform = "translateY(-100%)";
+                pre.style.transition = "transform 1s cubic-bezier(0.7, 0, 0.3, 1)";
+                document.body.classList.add('run-hero-anim');
+                document.body.classList.remove('overflow-hidden');
+                sessionStorage.setItem('v_ayusetu_centers', 'true');
+            }, 2000);
+        }
+
+        function toggleDrawer() {
+            const drw = document.getElementById('sideDrawer');
+            const ovl = document.getElementById('drawerOverlay');
+            drw.classList.toggle('open');
+            ovl.classList.toggle('hidden');
+            setTimeout(() => ovl.classList.toggle('opacity-0'), 10);
+        }
+
+        function selectPackage(pkg, price) {
+            document.getElementById('packageType').value = pkg;
+            document.getElementById('consultation').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
+            authDomain: "ayusetu-cd9bb.firebaseapp.com",
+            projectId: "ayusetu-cd9bb",
+            storageBucket: "ayusetu-cd9bb.firebasestorage.app",
+            messagingSenderId: "641194205830",
+            appId: "1:641194205830:web:ceb2e083ec77920a716707"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let isLoginMode = true;
+        let currentUserSession = null;
+
+        async function getDashboard(uid) {
+            const userDoc = await getDoc(doc(db, "users", uid));
+            if (userDoc.exists() && userDoc.data().role === 'admin') return './admin-dashboard.html';
+            if (userDoc.exists() && userDoc.data().role === 'doctor') return './doctor-dashboard.html';
+            return './user-dashboard.html';
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUserSession = user;
+            const loginBtns = [document.getElementById('navLoginBtn'), document.getElementById('drawerLoginBtn')];
+            if (user) {
+                const target = await getDashboard(user.uid);
+                loginBtns.forEach(btn => { if(btn) { btn.innerText = "Dashboard"; btn.onclick = () => window.location.href = target; } });
+            } else {
+                loginBtns.forEach(btn => { if(btn) { btn.innerText = "Login"; btn.onclick = () => openLogin(); } });
+            }
+        });
+
+        window.openLogin = () => document.getElementById('authModal').classList.remove('hidden');
+        window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
+        window.toggleAuthMode = () => {
+            isLoginMode = !isLoginMode;
+            document.getElementById('modalTitle').innerText = isLoginMode ? "Welcome Back" : "Join Ayusetu";
+            document.getElementById('btnText').innerText = isLoginMode ? "Login" : "Sign Up";
+        };
+
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPassword').value;
+            const errDiv = document.getElementById('authError');
+            try {
+                let uid;
+                if (isLoginMode) {
+                    const cred = await signInWithEmailAndPassword(auth, email, pass);
+                    uid = cred.user.uid;
+                } else {
+                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                    uid = cred.user.uid;
+                    await setDoc(doc(db, "users", uid), { email, role: 'user', createdAt: new Date() });
+                }
+                window.location.href = await getDashboard(uid);
+            } catch (err) {
+                errDiv.innerText = err.message;
+                errDiv.classList.remove('hidden');
+            }
+        });
+
+        window.submitBooking = async () => {
+            if (!currentUserSession) { 
+                alert("Membership required for residential bookings. Please login/signup first.");
+                openLogin(); 
+                return; 
+            }
+            
+            const btn = document.getElementById('bookBtn');
+            const name = document.getElementById('patientName').value;
+            const email = document.getElementById('patientEmail').value;
+            const phone = document.getElementById('patientPhone').value;
+
+            if(!name || !email || !phone) { 
+                alert("Contact details are required for coordination."); 
+                return; 
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Submitting Request...`;
+                
+                const bookingRef = doc(collection(db, "bookings"));
+                await setDoc(bookingRef, {
+                    uid: currentUserSession.uid,
+                    patientName: name,
+                    userEmail: email,
+                    userPhone: phone,
+                    package: document.getElementById('packageType').value,
+                    healthConcern: document.getElementById('healthConcern').value,
+                    type: "Residential Stay",
+                    status: "Pending", // Matches Admin Dashboard logic
+                    createdAt: new Date()
+                });
+                
+                alert("Stay Reservation Sent! Our wellness coordinator will call you within 24 hours to verify eligibility.");
+                window.location.href = await getDashboard(currentUserSession.uid);
+            } catch (e) {
+                console.error(e);
+                alert("Network error. Please try again.");
+                btn.disabled = false;
+                btn.innerText = "Confirm Stay Reservation";
+            }
+        };
+    </script>
+</body>
+</html>

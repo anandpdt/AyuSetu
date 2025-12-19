@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Payment | Ayusetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { ayu: { orange: '#C85226', green: '#2E7D32', dark: '#1B4D3E', light: '#F3F8F4' } },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-ayu-light min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-xl w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
+        <div class="bg-ayu-dark p-8 text-center text-white">
+            <h1 class="text-2xl font-bold">Secure Payment</h1>
+            <p class="opacity-70 text-sm mt-1">Scan the QR code to complete your booking</p>
+        </div>
+
+        <div class="p-8 md:p-12 space-y-8">
+            <div id="bookingSummary" class="text-center p-4 bg-ayu-light rounded-2xl border border-ayu-green/10 hidden">
+                <p class="text-xs font-bold text-ayu-green uppercase tracking-widest">Selected Service</p>
+                <p id="summaryService" class="text-lg font-bold text-ayu-dark">---</p>
+            </div>
+
+            <div class="flex flex-col items-center justify-center bg-gray-50 p-6 rounded-3xl border-2 border-dashed border-gray-200">
+                <img id="qrCode" src="https://via.placeholder.com/200?text=Generating+QR..." alt="Payment QR Code" class="w-48 h-48 rounded-lg shadow-inner">
+                <p id="displayAmount" class="mt-4 font-bold text-ayu-dark text-lg">Amount: ₹---</p>
+                <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">Scan with GPay, PhonePe, or Paytm</p>
+            </div>
+
+            <form id="paymentForm" class="space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-400 uppercase">Payer Name/UPI ID</label>
+                        <input type="text" id="payerId" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 outline-none focus:border-ayu-green transition" placeholder="e.g. Anand / anand@upi" required>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-400 uppercase">Transaction ID</label>
+                        <input type="text" id="txnId" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 outline-none focus:border-ayu-green transition" placeholder="12-digit Ref No." required>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-400 uppercase">Upload Screenshot</label>
+                    <div class="relative group">
+                        <input type="file" id="screenshot" accept="image/*" class="hidden" required onchange="updateFileName(this)">
+                        <label for="screenshot" class="flex items-center justify-center gap-3 w-full bg-gray-50 border border-gray-200 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition group-hover:border-ayu-orange">
+                            <i class="fas fa-cloud-upload-alt text-ayu-orange"></i>
+                            <span id="fileName" class="text-gray-500 text-sm">Choose payment screenshot...</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-ayu-green text-white py-4 rounded-2xl font-bold text-lg hover:shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3">
+                    <span>Verify Payment</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        // Updated Imports to include serverTimestamp and better reference handling
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
+            authDomain: "ayusetu-cd9bb.firebaseapp.com",
+            projectId: "ayusetu-cd9bb",
+            storageBucket: "ayusetu-cd9bb.firebasestorage.app",
+            messagingSenderId: "641194205830",
+            appId: "1:641194205830:web:ceb2e083ec77920a716707"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ImgBB API Key
+        const IMGBB_API_KEY = "cc0d57e33d7ff7f513eae6cb12110d89"; 
+
+        // 1. Load Data from Session Storage
+        const bookingData = JSON.parse(sessionStorage.getItem('active_booking'));
+
+        if (!bookingData) {
+            alert("No active booking session found. Redirecting to home...");
+            window.location.href = "./index.html";
+        } else {
+            document.getElementById('displayAmount').innerText = `Amount: ₹${bookingData.price}`;
+            document.getElementById('summaryService').innerText = bookingData.service;
+            document.getElementById('bookingSummary').classList.remove('hidden');
+            
+            const upiId = "YOUR_UPI_ID@okicici"; 
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${upiId}&pn=Ayusetu Wellness&am=${bookingData.price}&cu=INR`;
+            document.getElementById('qrCode').src = qrUrl;
+        }
+
+        window.updateFileName = (input) => {
+            const name = input.files[0] ? input.files[0].name : "Choose payment screenshot...";
+            document.getElementById('fileName').innerText = name;
+        };
+
+        document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Processing...`;
+
+            const payerId = document.getElementById('payerId').value;
+            const txnId = document.getElementById('txnId').value;
+            const fileInput = document.getElementById('screenshot');
+
+            try {
+                // 1. Upload Screenshot to ImgBB
+                const formData = new FormData();
+                formData.append("image", fileInput.files[0]);
+                
+                const imgbbRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                    method: "POST",
+                    body: formData
+                });
+                const imgData = await imgbbRes.json();
+                if (!imgData.success) throw new Error("Image upload failed at ImgBB.");
+                const screenshotUrl = imgData.data.url;
+
+                // 2. Create Final Booking in Firebase
+                // Using explicit collection reference to fix the 'indexOf' null error
+                const bookingsCollection = collection(db, "bookings");
+                
+                await addDoc(bookingsCollection, {
+                    ...bookingData,
+                    payerUpi: payerId,
+                    transactionId: txnId,
+                    screenshotUrl: screenshotUrl,
+                    status: "Pending Verification",
+                    createdAt: serverTimestamp() // Better practice than new Date()
+                });
+
+                // 3. Clear session and redirect
+                sessionStorage.removeItem('active_booking');
+                alert("Payment submitted! Our team will verify it within 24 hours.");
+                window.location.href = "./user-dashboard.html";
+
+            } catch (error) {
+                console.error("Submission error:", error);
+                // Detailed alert to help you debug
+                alert("Submission failed: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Verify Payment";
+            }
+        });
+    </script>
+</body>
+</html>

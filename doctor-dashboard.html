@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healer Dashboard | Ayusetu Wellness</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ayu: {
+                            orange: '#C85226',
+                            green: '#2E7D32',
+                            light: '#F3F8F4',
+                            dark: '#1B4D3E'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #fdfbf7; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .sidebar-link.active {
+            background-color: #C85226;
+            color: white;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .appointment-card {
+            border-left: 4px solid #2E7D32;
+            transition: all 0.3s ease;
+        }
+        .appointment-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen">
+
+    <!-- TOP NAVIGATION -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                <span class="font-serif text-2xl font-bold">
+                    <span class="text-ayu-green">AYU</span><span class="text-ayu-orange">SETU</span>
+                </span>
+                <span class="hidden md:block text-xs bg-orange-50 text-ayu-orange px-2 py-1 rounded font-bold uppercase tracking-widest ml-2">Healer Panel</span>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-100">
+                    <div class="text-right hidden sm:block">
+                        <p id="docName" class="text-sm font-bold text-gray-900 italic">Dr. Loading...</p>
+                        <p id="docEmail" class="text-[10px] text-gray-400 uppercase font-black">Medical Expert</p>
+                    </div>
+                    <button onclick="handleLogout()" class="bg-gray-100 hover:bg-red-50 hover:text-red-600 p-2.5 rounded-full transition">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 max-w-7xl mx-auto px-6">
+        <div class="grid lg:grid-cols-4 gap-8">
+            
+            <!-- LEFT SIDEBAR -->
+            <aside class="lg:col-span-1 space-y-4">
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                    <nav class="space-y-2">
+                        <a href="#" class="sidebar-link active flex items-center gap-3 p-4 rounded-2xl font-bold transition">
+                            <i class="fas fa-user-md w-5"></i> My Sessions
+                        </a>
+                        <a href="#" onclick="alert('Profile editing coming soon')" class="sidebar-link flex items-center gap-3 p-4 rounded-2xl font-medium text-gray-500 hover:bg-ayu-light hover:text-ayu-green transition">
+                            <i class="fas fa-id-card w-5"></i> My Profile
+                        </a>
+                        <a href="mailto:it@ayusetu.com" class="sidebar-link flex items-center gap-3 p-4 rounded-2xl font-medium text-gray-500 hover:bg-ayu-light hover:text-ayu-green transition">
+                            <i class="fas fa-headset w-5"></i> IT Support
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="bg-ayu-green rounded-3xl p-8 text-white relative overflow-hidden shadow-xl">
+                    <div class="relative z-10">
+                        <h4 class="font-serif text-xl mb-2">Ayusetu Pulse</h4>
+                        <p class="text-xs text-green-100 mb-6">Real-time patient updates and prescription status sync.</p>
+                        <div class="bg-white/20 p-4 rounded-xl backdrop-blur-sm">
+                            <p class="text-[10px] uppercase font-black tracking-widest text-white/60 mb-1">Status</p>
+                            <p class="text-xs font-bold">Online & Active</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-stethoscope absolute -bottom-4 -right-4 text-7xl text-white/5 rotate-12"></i>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <main class="lg:col-span-3 space-y-8">
+                
+                <div class="bg-ayu-dark rounded-[2.5rem] p-10 shadow-sm border border-gray-100 relative overflow-hidden text-white">
+                    <div class="relative z-10">
+                        <h1 class="text-4xl font-serif font-bold mb-2">Welcome, <span id="greetDoc" class="text-ayu-orange">Expert</span></h1>
+                        <p class="text-gray-300">You have <span id="pendingCount" class="font-bold text-white">0</span> pending consultations scheduled for today.</p>
+                    </div>
+                    <div class="absolute top-0 right-0 h-full w-1/3 bg-gradient-to-l from-white/5 to-transparent hidden md:block"></div>
+                </div>
+
+                <section id="sessions">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-serif font-bold">Scheduled Consultations</h3>
+                        <span class="text-xs font-bold text-ayu-green bg-green-50 px-3 py-1 rounded-full uppercase tracking-widest border border-green-100">Live Queue</span>
+                    </div>
+
+                    <div id="sessionsGrid" class="grid gap-6">
+                        <!-- Dynamic Session Cards -->
+                        <div class="bg-white p-12 rounded-[2rem] border border-gray-100 shadow-sm text-center py-24">
+                            <i class="fas fa-calendar-day text-gray-100 text-6xl mb-4"></i>
+                            <p class="text-gray-400 italic">No appointments assigned to you at the moment.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- PRESCRIPTION MODAL -->
+    <div id="prescriptionModal" class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-fadeIn">
+            <div class="bg-ayu-green p-8 text-white flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-serif font-bold">Write Protocol</h2>
+                    <p id="modalPatientInfo" class="text-xs text-green-100 uppercase tracking-widest mt-1">Patient: Loading...</p>
+                </div>
+                <button onclick="closePrescription()" class="text-white/60 hover:text-white text-3xl">&times;</button>
+            </div>
+            
+            <div class="p-8 space-y-6">
+                <input type="hidden" id="currentBookingId">
+                
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest flex items-center gap-2">
+                        <i class="fas fa-clipboard-list text-ayu-green"></i> Healer's Observations & Advice
+                    </label>
+                    <textarea id="doctorAdvice" rows="4" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 outline-none focus:border-ayu-green focus:ring-4 focus:ring-ayu-green/5 transition text-sm" placeholder="Summarize your findings and lifestyle suggestions..."></textarea>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest flex items-center gap-2">
+                        <i class="fas fa-pills text-ayu-orange"></i> Prescribed Protocol (Herbs / Yoga)
+                    </label>
+                    <textarea id="doctorPrescription" rows="4" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 outline-none focus:border-ayu-orange focus:ring-4 focus:ring-ayu-orange/5 transition text-sm" placeholder="List specific herbs, dosages, or yoga asanas..."></textarea>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="savePrescription()" id="saveBtn" class="flex-1 bg-ayu-dark text-white py-4 rounded-2xl font-bold hover:bg-black transition shadow-lg">
+                        Submit & Sync to Patient
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
+            authDomain: "ayusetu-cd9bb.firebaseapp.com",
+            projectId: "ayusetu-cd9bb",
+            storageBucket: "ayusetu-cd9bb.firebasestorage.app",
+            messagingSenderId: "641194205830",
+            appId: "1:641194205830:web:ceb2e083ec77920a716707",
+            measurementId: "G-JLYGFR8QCF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let sessionsUnsubscribe = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = './index.html';
+            } else {
+                // Verify Role
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (!userDoc.exists() || userDoc.data().role !== 'doctor') {
+                    alert("Unauthorized access. Doctors only.");
+                    window.location.href = './index.html';
+                    return;
+                }
+                
+                const data = userDoc.data();
+                document.getElementById('docName').innerText = (data.name || data.email.split('@')[0]).toUpperCase();
+                document.getElementById('greetDoc').innerText = data.name || data.email.split('@')[0];
+                
+                setupDoctorSessions(user.uid);
+            }
+        });
+
+        function setupDoctorSessions(uid) {
+            const grid = document.getElementById('sessionsGrid');
+            const pendingCountEl = document.getElementById('pendingCount');
+
+            if (sessionsUnsubscribe) sessionsUnsubscribe();
+
+            // Query: Bookings assigned to this doctor with status Scheduled or Verified
+            const q = query(collection(db, "bookings"), where("doctorId", "==", uid));
+
+            sessionsUnsubscribe = onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    grid.innerHTML = `<div class="bg-white p-20 rounded-[2rem] border border-gray-100 text-center italic text-gray-300">No appointments assigned.</div>`;
+                    pendingCountEl.innerText = "0";
+                    return;
+                }
+
+                grid.innerHTML = '';
+                let count = 0;
+
+                snapshot.forEach((docSnap) => {
+                    const b = docSnap.data();
+                    const id = docSnap.id;
+                    if (b.status === "Scheduled") count++;
+
+                    const card = `
+                        <div class="appointment-card bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col md:flex-row gap-8 items-center">
+                            <div class="flex-1 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-xl font-bold text-gray-900">${b.name || 'Patient'}</h4>
+                                    <span class="bg-ayu-light text-ayu-green text-[10px] font-black px-2 py-1 rounded uppercase">${b.service || 'Naturopathy'}</span>
+                                </div>
+                                <div class="text-xs text-gray-400 space-y-1">
+                                    <p><i class="fas fa-envelope mr-2"></i>${b.email || 'N/A'}</p>
+                                    <p><i class="fas fa-phone mr-2"></i>${b.phone || 'N/A'}</p>
+                                </div>
+                                <div class="pt-4 flex flex-wrap gap-2">
+                                    <span class="bg-gray-50 text-gray-500 text-[9px] font-bold px-3 py-1 rounded-full border border-gray-100">ID: ${b.transactionId || '---'}</span>
+                                    <span class="bg-orange-50 text-ayu-orange text-[9px] font-bold px-3 py-1 rounded-full border border-orange-100">${b.status}</span>
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-auto flex flex-col gap-3">
+                                ${b.meetingLink ? `
+                                    <a href="${b.meetingLink}" target="_blank" class="bg-ayu-green text-white px-8 py-3 rounded-xl text-xs font-bold shadow-lg shadow-green-900/10 text-center hover:bg-green-700 transition">
+                                        <i class="fas fa-video mr-2"></i> Launch Meeting
+                                    </a>
+                                ` : `<button disabled class="bg-gray-100 text-gray-400 px-8 py-3 rounded-xl text-xs font-bold text-center">Meeting Link Pending</button>`}
+                                
+                                <button onclick="openPrescription('${id}', '${b.name}', \`${b.advice || ''}\`, \`${b.prescription || ''}\`)" class="border-2 border-ayu-orange text-ayu-orange px-8 py-3 rounded-xl text-xs font-bold hover:bg-ayu-orange hover:text-white transition text-center">
+                                    <i class="fas fa-file-medical mr-2"></i> ${b.advice ? 'Edit Advice' : 'Add Advice'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+                pendingCountEl.innerText = count;
+            });
+        }
+
+        window.openPrescription = (id, name, advice, pres) => {
+            document.getElementById('currentBookingId').value = id;
+            document.getElementById('modalPatientInfo').innerText = `Patient: ${name}`;
+            document.getElementById('doctorAdvice').value = advice === "undefined" ? "" : advice;
+            document.getElementById('doctorPrescription').value = pres === "undefined" ? "" : pres;
+            document.getElementById('prescriptionModal').classList.remove('hidden');
+        };
+
+        window.closePrescription = () => document.getElementById('prescriptionModal').classList.add('hidden');
+
+        window.savePrescription = async () => {
+            const id = document.getElementById('currentBookingId').value;
+            const advice = document.getElementById('doctorAdvice').value;
+            const prescription = document.getElementById('doctorPrescription').value;
+            const btn = document.getElementById('saveBtn');
+
+            if (!advice) return alert("Please enter some observations first.");
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Syncing...`;
+                
+                await updateDoc(doc(db, "bookings", id), {
+                    advice: advice,
+                    prescription: prescription,
+                    updatedAt: new Date()
+                });
+
+                alert("Protocol synced successfully! The patient can now view this in their portal.");
+                closePrescription();
+            } catch (err) {
+                console.error(err);
+                alert("Sync failed. Check connection.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Submit & Sync to Patient";
+            }
+        };
+
+        window.handleLogout = async () => {
+            if(confirm("Logout from Healer Panel?")) {
+                await signOut(auth);
+                window.location.href = './index.html';
+            }
+        };
+    </script>
+</body>
+</html>

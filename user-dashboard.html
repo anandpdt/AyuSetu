@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard | Ayusetu Wellness</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ayu: {
+                            orange: '#C85226',
+                            green: '#2E7D32',
+                            light: '#F3F8F4',
+                            dark: '#1B4D3E'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #fdfbf7; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .sidebar-link.active {
+            background-color: #2E7D32;
+            color: white;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .advice-card {
+            border-left: 4px solid #C85226;
+            transition: all 0.3s ease;
+        }
+        .advice-card:hover { transform: translateX(5px); }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen">
+
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                <span class="font-serif text-2xl font-bold">
+                    <span class="text-ayu-green">AYU</span><span class="text-ayu-orange">SETU</span>
+                </span>
+                <span class="hidden md:block text-xs bg-ayu-light text-ayu-green px-2 py-1 rounded font-bold uppercase tracking-widest ml-2">Member Portal</span>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="hidden md:block text-sm font-medium text-gray-500 hover:text-ayu-green">Back to Home</a>
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-100">
+                    <div class="text-right hidden sm:block">
+                        <p id="userName" class="text-sm font-bold text-gray-900 italic">Loading...</p>
+                        <p id="userEmail" class="text-[10px] text-gray-400">User Session</p>
+                    </div>
+                    <button onclick="handleLogout()" class="bg-gray-100 hover:bg-red-50 hover:text-red-600 p-2.5 rounded-full transition">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 max-w-7xl mx-auto px-6">
+        <div class="grid lg:grid-cols-4 gap-8">
+            
+            <aside class="lg:col-span-1 space-y-4">
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                    <nav class="space-y-2">
+                        <a href="#" class="sidebar-link active flex items-center gap-3 p-4 rounded-2xl font-bold transition">
+                            <i class="fas fa-th-large w-5"></i> Dashboard
+                        </a>
+                        <a href="#my-bookings" class="sidebar-link flex items-center gap-3 p-4 rounded-2xl font-medium text-gray-500 hover:bg-ayu-light hover:text-ayu-green transition">
+                            <i class="fas fa-calendar-alt w-5"></i> My Bookings
+                        </a>
+                        <a href="#prescriptions" class="sidebar-link flex items-center gap-3 p-4 rounded-2xl font-medium text-gray-500 hover:bg-ayu-light hover:text-ayu-green transition">
+                            <i class="fas fa-file-medical w-5"></i> Medical Advice
+                        </a>
+                        <a href="index.html#services" class="sidebar-link flex items-center gap-3 p-4 rounded-2xl font-medium text-gray-500 hover:bg-ayu-light hover:text-ayu-green transition">
+                            <i class="fas fa-plus-circle w-5"></i> New Session
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="bg-ayu-dark rounded-3xl p-8 text-white relative overflow-hidden shadow-xl">
+                    <div class="relative z-10">
+                        <h4 class="font-serif text-xl mb-2">Need Help?</h4>
+                        <p class="text-xs text-gray-300 mb-6">Talk to our wellness concierge for immediate assistance.</p>
+                        <a href="mailto:help@ayusetu.com" class="inline-block bg-ayu-orange text-white px-6 py-2 rounded-xl text-sm font-bold">Contact Support</a>
+                    </div>
+                    <i class="fas fa-leaf absolute -bottom-4 -right-4 text-7xl text-white/5 rotate-12"></i>
+                </div>
+            </aside>
+
+            <main class="lg:col-span-3 space-y-8">
+                
+                <div class="bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h1 class="text-4xl font-serif font-bold text-gray-900 mb-2">Namaste, <span id="greetName" class="text-ayu-green">User</span>!</h1>
+                        <p class="text-gray-500">Welcome back. Your personalized wellness protocols are listed below.</p>
+                    </div>
+                    <div class="absolute top-0 right-0 h-full w-1/3 bg-gradient-to-l from-ayu-light to-transparent hidden md:block"></div>
+                </div>
+
+                <!-- NEW SECTION: MEDICAL ADVICE & PRESCRIPTIONS -->
+                <section id="prescriptions">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-serif font-bold">Healer's Advice & Prescriptions</h3>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-ayu-orange rounded-full animate-ping"></span>
+                            <span class="text-[10px] font-bold text-ayu-orange uppercase tracking-widest">New Updates Available</span>
+                        </div>
+                    </div>
+
+                    <div id="adviceGrid" class="grid gap-6">
+                        <!-- Dynamic Prescription Cards -->
+                        <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center py-16">
+                            <i class="fas fa-folder-open text-gray-200 text-5xl mb-4"></i>
+                            <p class="text-gray-400 italic">No prescriptions or medical advice shared by healers yet.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="my-bookings">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-serif font-bold">My Recent Bookings</h3>
+                        <span class="text-xs font-bold text-ayu-green bg-ayu-light px-3 py-1 rounded-full uppercase tracking-widest">Live Status</span>
+                    </div>
+                    
+                    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-50 border-b border-gray-100">
+                                    <tr>
+                                        <th class="px-8 py-5 text-xs font-bold text-gray-400 uppercase">Service</th>
+                                        <th class="px-8 py-5 text-xs font-bold text-gray-400 uppercase">Details</th>
+                                        <th class="px-8 py-5 text-xs font-bold text-gray-400 uppercase">Status</th>
+                                        <th class="px-8 py-5 text-xs font-bold text-gray-400 uppercase text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookingsTableBody" class="divide-y divide-gray-50">
+                                    <tr>
+                                        <td colspan="4" class="px-8 py-10 text-center text-gray-400 italic">
+                                            <i class="fas fa-spinner fa-spin mr-2"></i> Initializing session...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-serif font-bold mb-6">Available Programs</h3>
+                    <div id="services-grid" class="grid md:grid-cols-2 gap-6">
+                        <div class="col-span-2 text-center py-10 text-gray-400">Loading programs...</div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
+            authDomain: "ayusetu-cd9bb.firebaseapp.com",
+            projectId: "ayusetu-cd9bb",
+            storageBucket: "ayusetu-cd9bb.firebasestorage.app",
+            messagingSenderId: "641194205830",
+            appId: "1:641194205830:web:ceb2e083ec77920a716707",
+            measurementId: "G-JLYGFR8QCF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let bookingsUnsubscribe = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = './index.html';
+            } else {
+                fetchUserProfile(user.uid);
+                setupRealtimeBookings(user.uid);
+                fetchAvailableServices();
+            }
+        });
+
+        async function fetchUserProfile(uid) {
+            const docRef = doc(db, "users", uid);
+            const snap = await getDoc(docRef);
+            if (snap.exists()) {
+                const data = snap.data();
+                const displayName = data.email.split('@')[0];
+                document.getElementById('userName').innerText = displayName.toUpperCase();
+                document.getElementById('greetName').innerText = displayName;
+                document.getElementById('userEmail').innerText = data.email;
+            }
+        }
+
+        // REAL-TIME BOOKINGS & ADVICE LISTENER
+        function setupRealtimeBookings(uid) {
+            const tbody = document.getElementById('bookingsTableBody');
+            const adviceGrid = document.getElementById('adviceGrid');
+            
+            if (bookingsUnsubscribe) bookingsUnsubscribe();
+
+            const q = query(collection(db, "bookings"), where("uid", "==", uid));
+
+            bookingsUnsubscribe = onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-8 py-10 text-center text-gray-500">No bookings found. Start your journey today!</td></tr>`;
+                    adviceGrid.innerHTML = `<div class="bg-white p-12 rounded-[2rem] border border-gray-100 text-center italic text-gray-400">No data available.</div>`;
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                let adviceHTML = '';
+                let adviceCount = 0;
+
+                snapshot.forEach((doc) => {
+                    const b = doc.data();
+                    
+                    // 1. Table Logic
+                    let statusClass = "bg-orange-100 text-orange-700";
+                    if (b.status === "Verified" || b.status === "Scheduled") statusClass = "bg-green-100 text-green-700";
+                    if (b.status === "Rejected") statusClass = "bg-red-100 text-red-700";
+
+                    const row = `
+                        <tr class="hover:bg-gray-50/50 transition">
+                            <td class="px-8 py-5">
+                                <div class="font-bold text-gray-900">${b.service || 'Consultation'}</div>
+                                <div class="text-[10px] text-ayu-green uppercase font-bold">Ref: ${b.transactionId || 'N/A'}</div>
+                            </td>
+                            <td class="px-8 py-5 text-sm text-gray-500">
+                                <div><i class="fas fa-user-circle mr-1 opacity-50"></i> ${b.name || 'Patient'}</div>
+                                <div class="text-xs opacity-60">${b.phone || ''}</div>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="px-3 py-1 rounded-full text-[10px] font-bold ${statusClass}">
+                                    ${b.status || 'Pending Verification'}
+                                </span>
+                            </td>
+                            <td class="px-8 py-5 text-right">
+                                ${b.status === "Scheduled" ? 
+                                    `<a href="${b.meetingLink || '#'}" target="_blank" class="bg-ayu-green text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm inline-block">Join Video Call</a>` : 
+                                    (b.status === "Verified" ? `<span class="text-xs text-ayu-green italic font-medium">Link coming soon...</span>` : `<span class="text-xs text-gray-300 italic">No action available</span>`)
+                                }
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+
+                    // 2. Advice Section Logic (Display if doctor added notes or link)
+                    if (b.status === "Scheduled" || b.advice || b.prescription) {
+                        adviceCount++;
+                        adviceHTML += `
+                            <div class="advice-card bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 space-y-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-xs font-bold text-ayu-green uppercase tracking-widest mb-1">${b.service}</h4>
+                                        <p class="text-sm font-bold text-gray-900">Dr. ${b.doctorName || 'Assigned Expert'}</p>
+                                    </div>
+                                    ${b.status === "Scheduled" ? '<span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">Live Session Scheduled</span>' : ''}
+                                </div>
+                                
+                                <div class="bg-gray-50 p-6 rounded-2xl">
+                                    <h5 class="text-xs font-black uppercase text-gray-400 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-comment-medical text-ayu-orange"></i> Healer's Observations
+                                    </h5>
+                                    <p class="text-gray-600 text-sm leading-relaxed italic">
+                                        "${b.advice || 'Awaiting initial consultation. Please prepare your reports for the session.'}"
+                                    </p>
+                                </div>
+
+                                ${b.prescription ? `
+                                <div class="pt-2">
+                                    <h5 class="text-xs font-black uppercase text-gray-400 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-prescription text-ayu-green"></i> Prescribed Protocol
+                                    </h5>
+                                    <p class="text-gray-700 text-sm font-medium border-l-2 border-ayu-green/20 pl-4">
+                                        ${b.prescription}
+                                    </p>
+                                </div>
+                                ` : ''}
+
+                                <div class="flex gap-4 pt-4">
+                                    ${b.meetingLink ? `
+                                        <a href="${b.meetingLink}" target="_blank" class="flex-1 bg-ayu-dark text-white text-center py-3 rounded-xl text-xs font-bold hover:bg-black transition">
+                                            <i class="fas fa-video mr-2"></i> Launch Meeting
+                                        </a>
+                                    ` : ''}
+                                    <button class="flex-1 border border-gray-100 text-gray-400 py-3 rounded-xl text-xs font-bold cursor-not-allowed">
+                                        <i class="fas fa-download mr-2"></i> PDF Prescription
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                if (adviceCount > 0) adviceGrid.innerHTML = adviceHTML;
+            }, (error) => {
+                console.error("Listener error:", error);
+                tbody.innerHTML = `<tr><td colspan="4" class="px-8 py-10 text-center text-red-500">Connection error.</td></tr>`;
+            });
+        }
+
+        async function fetchAvailableServices() {
+            const grid = document.getElementById('services-grid');
+            try {
+                const snap = await getDoc(doc(db, "site_content", "homepage"));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    const sList = Object.keys(data.services || {}).map(k => data.services[k]);
+                    grid.innerHTML = sList.slice(0, 2).map(s => `
+                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="bg-ayu-light p-3 rounded-xl text-ayu-green text-xl"><i class="fas fa-spa"></i></div>
+                                <span class="text-lg font-bold">₹${s.price}</span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">${s.title}</h4>
+                            <p class="text-xs text-gray-400 mb-6">${s.desc.substring(0, 80)}...</p>
+                            <button onclick="window.location.href='./index.html#consultation'" class="w-full py-3 bg-ayu-green text-white rounded-xl text-sm font-bold">Book Again</button>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                grid.innerHTML = `<div class="col-span-2 text-center text-gray-400">Programs temporarily unavailable.</div>`;
+            }
+        }
+
+        window.handleLogout = async () => {
+            if(confirm("Are you sure you want to logout?")) {
+                await signOut(auth);
+                window.location.href = './index.html';
+            }
+        };
+    </script>
+</body>
+</html>

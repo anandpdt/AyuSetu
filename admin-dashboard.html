@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Admin | Ayusetu Wellness</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ayu: { orange: '#C85226', green: '#2E7D32', dark: '#1B4D3E', light: '#F3F8F4' }
+                    },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'], serif: ['Merriweather', 'serif'] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #f8fafc; }
+        .live-input { background: transparent; border: 1px dashed transparent; border-radius: 4px; transition: all 0.2s; width: 100%; display: block; }
+        .live-input:hover { border-color: #cbd5e1; background: rgba(255,255,255,0.5); cursor: text; }
+        .live-input:focus { outline: none; border-color: #C85226; background: white; color: #1e293b !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
+        .nav-active { background-color: #fff7ed; color: #C85226; border-right: 4px solid #C85226; font-weight: 700; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .img-edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2; cursor: pointer; }
+        .editable-img-container:hover .img-edit-overlay { opacity: 1; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden font-sans text-gray-800">
+
+    <aside class="w-72 bg-white border-r border-gray-200 flex flex-col shadow-xl z-50">
+        <div class="p-8 border-b border-gray-100">
+            <h1 class="font-serif font-bold text-2xl text-ayu-green">AYU<span class="text-ayu-orange">SETU</span></h1>
+            <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-black mt-1">Master Control</p>
+        </div>
+        
+        <nav class="flex-1 px-4 space-y-2 mt-8 overflow-y-auto custom-scrollbar">
+            <p class="px-4 text-[10px] font-bold text-gray-400 uppercase mb-2">Verification</p>
+            <button onclick="switchTab('payments')" id="btn-payments" class="nav-btn w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left text-gray-600 hover:bg-gray-50 transition-all nav-active">
+                <i class="fas fa-file-invoice-dollar w-5"></i> Payment Verifier
+            </button>
+
+            <p class="px-4 text-[10px] font-bold text-gray-400 uppercase mb-2 mt-8">Operations</p>
+            <button onclick="switchTab('manage-bookings')" id="btn-manage-bookings" class="nav-btn w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fas fa-calendar-check w-5"></i> Appointment Desk
+            </button>
+
+            <p class="px-4 text-[10px] font-bold text-gray-400 uppercase mb-2 mt-8">Site Editor</p>
+            <button onclick="switchTab('home-editor')" id="btn-home-editor" class="nav-btn w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fas fa-magic w-5"></i> Visual CMS
+            </button>
+            
+            <p class="px-4 text-[10px] font-bold text-gray-400 uppercase mb-2 mt-8">Directory</p>
+            <button onclick="switchTab('doctors-db')" id="btn-doctors-db" class="nav-btn w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fas fa-user-md w-5"></i> Healer Accounts
+            </button>
+            <button onclick="switchTab('users-db')" id="btn-users-db" class="nav-btn w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fas fa-user-injured w-5"></i> Patient Database
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-gray-50">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-3 px-4 py-3 text-red-500 bg-red-50 hover:bg-red-100 rounded-xl transition font-bold text-sm">
+                <i class="fas fa-power-off"></i> Secure Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative bg-[#fcfcfc]">
+        
+        <div id="loading-overlay" class="absolute inset-0 bg-white/90 z-[100] flex items-center justify-center">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-ayu-green mx-auto mb-4"></div>
+                <p class="text-gray-500 font-bold animate-pulse">Synchronizing Ayusetu Data...</p>
+            </div>
+        </div>
+
+        <div id="tab-payments" class="tab-content active p-12">
+            <header class="mb-12">
+                <h2 class="text-4xl font-serif font-bold text-gray-800">Payment Verifier</h2>
+                <p class="text-gray-400 mt-2">Comprehensive view of all transactions including residential stays and online sessions.</p>
+            </header>
+            
+            <div class="bg-white rounded-[2rem] shadow-xl border border-gray-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-widest">
+                        <tr>
+                            <th class="p-6">Patient & Program</th>
+                            <th class="p-6">Contact / Transaction</th>
+                            <th class="p-6 text-center">Verification Proof</th>
+                            <th class="p-6 text-center">Status</th>
+                            <th class="p-6 text-right">Verification Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsTableBody" class="divide-y divide-gray-50"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-manage-bookings" class="tab-content p-12">
+            <header class="mb-12">
+                <h2 class="text-4xl font-serif font-bold text-gray-800">Appointment Desk</h2>
+                <p class="text-gray-400 mt-2">Manage assigned healers and session links. All records remain visible after assignment.</p>
+            </header>
+            
+            <div class="bg-white rounded-[2rem] shadow-xl border border-gray-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-widest">
+                        <tr>
+                            <th class="p-6">Patient Info</th>
+                            <th class="p-6">Program Type</th>
+                            <th class="p-6">Assign Medical Expert</th>
+                            <th class="p-6 text-center">Current Desk Status</th>
+                            <th class="p-6 text-right">Linking Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="manageBookingsTableBody" class="divide-y divide-gray-50"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-home-editor" class="tab-content">
+            <div class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 px-12 py-6 flex justify-between items-center shadow-sm">
+                <div>
+                    <h2 class="font-serif font-bold text-2xl text-ayu-dark">Visual Page Editor</h2>
+                    <p class="text-[10px] text-ayu-green font-bold uppercase tracking-widest">Live Content Sync</p>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="saveCMS()" class="bg-ayu-orange hover:bg-orange-700 text-white px-8 py-3 rounded-xl shadow-lg font-bold flex items-center gap-3 transition">
+                        <i class="fas fa-check-circle"></i> Publish Changes
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-12 space-y-16">
+                <div class="relative p-10 border-2 border-dashed border-gray-200 rounded-[3rem]">
+                    <span class="absolute -top-4 left-10 bg-[#fcfcfc] px-4 py-1 text-[10px] font-black text-gray-300 uppercase italic">Section: Programs</span>
+                    <div class="flex overflow-x-auto gap-8 pb-4 custom-scrollbar" id="services-grid"></div>
+                </div>
+
+                <div class="relative p-10 border-2 border-dashed border-gray-200 rounded-[3rem]">
+                    <span class="absolute -top-4 left-10 bg-[#fcfcfc] px-4 py-1 text-[10px] font-black text-gray-300 uppercase italic">Section: Healers</span>
+                    <div class="flex overflow-x-auto gap-8 pb-4 custom-scrollbar" id="doctors-editor-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-doctors-db" class="tab-content p-12">
+            <h2 class="text-3xl font-serif font-bold mb-8">Medical Team Directory</h2>
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-gray-400 text-[10px] font-black uppercase">
+                        <tr><th class="p-6">Healer Email</th><th class="p-6 text-right">Actions</th></tr>
+                    </thead>
+                    <tbody id="doctorsTableBody" class="divide-y divide-gray-50"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-users-db" class="tab-content p-12">
+            <h2 class="text-3xl font-serif font-bold mb-8">All Registered Patients</h2>
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-gray-400 text-[10px] font-black uppercase">
+                        <tr><th class="p-6">Patient Email</th><th class="p-6 text-right">Actions</th></tr>
+                    </thead>
+                    <tbody id="usersTableBody" class="divide-y divide-gray-50"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals & Toasts -->
+    <div id="screenshotModal" class="fixed inset-0 z-[200] hidden bg-black/95 flex items-center justify-center p-10">
+        <button onclick="closeScreenshot()" class="absolute top-10 right-10 text-white text-5xl hover:text-ayu-orange">&times;</button>
+        <img id="modalImg" src="" class="max-w-full max-h-full rounded-xl shadow-2xl">
+    </div>
+
+    <div id="toast" class="fixed bottom-10 right-10 bg-ayu-dark text-white px-8 py-5 rounded-2xl shadow-2xl transform translate-y-40 transition-transform duration-500 z-[200] flex items-center gap-4">
+        <div class="bg-ayu-green p-2 rounded-full"><i class="fas fa-check text-white text-xs"></i></div>
+        <div><h4 id="toast-title" class="font-bold text-sm">Success</h4><p id="toast-msg" class="text-xs text-gray-400">Database updated.</p></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
+            authDomain: "ayusetu-cd9bb.firebaseapp.com",
+            projectId: "ayusetu-cd9bb",
+            storageBucket: "ayusetu-cd9bb.firebasestorage.app",
+            messagingSenderId: "641194205830",
+            appId: "1:641194205830:web:ceb2e083ec77920a716707"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let servicesList = [];
+        let doctorsCMS = [];
+        let expertAccounts = [];
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) { window.location.href = "./index.html"; return; }
+            const snap = await getDoc(doc(db, "users", user.uid));
+            if (!snap.exists() || snap.data().role !== 'admin') { 
+                alert("Unauthorized access denied.");
+                window.location.href = "./index.html"; 
+                return; 
+            }
+            await refreshAllData();
+            document.getElementById('loading-overlay').classList.add('hidden');
+        });
+
+        async function refreshAllData() {
+            await fetchExpertAccounts();
+            await loadCMSData();
+            await loadPayments();
+            await loadManageBookings();
+        }
+
+        window.logout = () => signOut(auth).then(() => window.location.href = "./index.html");
+
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
+            document.getElementById(`btn-${tab}`).classList.add('nav-active');
+            
+            if(tab === 'users-db') window.loadTable('usersTableBody', 'user');
+            if(tab === 'doctors-db') window.loadTable('doctorsTableBody', 'doctor');
+            if(tab === 'payments') loadPayments();
+            if(tab === 'manage-bookings') loadManageBookings();
+        }
+
+        // --- 1. PAYMENT VERIFIER ---
+        async function loadPayments() {
+            const tbody = document.getElementById('paymentsTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" class="p-10 text-center"><i class="fas fa-spinner fa-spin text-ayu-green"></i></td></tr>';
+            
+            const snap = await getDocs(collection(db, "bookings"));
+
+            if(snap.empty) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-gray-300 italic text-sm">No transaction records found in the system.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = snap.docs.map(d => {
+                const b = d.data();
+                const isPending = b.status === "Pending Verification" || b.status === "Pending";
+                const isVerified = b.status === "Verified" || b.status === "Scheduled";
+                
+                let statusBadge = `<span class="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-[9px] font-black uppercase border border-gray-200">${b.status}</span>`;
+                if(isPending) statusBadge = `<span class="px-3 py-1 bg-orange-50 text-orange-500 rounded-full text-[9px] font-black uppercase border border-orange-100 animate-pulse">Review Required</span>`;
+                if(isVerified) statusBadge = `<span class="px-3 py-1 bg-green-50 text-green-500 rounded-full text-[9px] font-black uppercase border border-green-100">Confirmed</span>`;
+                if(b.status === "Rejected") statusBadge = `<span class="px-3 py-1 bg-red-50 text-red-500 rounded-full text-[9px] font-black uppercase border border-red-100">Rejected</span>`;
+
+                return `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-6">
+                        <div class="font-bold text-gray-900 leading-tight">${b.patientName || b.name || 'Anonymous'}</div>
+                        <div class="text-[10px] text-ayu-green font-bold uppercase tracking-tight">${b.service || b.package || b.serviceName || 'Program Request'}</div>
+                    </td>
+                    <td class="p-6">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${b.userPhone || b.phone || 'No Phone'}</div>
+                        <div class="text-xs text-gray-600 truncate max-w-[150px]">ID: ${b.payerUpi || b.transactionId || '---'}</div>
+                    </td>
+                    <td class="p-6 text-center">
+                        ${b.screenshotUrl ? 
+                            `<img src="${b.screenshotUrl}" onclick="viewScreenshot('${b.screenshotUrl}')" class="w-10 h-10 mx-auto object-cover rounded-lg border border-gray-100 cursor-zoom-in hover:scale-110 transition shadow-sm">` : 
+                            `<span class="text-[9px] font-bold text-gray-300 uppercase">${b.type === 'Residential Stay' ? 'In-Person' : 'No Proof'}</span>`
+                        }
+                    </td>
+                    <td class="p-6 text-center">${statusBadge}</td>
+                    <td class="p-6 text-right space-x-2">
+                        ${isPending ? `
+                            <button onclick="approvePayment('${d.id}')" class="bg-ayu-green text-white p-2 rounded-lg hover:bg-green-700 transition" title="Approve"><i class="fas fa-check"></i></button>
+                            <button onclick="rejectPayment('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-100 transition" title="Reject"><i class="fas fa-times"></i></button>
+                        ` : `
+                            <button onclick="approvePayment('${d.id}')" class="text-gray-300 hover:text-ayu-green transition text-xs font-bold uppercase tracking-widest">Re-Audit</button>
+                        `}
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        window.viewScreenshot = (url) => { document.getElementById('modalImg').src = url; document.getElementById('screenshotModal').classList.remove('hidden'); }
+        window.closeScreenshot = () => document.getElementById('screenshotModal').classList.add('hidden');
+
+        window.approvePayment = async (id) => {
+            if(!confirm("Approve payment? This enables healer assignment.")) return;
+            await updateDoc(doc(db, "bookings", id), { status: "Verified", paymentVerified: true });
+            showToast("Verified", "Record updated. Patient can now be assigned an expert.");
+            refreshAllData();
+        }
+
+        window.rejectPayment = async (id) => {
+            const reason = prompt("Enter rejection reason for the patient:");
+            if(!reason) return;
+            await updateDoc(doc(db, "bookings", id), { status: "Rejected", reason });
+            showToast("Rejected", "Patient notified of rejection.");
+            refreshAllData();
+        }
+
+        // --- 2. APPOINTMENT DESK ---
+        async function fetchExpertAccounts() {
+            const snap = await getDocs(query(collection(db, "users"), where("role", "==", "doctor")));
+            expertAccounts = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+        }
+
+        async function loadManageBookings() {
+            const tbody = document.getElementById('manageBookingsTableBody');
+            const snap = await getDocs(collection(db, "bookings"));
+            
+            const deskList = snap.docs.filter(d => d.data().status === "Verified" || d.data().status === "Scheduled");
+
+            if(deskList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-gray-300 italic">No verified records ready for assignment.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = deskList.sort((a,b) => (b.data().createdAt?.seconds || 0) - (a.data().createdAt?.seconds || 0)).map(d => {
+                const b = d.data();
+                const options = expertAccounts.map(ex => `<option value="${ex.uid}" ${b.doctorId === ex.uid ? 'selected' : ''}>${ex.name || ex.email}</option>`).join('');
+                const statusColor = b.status === "Scheduled" ? "text-green-500" : "text-ayu-orange";
+
+                return `
+                <tr class="group hover:bg-gray-50/50 transition">
+                    <td class="p-6">
+                        <div class="font-bold text-gray-900 leading-tight">${b.patientName || b.name}</div>
+                        <div class="text-[10px] text-gray-400 lowercase">${b.userEmail || b.email}</div>
+                    </td>
+                    <td class="p-6">
+                        <span class="text-[10px] font-black text-ayu-green uppercase tracking-widest">${b.type || 'Consultation'}</span>
+                        <div class="text-[9px] text-gray-400 mt-1">${b.service || b.package || 'Standard'}</div>
+                    </td>
+                    <td class="p-6">
+                        <select id="doc-select-${d.id}" class="bg-gray-50 border border-gray-100 rounded-lg p-2 text-[10px] outline-none w-full font-bold">
+                            <option value="">-- Choose Expert --</option>${options}
+                        </select>
+                    </td>
+                    <td class="p-6 text-center">
+                        <div class="text-[9px] font-black ${statusColor} uppercase tracking-widest">${b.status}</div>
+                        ${b.doctorName ? `<div class="text-[8px] text-gray-400 mt-1 font-bold">Dr. ${b.doctorName.split(' ')[0]}</div>` : ''}
+                    </td>
+                    <td class="p-6 text-right">
+                        <button onclick="linkExpert('${d.id}')" class="bg-ayu-dark text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition shadow-lg shadow-black/5">
+                            ${b.status === "Scheduled" ? 'Update Expert' : 'Link Healer'}
+                        </button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        window.linkExpert = async (id) => {
+            const docId = document.getElementById(`doc-select-${id}`).value;
+            if(!docId) return alert("Please select a healer from the directory first.");
+            const healer = expertAccounts.find(ex => ex.uid === docId);
+            await updateDoc(doc(db, "bookings", id), { 
+                doctorId: docId, 
+                doctorName: healer.name || healer.email, 
+                meetingLink: `https://meet.jit.si/ayusetu-${id}`,
+                status: "Scheduled"
+            });
+            showToast("Session Linked", "The healer and patient portals are now synchronized.");
+            refreshAllData();
+        }
+
+        // --- 3. VISUAL CMS (GLOBALIZED FIXES) ---
+        async function loadCMSData() {
+            const snap = await getDoc(doc(db, "site_content", "homepage"));
+            if (snap.exists()) {
+                const data = snap.data();
+                servicesList = Object.keys(data.services || {}).sort().map(k => data.services[k]);
+                doctorsCMS = Object.keys(data.doctors || {}).sort().map(k => data.doctors[k]);
+                window.renderCMS();
+            }
+        }
+
+        window.renderCMS = function() {
+            const sGrid = document.getElementById('services-grid');
+            if(sGrid) {
+                sGrid.innerHTML = servicesList.map((s, i) => `
+                    <div class="w-[300px] flex-shrink-0 bg-white rounded-[2rem] p-8 shadow-sm border border-gray-50 flex flex-col group relative">
+                        <button onclick="window.removeService(${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
+                        <input type="text" oninput="servicesList[${i}].title=this.value" class="live-input text-xl font-bold mb-4" value="${s.title}">
+                        <textarea oninput="servicesList[${i}].desc=this.value" class="live-input text-xs text-gray-400 h-24 resize-none">${s.desc}</textarea>
+                        <div class="mt-4 flex items-center gap-2">
+                            <span class="text-xs font-bold text-gray-300">₹</span>
+                            <input type="text" oninput="servicesList[${i}].price=this.value" class="live-input text-lg font-bold" value="${s.price}">
+                        </div>
+                    </div>`).join('') + `<button onclick="window.addService()" class="w-[300px] flex-shrink-0 border-2 border-dashed border-gray-100 rounded-[2rem] text-gray-300 hover:text-ayu-green transition"><i class="fas fa-plus-circle text-3xl"></i></button>`;
+            }
+
+            const dGrid = document.getElementById('doctors-editor-grid');
+            if(dGrid) {
+                dGrid.innerHTML = doctorsCMS.map((d, i) => `
+                    <div class="w-[280px] flex-shrink-0 bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-50 group relative">
+                        <div class="h-48 relative editable-img-container">
+                            <img src="${d.img}" class="w-full h-full object-cover">
+                            <div class="img-edit-overlay" onclick="const u=prompt('Img URL:'); if(u) doctorsCMS[${i}].img=u; window.renderCMS();"><i class="fas fa-camera text-white"></i></div>
+                        </div>
+                        <div class="p-6">
+                            <button onclick="window.removeHealer(${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition z-20"><i class="fas fa-trash"></i></button>
+                            <input type="text" oninput="doctorsCMS[${i}].name=this.value" class="live-input font-bold" value="${d.name}">
+                            <input type="text" oninput="doctorsCMS[${i}].spec=this.value" class="live-input text-[10px] text-ayu-green font-bold uppercase" value="${d.spec}">
+                        </div>
+                    </div>`).join('') + `<button onclick="window.addHealer()" class="w-[280px] flex-shrink-0 border-2 border-dashed border-gray-100 rounded-3xl text-gray-300 hover:text-ayu-orange transition"><i class="fas fa-plus"></i></button>`;
+            }
+        }
+
+        window.addService = () => { servicesList.push({title:'New Program', desc:'...', price:'1000'}); window.renderCMS(); };
+        window.removeService = (i) => { servicesList.splice(i, 1); window.renderCMS(); };
+        window.addHealer = () => { doctorsCMS.push({name:'Dr. New', spec:'Expert Healer', img:'https://placehold.co/400x300'}); window.renderCMS(); };
+        window.removeHealer = (i) => { doctorsCMS.splice(i, 1); window.renderCMS(); };
+
+        window.saveCMS = async () => {
+            const services = {}; servicesList.forEach((s, i) => services[`s${i+1}`] = s);
+            const doctors = {}; doctorsCMS.forEach((d, i) => doctors[`doc${i+1}`] = d);
+            await setDoc(doc(db, "site_content", "homepage"), { services, doctors }, { merge: true });
+            showToast("Published", "Live site updated successfully.");
+        }
+
+        window.loadTable = async (tableId, role) => {
+            const tbody = document.getElementById(tableId);
+            const snap = await getDocs(query(collection(db, "users"), where("role", "==", role)));
+            tbody.innerHTML = snap.docs.map(d => `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-6 font-bold text-gray-600">${d.data().email}</td>
+                    <td class="p-6 text-right"><button onclick="if(confirm('Permanently remove record?')) deleteDoc(doc(db,'users','${d.id}')).then(()=>location.reload())" class="text-red-300 hover:text-red-500 text-[10px] font-black uppercase">Remove Access</button></td>
+                </tr>`).join('');
+        }
+
+        function showToast(title, msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = msg;
+            t.classList.remove('translate-y-40');
+            setTimeout(() => t.classList.add('translate-y-40'), 4000);
+        }
+    </script>
+</body>
+</html>
