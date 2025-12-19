@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayusetu | Your Trusted Wellness Partners</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Ayusetu: Combining Ancient Wisdom with Modern Technology for Holistic Healing.">
     
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
 
     <script>
@@ -20,12 +20,17 @@
                             orange: '#C85226',
                             green: '#2E7D32',
                             light: '#F3F8F4',
-                            dark: '#1B4D3E'
+                            dark: '#1B4D3E',
+                            accent: '#F97316'
                         },
                         fontFamily: {
                             sans: ['Poppins', 'sans-serif'],
                             serif: ['Merriweather', 'serif'],
                         }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'blob': 'blob 7s infinite',
                     }
                 }
             }
@@ -33,6 +38,7 @@
     </script>
 
     <style>
+        /* Base Styles */
         body { 
             background: linear-gradient(300deg, #fdfbf7, #e8f5e9, #fff3e0, #f0fdfa);
             background-size: 240% 240%;
@@ -44,50 +50,6 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        
-        .logo-text { font-family: 'Merriweather', serif; letter-spacing: 1px; }
-        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
-
-        /* Custom Horizontal Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #e2e8f0;
-            border-radius: 10px;
-            margin: 0 20px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-            border: 2px solid #e2e8f0;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        .hero-img img { animation: float 6s ease-in-out infinite; }
-
-        .hero-element { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
-        .run-hero-anim .hero-element { opacity: 1; transform: translateY(0); }
-        .delay-100 { transition-delay: 0.1s; }
-        .delay-200 { transition-delay: 0.2s; }
-        .delay-300 { transition-delay: 0.3s; }
-        .delay-400 { transition-delay: 0.4s; }
-        .delay-500 { transition-delay: 0.5s; }
-
-        .pill-nav { box-shadow: 0 10px 40px -10px rgba(46, 125, 50, 0.15); transition: all 0.3s ease; }
-        .pill-nav:hover { transform: translateY(2px); box-shadow: 0 5px 20px -5px rgba(46, 125, 50, 0.1); }
-
-        .drawer { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
-        .drawer.open { transform: translateX(0); }
-        .glass-drawer { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); }
 
         @keyframes blob {
             0% { transform: translate(0px, 0px) scale(1); }
@@ -95,300 +57,314 @@
             66% { transform: translate(-20px, 20px) scale(0.9); }
             100% { transform: translate(0px, 0px) scale(1); }
         }
-        .animate-blob { animation: blob 7s infinite; }
-        .animation-delay-2000 { animation-delay: 2s; }
 
-        .loader-text-char { display: inline-block; opacity: 0; transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1); }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2E7D32; border-radius: 10px; }
+
+        .drawer { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .drawer.open { transform: translateX(0); }
+
+        .hero-element { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .run-hero-anim .hero-element { opacity: 1; transform: translateY(0); }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+        /* Typography */
+        .logo-text { font-family: 'Merriweather', serif; }
     </style>
 </head>
 <body class="text-gray-800 antialiased min-h-screen overflow-hidden" onload="startLoader()">
 
-    <div id="preloader" class="fixed inset-0 z-[9999] flex items-center justify-center">
-        <div id="loader-top" class="absolute top-0 left-0 w-full h-1/2 bg-[#fdfbf7] z-0 transition-transform duration-1000 ease-in-out delay-100" style="transform-origin: top;"></div>
-        <div id="loader-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-[#fdfbf7] z-0 transition-transform duration-1000 ease-in-out delay-100" style="transform-origin: bottom;"></div>
-        
-        <div id="loader-content" class="relative z-10 flex flex-col items-center justify-center overflow-hidden">
-             <div class="text-6xl md:text-9xl font-serif font-bold flex gap-4 md:gap-8 items-center justify-center overflow-hidden py-4">
+    <div id="preloader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#fdfbf7]">
+        <div id="loader-content" class="relative z-10 flex flex-col items-center">
+             <div class="text-6xl md:text-8xl font-serif font-bold flex gap-4 overflow-hidden">
                 <span id="text-ayu" class="text-ayu-green translate-x-[-150%] opacity-0 transition-all duration-1000 ease-out">AYU</span>
                 <span id="text-setu" class="text-ayu-orange translate-x-[150%] opacity-0 transition-all duration-1000 ease-out">SETU</span>
              </div>
-             <div id="loading-line" class="w-0 h-[2px] bg-gray-800 mt-2 transition-all duration-700 ease-in-out opacity-0"></div>
+             <div id="loading-line" class="w-0 h-[3px] bg-ayu-green mt-4 transition-all duration-1000 ease-in-out opacity-0"></div>
+             <p class="mt-4 text-ayu-dark tracking-widest text-sm opacity-60 uppercase">Loading Wellness...</p>
         </div>
     </div>
-    
-    <script>
-        if (sessionStorage.getItem('visited')) {
-            const pre = document.getElementById('preloader');
-            if(pre) pre.style.display = 'none';
-            document.body.classList.remove('overflow-hidden');
-            document.body.classList.add('run-hero-anim');
-        }
-    </script>
 
     <nav class="fixed top-6 left-0 right-0 z-50 px-4">
-        <div class="pill-nav max-w-6xl mx-auto bg-white/90 backdrop-blur-md rounded-full py-2 px-6 md:px-8 flex justify-between items-center relative border border-white/50">
-            
-            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-                <img src="1-removebg-preview.png" onerror="this.src='https://via.placeholder.com/150x60?text=AYUSETU'" alt="Ayusetu Logo" class="h-14 w-auto object-contain mix-blend-multiply">
+        <div class="max-w-7xl mx-auto bg-white/80 backdrop-blur-lg rounded-full py-3 px-8 flex justify-between items-center border border-white/50 shadow-xl">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                <div class="bg-ayu-green p-2 rounded-full hidden md:block">
+                    <i class="fas fa-leaf text-white text-xs"></i>
+                </div>
+                <span class="logo-text text-2xl font-bold tracking-tight">
+                    <span class="text-ayu-green">AYU</span><span class="text-ayu-orange">SETU</span>
+                </span>
             </div>
 
-            <div class="flex items-center gap-2 md:gap-8">
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#about" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">About</a>
-                    <a href="centers.html" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm whitespace-nowrap">Offline Centers</a>
-                    <button onclick="openLogin()" class="bg-ayu-green text-white px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg shadow-green-900/20 cursor-pointer">
-                        Login
-                    </button>
-                </div>
-
-                <button onclick="toggleDrawer()" class="text-ayu-green text-2xl hover:scale-110 transition p-1 focus:outline-none cursor-pointer">
-                    <i class="fas fa-ellipsis-v"></i>
+            <div class="hidden lg:flex items-center gap-10">
+                <a href="#about" class="text-gray-600 font-medium hover:text-ayu-green transition">About</a>
+                <a href="#services" class="text-gray-600 font-medium hover:text-ayu-green transition">Services</a>
+                <a href="centers.html" class="text-gray-600 font-medium hover:text-ayu-green transition">Offline Centers</a>
+                <a href="#faq" class="text-gray-600 font-medium hover:text-ayu-green transition">FAQ</a>
+                <button id="navLoginBtn" onclick="openLogin()" class="bg-ayu-green text-white px-10 py-3 rounded-full font-semibold hover:bg-[#1e5c22] transition shadow-lg transform active:scale-95">
+                    Login
                 </button>
             </div>
+
+            <button onclick="toggleDrawer()" class="lg:hidden text-ayu-green text-2xl p-2 focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
-    <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
-    
-    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100 overflow-y-auto">
-        <button onclick="toggleDrawer()" class="absolute top-8 right-8 text-2xl text-ayu-green hover:rotate-90 transition duration-300">
+    <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
+    <div id="sideDrawer" class="drawer fixed top-0 right-0 h-full w-[300px] md:w-[400px] bg-white z-[70] shadow-2xl p-10 flex flex-col border-l border-gray-100">
+        <button onclick="toggleDrawer()" class="self-end text-3xl text-gray-400 hover:text-ayu-green transition mb-10">
             <i class="fas fa-times"></i>
         </button>
 
-        <div class="mt-16 space-y-8">
-            <div class="md:hidden space-y-4 border-b border-gray-100 pb-6">
-                <button onclick="toggleDrawer(); openLogin();" class="block w-full bg-ayu-green text-white text-center py-3 rounded-full font-bold shadow-md hover:bg-[#1e5c22] transition">Login</button>
-                <div class="grid grid-cols-2 gap-4">
-                    <a href="#about" onclick="toggleDrawer()" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">About</a>
-                    <a href="centers.html" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">Offline Centers</a>
-                </div>
-            </div>
-
-            <h3 class="font-serif text-3xl text-ayu-green border-b border-gray-100 pb-4">Wellness Menu</h3>
+        <div class="flex flex-col gap-8">
+            <button id="drawerLoginBtn" onclick="toggleDrawer(); openLogin();" class="w-full bg-ayu-green text-white py-4 rounded-xl font-bold shadow-md">Login / Join</button>
             
-            <div class="group cursor-pointer" onclick="document.getElementById('doctors').scrollIntoView({behavior: 'smooth'}); toggleDrawer();">
-                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
-                    <span class="text-sm bg-green-100 text-ayu-green px-2 py-1 rounded">01</span> Consult Doctors
-                </h4>
-                <p class="text-gray-500 mt-2 pl-9 text-sm">Video consultation with top Naturopaths.</p>
-            </div>
+            <nav class="flex flex-col gap-6 text-xl font-serif">
+                <a href="#about" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">About Ayusetu</a>
+                <a href="#services" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">Our Programs</a>
+                <a href="centers.html" class="hover:text-ayu-green border-b border-gray-50 pb-2">Therapy Centers</a>
+                <a href="#contact" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">Contact Us</a>
+            </nav>
 
-            <div class="group cursor-pointer" onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'}); toggleDrawer();">
-                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
-                    <span class="text-sm bg-orange-100 text-ayu-orange px-2 py-1 rounded">02</span> Online Yoga Session
-                </h4>
-                <p class="text-gray-500 mt-2 pl-9 text-sm">Daily live sessions for Anxiety & Stress.</p>
-                <div class="pl-9 mt-2">
-                    <span class="text-xs font-bold text-white bg-ayu-orange px-2 py-1 rounded-full">₹1500 / Month</span>
-                </div>
+            <div class="mt-10 bg-ayu-light p-6 rounded-2xl">
+                <p class="text-ayu-green font-serif italic">"Health is a state of complete physical, mental and social well-being."</p>
+                <button onclick="handleBooking(event)" class="mt-6 w-full bg-ayu-orange text-white py-3 rounded-lg font-bold">Book Consult</button>
             </div>
-
-            <div class="group cursor-pointer" onclick="window.location.href='centers.html'; toggleDrawer();">
-                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
-                    <span class="text-sm bg-blue-100 text-blue-600 px-2 py-1 rounded">03</span> Residential Therapy
-                </h4>
-                <p class="text-gray-500 mt-2 pl-9 text-sm">Offline healing at our centers (10-30 days).</p>
-            </div>
-        </div>
-
-        <div class="bg-gray-50 p-6 rounded-2xl mt-8">
-            <p class="text-ayu-green font-serif italic mb-4">"Balance your energy, balance your life."</p>
-            <button onclick="document.getElementById('consultation').scrollIntoView({behavior: 'smooth'}); toggleDrawer();" class="w-full bg-ayu-green text-white py-3 rounded-xl font-bold hover:bg-[#1e5c22] transition">
-                Register Now
-            </button>
         </div>
     </div>
 
-    <header class="relative overflow-hidden pt-40 pb-20"> 
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            <div class="z-10 relative">
-                <span class="hero-element delay-100 bg-white/60 backdrop-blur-md border border-green-100 text-ayu-green px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block shadow-sm">Natural Healing</span>
-                <h1 class="hero-element delay-200 text-5xl md:text-6xl font-serif font-bold text-gray-900 leading-tight mb-6">
-                    Your Trusted <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-ayu-orange to-red-600">Wellness Partners</span>
+    <header class="relative pt-48 pb-24 overflow-hidden">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-ayu-orange/5 rounded-full blur-3xl animate-blob"></div>
+        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-ayu-green/5 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+            <div class="relative z-10">
+                <span class="hero-element delay-100 inline-block bg-white/80 border border-ayu-green/20 text-ayu-green px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm">
+                    ✨ Ancient Wisdom & Modern Science
+                </span>
+                <h1 class="hero-element delay-200 text-6xl md:text-7xl font-serif font-bold text-gray-900 leading-tight mb-8">
+                    Start Your <br> 
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-ayu-green via-ayu-orange to-red-500">Healing Journey</span>
                 </h1>
-                <p class="hero-element delay-300 text-lg text-gray-600 mb-8 leading-relaxed mix-blend-multiply">
-                    Combining ancient wisdom with modern expertise. From <strong>AI Body Diagnosis</strong> to <strong>Residential Therapy Centers</strong>, we provide a holistic healing experience.
+                <p class="hero-element delay-300 text-xl text-gray-600 leading-relaxed mb-10 max-w-lg">
+                    Access premium Naturopathy, Yoga Therapy, and Ayurvedic consultations from the comfort of your home. 100% natural, personalized care.
                 </p>
                 
-                <div class="hero-element delay-400 flex flex-wrap gap-4">
-                    <a href="#consultation" class="bg-ayu-orange text-white px-8 py-4 rounded hover:bg-orange-700 transition shadow-xl hover:shadow-orange-200 font-semibold">
-                        Start Healing Journey
-                    </a>
-                    <button class="flex items-center gap-3 px-6 py-4 bg-white/50 backdrop-blur-sm rounded border border-gray-200 text-gray-700 hover:text-ayu-green transition font-medium">
-                        <i class="fas fa-play-circle text-2xl"></i> How it Works
+                <div class="hero-element delay-400 flex flex-wrap gap-6">
+                    <button onclick="handleBooking(event)" class="bg-ayu-dark text-white px-10 py-5 rounded-2xl hover:bg-black transition shadow-2xl font-bold text-lg transform active:scale-95">
+                        Get Started Today
                     </button>
+                    <button class="flex items-center gap-4 px-8 py-5 bg-white rounded-2xl border border-gray-200 text-gray-700 hover:border-ayu-green transition font-bold group">
+                        <i class="fas fa-play-circle text-2xl text-ayu-orange group-hover:scale-110 transition"></i> How it Works
+                    </button>
+                </div>
+
+                <div class="hero-element delay-500 mt-12 flex items-center gap-6">
+                    <div class="flex -space-x-4">
+                        <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-12 h-12 rounded-full border-4 border-white shadow-sm" alt="">
+                        <img src="https://randomuser.me/api/portraits/men/2.jpg" class="w-12 h-12 rounded-full border-4 border-white shadow-sm" alt="">
+                        <img src="https://randomuser.me/api/portraits/women/3.jpg" class="w-12 h-12 rounded-full border-4 border-white shadow-sm" alt="">
+                    </div>
+                    <p class="text-sm text-gray-500 font-medium">Joined by <span class="text-ayu-green font-bold">5000+</span> global members</p>
                 </div>
             </div>
 
-            <div class="relative hero-img hero-element delay-500">
-                <div class="absolute inset-0 bg-ayu-green opacity-10 rounded-[3rem] transform rotate-6"></div>
-                <img src="https://images.unsplash.com/photo-1599447421405-0c325d26d77e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Yoga Woman" class="relative rounded-[3rem] shadow-2xl object-cover w-full h-[500px]">
-                
-                <div class="absolute bottom-10 -left-6 bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-lg flex items-center gap-4 animate-bounce border border-white" style="animation-duration: 4s;">
-                    <div class="bg-green-100 p-3 rounded-full text-ayu-green">
-                        <i class="fas fa-user-md text-xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-2xl font-bold text-gray-900">15+</p>
-                        <p class="text-xs text-gray-500">Years Experience</p>
+            <div class="hero-element delay-500 relative">
+                <div class="absolute -inset-4 bg-ayu-green/10 rounded-[4rem] rotate-3"></div>
+                <div class="relative rounded-[4rem] overflow-hidden shadow-2xl animate-float">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1000&q=80" alt="Meditation" class="w-full h-[600px] object-cover">
+                    <div class="absolute bottom-10 left-10 glass-card p-6 rounded-3xl border-white shadow-lg">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-ayu-orange/20 p-3 rounded-full text-ayu-orange">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900">100% Natural</h4>
+                                <p class="text-xs text-gray-500">No harmful chemicals</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <section class="bg-white/80 backdrop-blur-sm py-10 shadow-sm border-b border-gray-100 relative z-20">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div><h3 class="text-3xl font-bold text-ayu-green">500+</h3><p class="text-gray-500 text-sm">Happy Patients</p></div>
-            <div><h3 class="text-3xl font-bold text-ayu-green">7+</h3><p class="text-gray-500 text-sm">Offline Centers</p></div>
-            <div><h3 class="text-3xl font-bold text-ayu-green">15+</h3><p class="text-gray-500 text-sm">Expert Doctors</p></div>
-            <div><h3 class="text-3xl font-bold text-ayu-green">4.9</h3><p class="text-gray-500 text-sm">Average Rating</p></div>
-        </div>
-    </section>
-
-    <section id="about" class="py-24 bg-white/50 backdrop-blur-sm relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            <div>
-                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">About Ayusetu</span>
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mt-2 mb-6">Bridging Ancient Wisdom & Modern Lifestyle</h2>
-                <div class="w-20 h-1 bg-ayu-green mb-6 rounded-full"></div>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    Ayusetu was born from a simple yet powerful vision: to make authentic holistic healing accessible to everyone, everywhere. We believe that true wellness comes from the perfect balance of mind, body, and spirit.
-                </p>
-                <p class="text-gray-600 mb-8 leading-relaxed">
-                    By combining the time-tested traditions of Ayurveda and Naturopathy with modern technology, we bring expert care directly to your home. Whether you need a digital consultation or an immersive residential retreat, we are your partners in this journey of healing.
-                </p>
-                <div class="flex gap-4">
-                    <div class="flex items-center gap-2 text-sm font-semibold text-gray-700"><i class="fas fa-leaf text-ayu-green"></i> 100% Natural</div>
-                    <div class="flex items-center gap-2 text-sm font-semibold text-gray-700"><i class="fas fa-user-shield text-ayu-green"></i> Verified Experts</div>
-                </div>
+    <section class="py-20 bg-white relative z-10 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            <div class="group">
+                <div class="text-5xl font-serif font-bold text-ayu-green mb-2 group-hover:scale-110 transition">15+</div>
+                <div class="text-gray-400 uppercase tracking-widest text-xs font-bold">Expert Doctors</div>
             </div>
-            
-            <div class="relative">
-                <div class="absolute -top-4 -left-4 w-2/3 h-2/3 bg-orange-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
-                <div class="absolute -bottom-4 -right-4 w-2/3 h-2/3 bg-green-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
-                <div class="relative grid grid-cols-2 gap-4">
-                    <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-lg transform translate-y-8" alt="Herbs">
-                    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-lg" alt="Meditation">
-                </div>
+            <div class="group">
+                <div class="text-5xl font-serif font-bold text-ayu-green mb-2 group-hover:scale-110 transition">7+</div>
+                <div class="text-gray-400 uppercase tracking-widest text-xs font-bold">Offline Centers</div>
+            </div>
+            <div class="group">
+                <div class="text-5xl font-serif font-bold text-ayu-green mb-2 group-hover:scale-110 transition">10k+</div>
+                <div class="text-gray-400 uppercase tracking-widest text-xs font-bold">Sessions Done</div>
+            </div>
+            <div class="group">
+                <div class="text-5xl font-serif font-bold text-ayu-green mb-2 group-hover:scale-110 transition">4.9/5</div>
+                <div class="text-gray-400 uppercase tracking-widest text-xs font-bold">User Rating</div>
             </div>
         </div>
     </section>
 
-    <!-- DYNAMIC SERVICES SECTION -->
-    <section id="services" class="py-24 bg-white/60 backdrop-blur-sm relative">
-        <div class="absolute top-0 left-0 w-64 h-64 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div class="absolute top-0 right-0 w-64 h-64 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16">
-                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">Our Services</span>
-                <h2 class="text-4xl font-serif font-bold text-gray-900 mt-2">Comprehensive Wellness Solutions</h2>
-                <div class="w-24 h-1 bg-ayu-green mx-auto mt-4 rounded-full"></div>
-            </div>
-
-            <!-- Dynamic Horizontal Scroll Container for Services -->
-            <div id="services-container" class="flex overflow-x-auto gap-8 pb-10 snap-x custom-scrollbar" style="scroll-behavior: smooth;">
-                <!-- Loading State (Replaced by JS) -->
-                <div class="w-full text-center text-gray-400 py-10">Loading Services...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- DYNAMIC DOCTORS SECTION -->
-    <section id="doctors" class="py-24 bg-transparent">
+    <section id="about" class="py-32 bg-gray-50 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl font-serif font-bold text-center mb-16">Meet Our Expert Team</h2>
-            
-            <!-- Dynamic Horizontal Scroll Container for Doctors -->
-            <div id="doctors-container" class="flex overflow-x-auto gap-6 pb-10 snap-x custom-scrollbar" style="scroll-behavior: smooth;">
-                 <!-- Loading State (Replaced by JS) -->
-                 <div class="w-full text-center text-gray-400 py-10">Loading Experts...</div>
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="relative">
+                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-ayu-orange/10 rounded-full blur-2xl"></div>
+                    <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc206e?auto=format&fit=crop&w=800&q=80" alt="Herbal medicine" class="rounded-[3rem] shadow-xl relative z-10">
+                    <div class="absolute -bottom-10 -right-10 bg-white p-8 rounded-3xl shadow-xl z-20 hidden md:block border border-gray-100">
+                        <p class="text-ayu-green font-bold text-4xl">20+</p>
+                        <p class="text-gray-500 text-sm">Years of Traditional <br> Expertise</p>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-ayu-orange font-bold uppercase tracking-widest text-sm">Our Philosophy</span>
+                    <h2 class="text-5xl font-serif font-bold text-gray-900 mt-4 mb-8">Restoring Balance to Your Modern Life</h2>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                        Ayusetu bridges the gap between ancient healing sciences—Ayurveda and Naturopathy—and the busy digital age. We don't just treat symptoms; we identify the root cause of your physical and mental distress.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-ayu-green/10 p-3 rounded-lg text-ayu-green mt-1">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-gray-900">Personalized Protocols</h4>
+                                <p class="text-gray-500">Tailored diet and lifestyle plans based on your unique body constitution.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-ayu-green/10 p-3 rounded-lg text-ayu-green mt-1">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-gray-900">Verified Professionals</h4>
+                                <p class="text-gray-500">All our consultants are certified doctors with years of clinical experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="py-20 bg-ayu-dark text-white relative overflow-hidden">
-        <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
-            <h2 class="text-3xl font-serif font-bold mb-12">Your Path to Wellness</h2>
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="relative">
-                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 border-2 border-ayu-orange backdrop-blur-sm"><i class="fas fa-file-signature"></i></div>
-                    <h4 class="font-bold text-xl">1. Register</h4>
-                    <p class="text-sm opacity-70 mt-2">Fill details, upload reports & pay ₹1000.</p>
-                </div>
-                <div class="hidden md:block absolute top-10 left-[20%] w-[15%] border-t-2 border-dashed border-white/30"></div>
-                <div class="relative">
-                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm"><i class="fas fa-video"></i></div>
-                    <h4 class="font-bold text-xl">2. Consult</h4>
-                    <p class="text-sm opacity-70 mt-2">Video call with expert within 7 days.</p>
-                </div>
-                <div class="hidden md:block absolute top-10 left-[45%] w-[15%] border-t-2 border-dashed border-white/30"></div>
-                <div class="relative">
-                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm"><i class="fas fa-spa"></i></div>
-                    <h4 class="font-bold text-xl">3. Heal</h4>
-                    <p class="text-sm opacity-70 mt-2">Visit assigned Therapy Center.</p>
-                </div>
-                 <div class="hidden md:block absolute top-10 left-[70%] w-[15%] border-t-2 border-dashed border-white/30"></div>
-                <div class="relative">
-                    <div class="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 backdrop-blur-sm"><i class="fas fa-smile"></i></div>
-                    <h4 class="font-bold text-xl">4. Recover</h4>
-                    <p class="text-sm opacity-70 mt-2">Follow up & stay healthy.</p>
+    <section id="services" class="py-32 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-5xl font-serif font-bold text-gray-900 mb-6">Healing Programs</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">Select a pathway that suits your lifestyle. From one-time consultations to month-long transformations.</p>
+                <div class="w-24 h-1.5 bg-ayu-orange mx-auto mt-8 rounded-full"></div>
+            </div>
+
+            <div id="services-container" class="flex overflow-x-auto gap-8 pb-12 snap-x custom-scrollbar">
+                <div class="w-full text-center py-20 text-gray-400">
+                    <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
+                    <p>Fetching latest programs...</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="consultation" class="py-24 bg-white/30 backdrop-blur-sm">
+    <section class="py-24 bg-ayu-dark text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-serif font-bold text-center mb-20 italic">"Four Steps to Transformation"</h2>
+            <div class="grid md:grid-cols-4 gap-12 relative">
+                <div class="text-center relative z-10">
+                    <div class="w-24 h-24 mx-auto bg-white/10 rounded-3xl flex items-center justify-center text-4xl mb-8 border border-ayu-orange rotate-3 hover:rotate-0 transition duration-500">
+                        <i class="fas fa-user-plus text-ayu-orange"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">1. Join</h4>
+                    <p class="text-gray-400 text-sm">Register your profile and upload your health history securely.</p>
+                </div>
+                <div class="text-center relative z-10">
+                    <div class="w-24 h-24 mx-auto bg-white/10 rounded-3xl flex items-center justify-center text-4xl mb-8 border border-white/20 -rotate-3 hover:rotate-0 transition duration-500">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">2. Schedule</h4>
+                    <p class="text-gray-400 text-sm">Pick a time slot for a deep-dive video call with our specialist.</p>
+                </div>
+                <div class="text-center relative z-10">
+                    <div class="w-24 h-24 mx-auto bg-white/10 rounded-3xl flex items-center justify-center text-4xl mb-8 border border-white/20 rotate-6 hover:rotate-0 transition duration-500">
+                        <i class="fas fa-mortar-pestle"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">3. Protocol</h4>
+                    <p class="text-gray-400 text-sm">Receive your personalized herbal, diet, and yoga prescription.</p>
+                </div>
+                <div class="text-center relative z-10">
+                    <div class="w-24 h-24 mx-auto bg-white/10 rounded-3xl flex items-center justify-center text-4xl mb-8 border border-green-400 -rotate-6 hover:rotate-0 transition duration-500">
+                        <i class="fas fa-spa text-green-400"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4">4. Thrive</h4>
+                    <p class="text-gray-400 text-sm">Experience lasting relief and energy with continuous support.</p>
+                </div>
+
+                <div class="hidden lg:block absolute top-12 left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="doctors" class="py-32 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-serif font-bold text-center mb-20">The Healers</h2>
+            <div id="doctors-container" class="flex overflow-x-auto gap-8 pb-12 snap-x custom-scrollbar">
+                </div>
+        </div>
+    </section>
+
+    <section id="consultation" class="py-32 bg-white relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-ayu-orange/5 rounded-full blur-3xl"></div>
         <div class="max-w-4xl mx-auto px-6">
-            <div class="bg-white/95 rounded-2xl shadow-2xl overflow-hidden border-t-8 border-ayu-orange">
-                <div class="bg-green-50/80 p-8 text-center border-b border-green-100">
-                    <h2 class="text-3xl font-serif font-bold text-ayu-green">Start Your Healing Journey</h2>
-                    <p class="text-gray-600 mt-2">Fill in your details and we'll get back to you within 24 hours.</p>
+            <div class="bg-white rounded-[3rem] shadow-2xl border border-gray-100 overflow-hidden">
+                <div class="bg-ayu-green p-12 text-center text-white">
+                    <h2 class="text-4xl font-serif font-bold mb-4">Request Consultation</h2>
+                    <p class="opacity-80">Our team will coordinate your call within 24 business hours.</p>
                 </div>
-                <div class="p-8 md:p-12">
-                    <form class="space-y-6">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
-                                <input type="text" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange focus:ring-1 focus:ring-ayu-orange outline-none" placeholder="Anand Kumar">
+                <div class="p-12 md:p-20">
+                    <form id="consultationForm" class="space-y-8">
+                        <div class="grid md:grid-cols-2 gap-10">
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold text-gray-400 uppercase">Patient Name</label>
+                                <input type="text" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-ayu-green p-4 outline-none transition" placeholder="John Doe" required>
                             </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
-                                <input type="email" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange focus:ring-1 focus:ring-ayu-orange outline-none" placeholder="you@example.com">
-                            </div>
-                        </div>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
-                                <input type="tel" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange focus:ring-1 focus:ring-ayu-orange outline-none" placeholder="+91 90000 00000">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Service Type *</label>
-                                <select class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange focus:ring-1 focus:ring-ayu-orange outline-none">
-                                    <option>Doctor Consultation (₹1000)</option>
-                                    <option>Yoga Therapy Session (₹1500/mo)</option>
-                                    <option>Body Diagnosis</option>
-                                    <option>Residential Program</option>
-                                </select>
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold text-gray-400 uppercase">Email</label>
+                                <input type="email" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-ayu-green p-4 outline-none transition" placeholder="john@example.com" required>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Upload Past Reports</label>
-                            <div class="border-2 border-dashed border-gray-300 rounded p-6 text-center bg-gray-50 hover:bg-white transition cursor-pointer group">
-                                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2 group-hover:text-ayu-green transition"></i>
-                                <p class="text-sm text-gray-500">Click to upload PDF or Images</p>
-                            </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-gray-400 uppercase">Health Concern</label>
+                            <textarea rows="4" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-ayu-green p-4 outline-none transition" placeholder="Describe your symptoms..."></textarea>
                         </div>
-                        <div class="flex items-center justify-between bg-ayu-light p-4 rounded border border-green-200">
+                        <div class="bg-ayu-light p-6 rounded-2xl flex items-center justify-between border border-ayu-green/10">
                             <div>
-                                <p class="font-bold text-ayu-dark">Total Payable</p>
-                                <p class="text-xs text-gray-500">Includes taxes & service charge</p>
+                                <p class="font-bold text-ayu-dark">Consultation Fee</p>
+                                <p class="text-xs text-gray-400">Valid for 7 days including follow-up</p>
                             </div>
-                            <span class="text-2xl font-bold text-ayu-orange">₹1000</span>
+                            <span class="text-3xl font-bold text-ayu-green">₹1,000</span>
                         </div>
-                        <button type="button" onclick="openLogin()" class="w-full bg-ayu-green text-white font-bold py-4 rounded text-lg hover:bg-green-800 transition shadow-lg">
-                            Proceed to Payment
+                        <button type="button" onclick="handleBooking(event)" class="w-full bg-ayu-orange text-white py-6 rounded-2xl font-bold text-xl hover:shadow-2xl transition transform active:scale-95 shadow-orange-500/20">
+                            Confirm Appointment
                         </button>
                     </form>
                 </div>
@@ -396,149 +372,113 @@
         </div>
     </section>
 
-    <section id="blog" class="py-24 bg-white/70 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <span class="bg-green-100 text-ayu-green px-3 py-1 rounded-full text-xs font-bold uppercase">Blog & Resources</span>
-                    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-3">Wellness Insights & Tips</h2>
+    <section id="faq" class="py-32 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-5xl font-serif font-bold text-center mb-16">Common Questions</h2>
+            <div class="space-y-6">
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <h4 class="text-xl font-bold text-gray-900 mb-4">Is Naturopathy effective for chronic pain?</h4>
+                    <p class="text-gray-500">Yes, Naturopathy focuses on eliminating toxins and inflammation, which are primary causes of chronic pain. Our protocols have helped hundreds manage sciatica and arthritis naturally.</p>
                 </div>
-                <a href="#" class="hidden md:inline-block text-ayu-orange font-bold hover:underline">View All Articles</a>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="group cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-4 h-56">
-                        <img src="https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Sleep" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
-                    </div>
-                    <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs font-bold">Naturopathy</span>
-                    <h3 class="font-bold text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">10 Natural Remedies for Better Sleep</h3>
-                    <p class="text-gray-500 text-sm line-clamp-2">Discover time-tested natural approaches to improve your sleep quality without medication.</p>
-                </div>
-                <div class="group cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-4 h-56">
-                        <img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Yoga" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
-                    </div>
-                    <span class="bg-purple-100 text-purple-600 px-2 py-1 rounded text-xs font-bold">Yoga</span>
-                    <h3 class="font-bold text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">Yoga Poses for Stress Relief</h3>
-                    <p class="text-gray-500 text-sm line-clamp-2">Learn essential yoga asanas that can help reduce stress and anxiety in daily life.</p>
-                </div>
-                <div class="group cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-4 h-56">
-                        <img src="https://images.unsplash.com/photo-1606902965551-dce093cda6e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Ayurveda" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
-                    </div>
-                    <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded text-xs font-bold">Ayurveda</span>
-                    <h3 class="font-bold text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">Understanding Your Dosha</h3>
-                    <p class="text-gray-500 text-sm line-clamp-2">A comprehensive guide to identifying your body constitution (Prakriti) and living in harmony.</p>
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <h4 class="text-xl font-bold text-gray-900 mb-4">How long are the Yoga Therapy sessions?</h4>
+                    <p class="text-gray-500">Standard therapeutic sessions are 45-60 minutes long, conducted via high-quality video link with real-time posture correction.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 bg-transparent">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl font-serif font-bold text-center mb-16">Stories of Transformation</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-gray-100 hover-lift">
-                    <div class="flex items-center gap-4 mb-4">
-                        <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="User" class="w-12 h-12 rounded-full">
-                        <div><h4 class="font-bold text-sm">Emily Johnson</h4><p class="text-xs text-gray-400">Chronic Pain Relief</p></div>
-                    </div>
-                    <div class="text-yellow-400 text-xs mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="text-sm text-gray-600 italic">"After years of chronic back pain, the naturopathy treatments here changed my life. The online consultations made it so convenient."</p>
-                </div>
-                <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-gray-100 hover-lift">
-                    <div class="flex items-center gap-4 mb-4">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-12 h-12 rounded-full">
-                        <div><h4 class="font-bold text-sm">Michael Chen</h4><p class="text-xs text-gray-400">Stress Management</p></div>
-                    </div>
-                    <div class="text-yellow-400 text-xs mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="text-sm text-gray-600 italic">"The yoga therapy sessions helped me manage work stress better than anything else. Maya is an incredible instructor."</p>
-                </div>
-                <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm border border-gray-100 hover-lift">
-                    <div class="flex items-center gap-4 mb-4">
-                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User" class="w-12 h-12 rounded-full">
-                        <div><h4 class="font-bold text-sm">Priya Sharma</h4><p class="text-xs text-gray-400">Digestive Health</p></div>
-                    </div>
-                    <div class="text-yellow-400 text-xs mb-3"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p class="text-sm text-gray-600 italic">"Dr. Kumar's Ayurvedic approach to my digestive issues was life-changing. Personalized diet plans worked wonders."</p>
+    <footer id="contact" class="bg-ayu-dark text-white pt-32 pb-12 overflow-hidden relative">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-ayu-green via-ayu-orange to-red-500"></div>
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-4 gap-16 mb-20">
+            <div>
+                <h2 class="logo-text text-3xl font-bold mb-8">AYUSETU</h2>
+                <p class="text-gray-400 leading-relaxed mb-8">
+                    Your bridge to authentic wellness. Empowering lives through natural science since 2005.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center hover:bg-ayu-orange transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center hover:bg-ayu-orange transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center hover:bg-ayu-orange transition"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <footer id="contact" class="bg-gray-900 text-white pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 mb-12">
             <div>
-                <h1 class="text-2xl font-bold text-ayu-orange mb-4">AYUSETU</h1>
-                <p class="text-gray-400 text-sm leading-relaxed">Bridging tradition and technology to provide the best natural healing experience.</p>
-                <div class="flex gap-4 mt-6">
-                    <a href="#" class="bg-gray-800 w-10 h-10 flex items-center justify-center rounded-full hover:bg-ayu-green transition"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="bg-gray-800 w-10 h-10 flex items-center justify-center rounded-full hover:bg-ayu-green transition"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="bg-gray-800 w-10 h-10 flex items-center justify-center rounded-full hover:bg-ayu-green transition"><i class="fab fa-twitter"></i></a>
+                <h4 class="text-xl font-bold mb-8 text-ayu-orange">Navigation</h4>
+                <ul class="space-y-4 text-gray-400 font-medium">
+                    <li><a href="#" class="hover:text-white transition">Home</a></li>
+                    <li><a href="#about" class="hover:text-white transition">About Us</a></li>
+                    <li><a href="#services" class="hover:text-white transition">Programs</a></li>
+                    <li><a href="centers.html" class="hover:text-white transition">Therapy Centers</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-xl font-bold mb-8 text-ayu-orange">Specialties</h4>
+                <ul class="space-y-4 text-gray-400 font-medium">
+                    <li><a href="#" class="hover:text-white transition">Stress Management</a></li>
+                    <li><a href="#" class="hover:text-white transition">Digestive Health</a></li>
+                    <li><a href="#" class="hover:text-white transition">Women's Wellness</a></li>
+                    <li><a href="#" class="hover:text-white transition">Weight Transformation</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-xl font-bold mb-8 text-ayu-orange">Reach Us</h4>
+                <div class="space-y-6 text-gray-400">
+                    <div class="flex gap-4">
+                        <i class="fas fa-map-marker-alt mt-1 text-ayu-green"></i>
+                        <p>IIT Patna Campus, <br> Bihta, Bihar - 801103</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <i class="fas fa-phone-alt mt-1 text-ayu-green"></i>
+                        <p>+91 90008 09090</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <i class="fas fa-envelope mt-1 text-ayu-green"></i>
+                        <p>care@ayusetu.com</p>
+                    </div>
                 </div>
             </div>
-            <div>
-                <h4 class="font-bold mb-4">Quick Links</h4>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li><a href="#" class="hover:text-white">Home</a></li>
-                    <li><a href="#about" class="hover:text-white">About Us</a></li>
-                    <li><a href="#services" class="hover:text-white">Services</a></li>
-                    <li><a href="#contact" class="hover:text-white">Contact</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Services</h4>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li><a href="#" class="hover:text-white">Naturopathy</a></li>
-                    <li><a href="#" class="hover:text-white">Yoga Therapy</a></li>
-                    <li><a href="#" class="hover:text-white">Ayurveda</a></li>
-                    <li><a href="#" class="hover:text-white">Online Consult</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Contact Us</h4>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li><i class="fas fa-map-marker-alt mr-2"></i> Patna, Bihar, India</li>
-                    <li><i class="fas fa-phone mr-2"></i> +91 90008 09090</li>
-                    <li><i class="fas fa-envelope mr-2"></i> help@ayusetu.com</li>
-                </ul>
-            </div>
         </div>
-        <div class="border-t border-gray-800 pt-8 text-center text-xs text-gray-500">
-            &copy; 2025 Ayusetu Wellness Pvt Ltd. All rights reserved.
+
+        <div class="border-t border-white/5 pt-12 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 Ayusetu Wellness Pvt Ltd. All rights reserved. Crafted for health.</p>
         </div>
     </footer>
 
     <div id="authModal" class="fixed inset-0 z-[100] hidden">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAuthModal()"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="absolute inset-0 bg-ayu-dark/80 backdrop-blur-md" onclick="closeAuthModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl overflow-hidden animate-hero-anim">
             <div class="flex">
-                <div class="w-2 bg-ayu-orange"></div>
-                <div class="p-8 w-full">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-serif font-bold text-gray-800" id="modalTitle">Welcome Back</h2>
-                        <button onclick="closeAuthModal()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+                <div class="w-3 bg-ayu-orange"></div>
+                <div class="p-12 w-full">
+                    <div class="flex justify-between items-center mb-10">
+                        <h2 class="text-4xl font-serif font-bold text-ayu-dark" id="modalTitle">Welcome</h2>
+                        <button onclick="closeAuthModal()" class="text-gray-300 hover:text-red-500 transition text-2xl">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
 
-                    <div id="authError" class="hidden bg-red-100 text-red-700 p-3 rounded text-sm mb-4"></div>
+                    <div id="authError" class="hidden bg-red-50 text-red-600 p-4 rounded-xl text-sm mb-6 border border-red-100 italic"></div>
 
-                    <form id="authForm" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label>
-                            <input type="email" id="authEmail" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green" placeholder="you@ayusetu.com" required>
+                    <form id="authForm" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Your Email</label>
+                            <input type="email" id="authEmail" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 focus:ring-2 focus:ring-ayu-green/20 focus:border-ayu-green outline-none transition" placeholder="name@email.com" required>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Password</label>
-                            <input type="password" id="authPassword" class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:border-ayu-green" placeholder="••••••••" required>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Secure Password</label>
+                            <input type="password" id="authPassword" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 focus:ring-2 focus:ring-ayu-green/20 focus:border-ayu-green outline-none transition" placeholder="••••••••" required>
                         </div>
                         
-                        <button type="submit" class="w-full bg-ayu-green text-white font-bold py-3 rounded-lg hover:bg-[#1e5c22] transition shadow-lg">
-                            <span id="btnText">Login</span>
+                        <button type="submit" class="w-full bg-ayu-green text-white py-5 rounded-2xl font-bold text-lg hover:shadow-xl transition transform active:scale-95 shadow-green-900/10">
+                            <span id="btnText">Continue to Healing</span>
                         </button>
                     </form>
 
-                    <div class="mt-6 text-center text-sm text-gray-500">
-                        <p id="toggleText">New to Ayusetu? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a></p>
+                    <div class="mt-8 text-center">
+                        <p id="toggleText" class="text-gray-500 font-medium">New to our community? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create an Account</a></p>
                     </div>
                 </div>
             </div>
@@ -546,52 +486,52 @@
     </div>
 
     <script>
-        // Existing Scripts
+        // --- 1. PRELOADER & HERO ANIMATION ---
         function startLoader() {
-            if (sessionStorage.getItem('visited')) return;
-            sessionStorage.setItem('visited', 'true');
-            const textAyu = document.getElementById('text-ayu');
-            const textSetu = document.getElementById('text-setu');
+            const pre = document.getElementById('preloader');
+            if (sessionStorage.getItem('ayusetu_visited')) {
+                pre.style.display = 'none';
+                document.body.classList.remove('overflow-hidden');
+                document.body.classList.add('run-hero-anim');
+                return;
+            }
+            
+            const ayu = document.getElementById('text-ayu');
+            const setu = document.getElementById('text-setu');
             const line = document.getElementById('loading-line');
-            const loaderTop = document.getElementById('loader-top');
-            const loaderBottom = document.getElementById('loader-bottom');
-            const loaderContent = document.getElementById('loader-content');
-            const preloader = document.getElementById('preloader');
 
-            setTimeout(() => { textAyu.classList.remove('translate-x-[-150%]', 'opacity-0'); textSetu.classList.remove('translate-x-[150%]', 'opacity-0'); }, 300);
+            setTimeout(() => { ayu.classList.remove('translate-x-[-150%]', 'opacity-0'); setu.classList.remove('translate-x-[150%]', 'opacity-0'); }, 300);
             setTimeout(() => { line.classList.remove('opacity-0', 'w-0'); line.classList.add('w-full'); }, 1200);
             setTimeout(() => {
-                loaderContent.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                loaderTop.style.transform = "translateY(-100%)";
-                loaderBottom.style.transform = "translateY(100%)";
+                pre.style.transform = "translateY(-100%)";
+                pre.style.transition = "transform 1s cubic-bezier(0.7, 0, 0.3, 1)";
                 document.body.classList.add('run-hero-anim');
                 document.body.classList.remove('overflow-hidden');
-            }, 2000);
-            setTimeout(() => { preloader.style.display = 'none'; }, 3000);
+                sessionStorage.setItem('ayusetu_visited', 'true');
+            }, 2500);
         }
 
+        // --- 2. UI HELPERS ---
         function toggleDrawer() {
-            const drawer = document.getElementById('sideDrawer');
-            const overlay = document.getElementById('drawerOverlay');
-            if (drawer.classList.contains('open')) {
-                drawer.classList.remove('open');
-                overlay.classList.add('opacity-0');
-                setTimeout(() => { overlay.classList.add('hidden'); }, 300);
+            const drw = document.getElementById('sideDrawer');
+            const ovl = document.getElementById('drawerOverlay');
+            if (drw.classList.contains('open')) {
+                drw.classList.remove('open');
+                ovl.classList.add('opacity-0');
+                setTimeout(() => ovl.classList.add('hidden'), 300);
             } else {
-                overlay.classList.remove('hidden');
-                setTimeout(() => { overlay.classList.remove('opacity-0'); drawer.classList.add('open'); }, 10);
+                ovl.classList.remove('hidden');
+                setTimeout(() => { ovl.classList.remove('opacity-0'); drw.classList.add('open'); }, 10);
             }
         }
     </script>
 
     <script type="module">
+        // --- 3. FIREBASE CORE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // ============================================
-        // PASTE YOUR FIREBASE CONFIG HERE
-        // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
             authDomain: "ayusetu-cd9bb.firebaseapp.com",
@@ -602,170 +542,152 @@
             measurementId: "G-JLYGFR8QCF"
         };
 
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let isLogin = true;
+        let isLoginMode = true;
+        let currentUserSession = null;
 
-        // Make functions accessible globally
-        window.openLogin = function() { document.getElementById('authModal').classList.remove('hidden'); }
-        window.closeAuthModal = function() { document.getElementById('authModal').classList.add('hidden'); }
-
-        window.toggleAuthMode = function() {
-            isLogin = !isLogin;
-            const title = document.getElementById('modalTitle');
-            const btn = document.getElementById('btnText');
-            const toggle = document.getElementById('toggleText');
+        // --- 4. AUTH STATE OBSERVER ---
+        onAuthStateChanged(auth, (user) => {
+            currentUserSession = user;
+            const loginBtns = [document.getElementById('navLoginBtn'), document.getElementById('drawerLoginBtn')];
             
-            if(isLogin) {
-                title.innerText = "Welcome Back";
-                btn.innerText = "Login";
-                toggle.innerHTML = 'New to Ayusetu? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a>';
-            } else {
-                title.innerText = "Join Ayusetu";
-                btn.innerText = "Sign Up";
-                toggle.innerHTML = 'Already have an account? <a href="#" onclick="toggleAuthMode()" class="text-ayu-green font-bold hover:underline">Login here</a>';
-            }
-        }
-
-        // Auth Logic
-        document.getElementById('authForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-            const errorDiv = document.getElementById('authError');
-            errorDiv.classList.add('hidden');
-
-            try {
-                if (isLogin) {
-                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                    const uid = userCredential.user.uid;
-                    const docRef = doc(db, "users", uid);
-                    const docSnap = await getDoc(docRef);
-                    if (docSnap.exists()) {
-                        redirectBasedOnRole(docSnap.data().role);
-                    } else {
-                        redirectBasedOnRole('user');
+            if (user) {
+                loginBtns.forEach(btn => {
+                    if(btn) {
+                        btn.innerText = "My Dashboard";
+                        btn.onclick = () => window.location.href = 'user-dashboard.html';
                     }
-                } else {
-                    // Force role to 'user' for new signups
-                    const role = 'user';
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    await setDoc(doc(db, "users", userCredential.user.uid), {
-                        email: email,
-                        role: role,
-                        createdAt: new Date()
-                    });
-                    redirectBasedOnRole(role);
-                }
-            } catch (error) {
-                errorDiv.innerText = error.message;
-                errorDiv.classList.remove('hidden');
+                });
             }
         });
 
-        function redirectBasedOnRole(role) {
-            if(role === 'admin') window.location.href = 'admin-dashboard.html';
-            else if(role === 'doctor') window.location.href = 'doctor-dashboard.html';
-            else window.location.href = 'user-dashboard.html';
-        }
-        
-        // --- UPDATED DYNAMIC FETCH CONTENT FUNCTION ---
-        async function fetchContent() {
-             try {
-                const docRef = doc(db, "site_content", "homepage");
-                const docSnap = await getDoc(docRef);
+        // --- 5. GLOBAL WINDOW FUNCTIONS ---
+        window.openLogin = () => document.getElementById('authModal').classList.remove('hidden');
+        window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
+
+        // THE PROTECTIVE GATEKEEPER
+        window.handleBooking = (event) => {
+            if (event) event.preventDefault();
+            
+            if (!currentUserSession) {
+                // If not logged in, force login
+                alert("Please login or create an account to book your consultation.");
+                openLogin();
+            } else {
+                // If logged in, scroll to form or redirect
+                const target = document.getElementById('consultation');
+                if(target) target.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        window.toggleAuthMode = () => {
+            isLoginMode = !isLoginMode;
+            const title = document.getElementById('modalTitle');
+            const btn = document.getElementById('btnText');
+            const toggler = document.getElementById('toggleText');
+
+            if (isLoginMode) {
+                title.innerText = "Welcome Back";
+                btn.innerText = "Login";
+                toggler.innerHTML = 'New to our community? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create an Account</a>';
+            } else {
+                title.innerText = "Start Your Journey";
+                btn.innerText = "Create Account";
+                toggler.innerHTML = 'Already a member? <a href="#" onclick="toggleAuthMode()" class="text-ayu-green font-bold hover:underline">Login here</a>';
+            }
+        };
+
+        // --- 6. FORM LOGIC ---
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPassword').value;
+            const errDiv = document.getElementById('authError');
+            errDiv.classList.add('hidden');
+
+            try {
+                if (isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                } else {
+                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                    await setDoc(doc(db, "users", cred.user.uid), {
+                        email: email,
+                        role: 'user',
+                        createdAt: new Date()
+                    });
+                }
+                closeAuthModal();
+                // Check if there was a scroll intent
+                document.getElementById('consultation').scrollIntoView({ behavior: 'smooth' });
+            } catch (err) {
+                errDiv.innerText = err.message;
+                errDiv.classList.remove('hidden');
+            }
+        });
+
+        // --- 7. DYNAMIC CONTENT FETCHING ---
+        async function loadSiteContent() {
+            try {
+                const homeRef = doc(db, "site_content", "homepage");
+                const snap = await getDoc(homeRef);
                 
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
+                if (snap.exists()) {
+                    const data = snap.data();
                     
-                    // --- RENDER SERVICES ---
-                    const sContainer = document.getElementById('services-container');
-                    if (data.services && sContainer) {
-                        // 1. Convert Map to Array & Sort by key (s1, s2, s3...)
-                        const servicesList = [];
-                        Object.keys(data.services)
-                            .sort((a,b) => parseInt(a.slice(1)) - parseInt(b.slice(1)))
-                            .forEach(k => servicesList.push(data.services[k]));
+                    // Populate Services
+                    const sCont = document.getElementById('services-container');
+                    if(data.services) {
+                        const sList = Object.keys(data.services)
+                                        .sort((a,b) => parseInt(a.slice(1)) - parseInt(b.slice(1)))
+                                        .map(k => data.services[k]);
                         
-                        // 2. Generate HTML
-                        if (servicesList.length > 0) {
-                            sContainer.innerHTML = servicesList.map(s => {
-                                const isPricing = !!s.price; // Checks if it's a pricing card type
-                                
-                                if (isPricing) {
-                                    // PRICING CARD (Dark Theme)
-                                    return `
-                                    <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center group bg-ayu-dark rounded-2xl p-8 hover-lift shadow-xl relative text-white overflow-hidden flex flex-col h-auto">
-                                        <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-bl-full -mr-4 -mt-4"></div>
-                                        <div class="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center text-white text-3xl mb-6"><i class="fas fa-om"></i></div>
-                                        <h3 class="text-xl font-bold mb-3">${s.title || 'Service'}</h3>
-                                        <p class="text-gray-300 text-sm mb-6 leading-relaxed flex-grow">${s.desc || ''}</p>
-                                        <div class="bg-white/10 p-4 rounded-lg mb-6 backdrop-blur-sm">
-                                            <p class="text-xs uppercase tracking-wide text-gray-400">Pricing</p>
-                                            <div class="flex items-baseline gap-2">
-                                                <span class="text-3xl font-bold">₹${s.price || '0'}</span>
-                                                ${s.old ? `<span class="text-sm line-through text-gray-400">₹${s.old}</span>` : ''}
-                                            </div>
-                                        </div>
-                                        <a href="#consultation" class="w-full block text-center bg-ayu-orange text-white py-3 rounded hover:bg-orange-600 transition mt-auto">Book Now</a>
-                                    </div>`;
-                                } else {
-                                    // STANDARD CARD (Light Theme)
-                                    return `
-                                    <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center group bg-white/90 backdrop-blur border border-white/50 rounded-2xl p-8 hover-lift shadow-sm relative overflow-hidden flex flex-col h-auto">
-                                        <div class="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-green-100"></div>
-                                        <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center text-ayu-green text-3xl mb-6"><i class="fas fa-leaf"></i></div>
-                                        <h3 class="text-xl font-bold mb-3 text-gray-900">${s.title || 'Service'}</h3>
-                                        <p class="text-gray-500 text-sm mb-6 leading-relaxed flex-grow">${s.desc || ''}</p>
-                                        <ul class="text-sm text-gray-500 space-y-2 mb-6">
-                                            ${s.f1 ? `<li><i class="fas fa-check text-ayu-orange mr-2"></i> ${s.f1}</li>` : ''}
-                                            ${s.f2 ? `<li><i class="fas fa-check text-ayu-orange mr-2"></i> ${s.f2}</li>` : ''}
-                                            ${s.f3 ? `<li><i class="fas fa-check text-ayu-orange mr-2"></i> ${s.f3}</li>` : ''}
-                                        </ul>
-                                        <a href="#consultation" class="w-full block text-center bg-ayu-green text-white py-3 rounded hover:bg-green-800 transition mt-auto">Book Now</a>
-                                    </div>`;
-                                }
-                            }).join('');
-                        } else {
-                            sContainer.innerHTML = `<div class="w-full text-center text-gray-500">No services currently listed.</div>`;
-                        }
+                        sCont.innerHTML = sList.map(s => `
+                            <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-50 hover-lift flex flex-col h-auto">
+                                <div class="w-16 h-16 bg-ayu-green/10 rounded-2xl flex items-center justify-center text-ayu-green text-3xl mb-8">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-4 text-ayu-dark">${s.title}</h3>
+                                <p class="text-gray-500 text-sm leading-relaxed mb-8 flex-grow">${s.desc}</p>
+                                <div class="mb-8">
+                                    <span class="text-3xl font-bold text-gray-900">₹${s.price || '999'}</span>
+                                    <span class="text-sm text-gray-400">/ session</span>
+                                </div>
+                                <button onclick="handleBooking(event)" class="w-full bg-ayu-green text-white py-4 rounded-xl font-bold hover:shadow-lg transition">Select Program</button>
+                            </div>
+                        `).join('');
                     }
 
-                    // --- RENDER DOCTORS ---
-                    const dContainer = document.getElementById('doctors-container');
-                    if(data.doctors && dContainer) {
-                        const doctorsList = [];
-                        Object.keys(data.doctors)
-                            .sort((a,b) => parseInt(a.slice(3)) - parseInt(b.slice(3)))
-                            .forEach(k => doctorsList.push(data.doctors[k]));
-                        
-                        if (doctorsList.length > 0) {
-                            dContainer.innerHTML = doctorsList.map(d => `
-                                <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
-                                    <div class="h-64 overflow-hidden">
-                                        <img src="${d.img || 'https://via.placeholder.com/400x300'}" alt="${d.name}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
-                                    </div>
-                                    <div class="p-6">
-                                        <h4 class="font-bold text-lg text-gray-900">${d.name || 'Doctor Name'}</h4>
-                                        <p class="text-ayu-green text-sm font-medium mb-2">${d.spec || 'Specialist'}</p>
-                                        <div class="flex justify-between text-xs text-gray-500 border-t pt-3 mt-3">
-                                            <span class="bg-gray-100 px-2 py-1 rounded">${d.deg || 'MBBS'}</span>
-                                            <span class="flex items-center"><i class="fas fa-clock mr-1 text-ayu-orange"></i> ${d.exp || '5+ Yrs'}</span>
-                                        </div>
+                    // Populate Doctors
+                    const dCont = document.getElementById('doctors-container');
+                    if(data.doctors) {
+                        const dList = Object.keys(data.doctors).map(k => data.doctors[k]);
+                        dCont.innerHTML = dList.map(d => `
+                            <div class="w-[85vw] md:w-[300px] flex-shrink-0 snap-center bg-white rounded-3xl overflow-hidden shadow-md group">
+                                <div class="h-64 overflow-hidden relative">
+                                    <img src="${d.img || 'https://via.placeholder.com/300'}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-ayu-dark/80 to-transparent"></div>
+                                    <div class="absolute bottom-4 left-4">
+                                        <span class="bg-ayu-orange text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase">${d.spec}</span>
                                     </div>
                                 </div>
-                            `).join('');
-                        } else {
-                            dContainer.innerHTML = `<div class="w-full text-center text-gray-500">No experts currently listed.</div>`;
-                        }
+                                <div class="p-6">
+                                    <h4 class="text-xl font-bold mb-1">${d.name}</h4>
+                                    <p class="text-gray-400 text-xs mb-4">${d.deg}</p>
+                                    <button onclick="handleBooking(event)" class="w-full border border-ayu-green text-ayu-green py-2 rounded-lg font-bold hover:bg-ayu-green hover:text-white transition">Book Slot</button>
+                                </div>
+                            </div>
+                        `).join('');
                     }
                 }
-             } catch(e) { console.log("Content not customized yet or error fetching", e); }
+            } catch (e) {
+                console.error("Content fetch failed: ", e);
+            }
         }
-        fetchContent();
+
+        loadSiteContent();
     </script>
 </body>
 </html>
