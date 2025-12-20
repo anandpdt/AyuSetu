@@ -518,25 +518,43 @@
         let isLogin = true;
         let currentUser = null;
 
-        // FIXED: Role check to include doctor-dashboard.html
+        // HELPER: Determine dashboard target based on user role
+        async function getDashboardTarget(uid) {
+            const userDoc = await getDoc(doc(db, "users", uid));
+            if (!userDoc.exists()) return 'user-dashboard.html';
+            
+            const role = userDoc.data().role;
+            if (role === 'admin') return 'admin-dashboard.html';
+            if (role === 'doctor') return 'doctor-dashboard.html';
+            return 'user-dashboard.html';
+        }
+
+        // Handle UI updates based on auth state
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             const loginBtn = document.getElementById('navLoginBtn');
             const dLoginBtn = document.getElementById('drawerLoginBtn');
             
             if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                const role = userDoc.exists() ? userDoc.data().role : 'user';
+                const target = await getDashboardTarget(user.uid);
                 
-                let target = 'user-dashboard.html';
-                if (role === 'admin') target = 'admin-dashboard.html';
-                else if (role === 'doctor') target = 'doctor-dashboard.html';
-                
-                if(loginBtn) { loginBtn.innerText = "Dashboard"; loginBtn.onclick = () => window.location.href = target; }
-                if(dLoginBtn) { dLoginBtn.innerText = "Dashboard"; dLoginBtn.onclick = () => window.location.href = target; }
+                if(loginBtn) { 
+                    loginBtn.innerText = "Dashboard"; 
+                    loginBtn.onclick = () => window.location.href = target; 
+                }
+                if(dLoginBtn) { 
+                    dLoginBtn.innerText = "Dashboard"; 
+                    dLoginBtn.onclick = () => window.location.href = target; 
+                }
             } else {
-                if(loginBtn) { loginBtn.innerText = "Login"; loginBtn.onclick = openLogin; }
-                if(dLoginBtn) { dLoginBtn.innerText = "Login"; dLoginBtn.onclick = openLogin; }
+                if(loginBtn) { 
+                    loginBtn.innerText = "Login"; 
+                    loginBtn.onclick = openLogin; 
+                }
+                if(dLoginBtn) { 
+                    dLoginBtn.innerText = "Login"; 
+                    dLoginBtn.onclick = openLogin; 
+                }
             }
         });
 
@@ -548,7 +566,7 @@
             document.getElementById('btnText').innerText = isLogin ? "Login" : "Sign Up";
         }
 
-        // FIXED: Redirection after direct login submission
+        // Handle login/signup form submission
         document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('authEmail').value;
@@ -557,22 +575,19 @@
             errorDiv.classList.add('hidden');
 
             try {
+                let uid;
                 if (isLogin) {
                     const cred = await signInWithEmailAndPassword(auth, email, password);
-                    // Fetch user doc immediately to determine where to redirect
-                    const userDoc = await getDoc(doc(db, "users", cred.user.uid));
-                    const role = userDoc.exists() ? userDoc.data().role : 'user';
-                    
-                    let target = 'user-dashboard.html';
-                    if (role === 'admin') target = 'admin-dashboard.html';
-                    else if (role === 'doctor') target = 'doctor-dashboard.html';
-                    
-                    window.location.href = target;
+                    uid = cred.user.uid;
                 } else {
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
-                    await setDoc(doc(db, "users", cred.user.uid), { email, role: 'user', createdAt: new Date() });
-                    window.location.href = 'user-dashboard.html';
+                    uid = cred.user.uid;
+                    await setDoc(doc(db, "users", uid), { email, role: 'user', createdAt: new Date() });
                 }
+                
+                // Redirect based on role
+                const target = await getDashboardTarget(uid);
+                window.location.href = target;
                 closeAuthModal();
             } catch (error) {
                 errorDiv.innerText = error.message;
@@ -669,7 +684,7 @@
                         }).join('');
                     }
 
-                    // RENDER DOCTORS
+                    // RENDER DOCTORS (Fixed order issue)
                    // RENDER DOCTORS (FIXED PHOTO CROPPING)
 const dContainer = document.getElementById('doctors-container');
 if(data.doctors && dContainer) {
@@ -691,7 +706,6 @@ if(data.doctors && dContainer) {
         </div>
     </div>`).join('');
 }
-                    }
                 }
             } catch(e) { console.log("CMS load error", e); }
         }
