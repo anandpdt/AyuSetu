@@ -124,6 +124,7 @@
             <div class="flex items-center gap-2 md:gap-8">
                 <div class="hidden md:flex items-center gap-8">
                     <a href="#about" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">About</a>
+                    <a href="#conditions" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">Treatments</a>
                     <a href="centers.html" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm whitespace-nowrap">Offline Centers</a>
                     <button id="navLoginBtn" onclick="openLogin()" class="bg-ayu-green text-white px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg shadow-green-900/20 cursor-pointer">
                         Login
@@ -149,6 +150,7 @@
                 <button id="drawerLoginBtn" onclick="toggleDrawer(); openLogin();" class="block w-full bg-ayu-green text-white text-center py-3 rounded-full font-bold shadow-md hover:bg-[#1e5c22] transition">Login</button>
                 <div class="grid grid-cols-2 gap-4">
                     <a href="#about" onclick="toggleDrawer()" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">About</a>
+                    <a href="#conditions" onclick="toggleDrawer()" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">Treatments</a>
                     <a href="centers.html" class="text-center py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-green-50 transition">Offline Centers</a>
                 </div>
             </div>
@@ -177,6 +179,13 @@
                     <span class="text-sm bg-blue-100 text-blue-600 px-2 py-1 rounded">03</span> Residential Therapy
                 </h4>
                 <p class="text-gray-500 mt-2 pl-9 text-sm">Offline healing at our centers (10-30 days).</p>
+            </div>
+            
+            <div class="group cursor-pointer" onclick="toggleDrawer(); document.getElementById('leadership').scrollIntoView({behavior:'smooth'});">
+                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                    <span class="text-sm bg-purple-100 text-purple-600 px-2 py-1 rounded">04</span> Leadership
+                </h4>
+                <p class="text-gray-500 mt-2 pl-9 text-sm">Meet our Team members.</p>
             </div>
         </div>
 
@@ -254,6 +263,188 @@
             </div>
             <div class="relative">
                 <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-lg w-full" alt="Meditation">
+            </div>
+        </div>
+    </section>
+
+    <!-- CONDITIONS TREATED SECTION (NEW) -->
+    <section id="conditions" class="py-24 bg-ayu-dark text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-ayu-green/20 rounded-full blur-3xl -mr-48 -mt-48"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-ayu-orange/10 rounded-full blur-3xl -ml-48 -mb-48"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">Health Verticals</span>
+                <h2 class="text-4xl font-serif font-bold mt-2">Conditions We Treat</h2>
+                <div class="w-24 h-1 bg-white/20 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- 1. Mental Health -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition duration-300">
+                    <div class="text-ayu-orange text-3xl mb-4"><i class="fas fa-brain"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Mental Health</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Anxiety & Depression</li>
+                        <li>Stress & Panic Disorders</li>
+                        <li>Insomnia (अनिद्रा) / OCD</li>
+                        <li>PTSD / ADHD</li>
+                        <li>Bipolar Disorder Support</li>
+                        <li>Mental Fatigue</li>
+                    </ul>
+                </div>
+
+                <!-- 2. Cardiovascular -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-red-400 text-3xl mb-4"><i class="fas fa-heartbeat"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Cardiovascular</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>High & Low BP</li>
+                        <li>Ischemic Heart Disease</li>
+                        <li>Atherosclerosis</li>
+                        <li>High Cholesterol</li>
+                        <li>Palpitations</li>
+                        <li>Varicose Veins</li>
+                    </ul>
+                </div>
+
+                <!-- 3. Respiratory -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-blue-400 text-3xl mb-4"><i class="fas fa-lungs"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Respiratory</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Asthma / Allergic Rhinitis</li>
+                        <li>Chronic Bronchitis</li>
+                        <li>Sinusitis / Sleep Apnea</li>
+                        <li>COPD Supportive Care</li>
+                        <li>Cold & Cough</li>
+                        <li>Breathing Disorders</li>
+                    </ul>
+                </div>
+
+                <!-- 4. Digestive -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-yellow-400 text-3xl mb-4"><i class="fas fa-utensils"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Digestive</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Acid Reflux (GERD)</li>
+                        <li>Gastritis / Indigestion</li>
+                        <li>Constipation / IBS</li>
+                        <li>Fatty Liver / Hepatitis</li>
+                        <li>Piles / Fissure / Fistula</li>
+                        <li>Chronic Diarrhea</li>
+                    </ul>
+                </div>
+
+                <!-- 5. Metabolic -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-green-400 text-3xl mb-4"><i class="fas fa-vial"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Metabolic</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Diabetes Type 2</li>
+                        <li>Prediabetes / Obesity</li>
+                        <li>Metabolic Syndrome</li>
+                        <li>Gout / Thyroid</li>
+                        <li>PCOD / PCOS</li>
+                        <li>High Uric Acid</li>
+                    </ul>
+                </div>
+
+                <!-- 6. Musculoskeletal -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-ayu-orange text-3xl mb-4"><i class="fas fa-bone"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Musculoskeletal</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Back Pain / Slip Disc</li>
+                        <li>Cervical Spondylosis</li>
+                        <li>Lumbar Spondylosis</li>
+                        <li>Knee Pain / Arthritis</li>
+                        <li>Sciatica / Osteoporosis</li>
+                        <li>Frozen Shoulder</li>
+                    </ul>
+                </div>
+
+                <!-- 7. Skin Diseases -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-pink-300 text-3xl mb-4"><i class="fas fa-spa"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Skin Care</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Psoriasis / Eczema</li>
+                        <li>Acne / Dermatitis</li>
+                        <li>Vitiligo (Leucoderma)</li>
+                        <li>Urticaria</li>
+                        <li>Fungal Infection</li>
+                        <li>Premature Aging</li>
+                    </ul>
+                </div>
+
+                <!-- 8. Neurological -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-purple-400 text-3xl mb-4"><i class="fas fa-microchip"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Neurological</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Migraine / Tension Headache</li>
+                        <li>Epilepsy Supportive</li>
+                        <li>Parkinson's Support</li>
+                        <li>Vertigo</li>
+                        <li>Memory Loss</li>
+                        <li>Neuropathy</li>
+                    </ul>
+                </div>
+
+                <!-- 9. Women's Health -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-red-300 text-3xl mb-4"><i class="fas fa-female"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Women's Health</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Menstrual Disorders</li>
+                        <li>Menopause Relief</li>
+                        <li>Female Infertility</li>
+                        <li>Leucorrhea / Hormones</li>
+                        <li>Endometriosis Support</li>
+                        <li>Pregnancy Stress</li>
+                    </ul>
+                </div>
+
+                <!-- 10. Men's Health -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-blue-300 text-3xl mb-4"><i class="fas fa-male"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Men's Health</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Erectile Dysfunction</li>
+                        <li>Premature Ejaculation</li>
+                        <li>Low Testosterone</li>
+                        <li>Male Infertility</li>
+                        <li>Prostate (BPH) Support</li>
+                    </ul>
+                </div>
+
+                <!-- 11. Renal & Urinary -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-teal-400 text-3xl mb-4"><i class="fas fa-tint"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Renal & Urinary</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Kidney Stones</li>
+                        <li>Recurrent UTI</li>
+                        <li>Urinary Incontinence</li>
+                        <li>CKD (supportive)</li>
+                        <li>Fluid Retention Swelling</li>
+                    </ul>
+                </div>
+
+                <!-- 12. Lifestyle & Immunity -->
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition xl:col-span-1">
+                    <div class="text-gray-400 text-3xl mb-4"><i class="fas fa-couch"></i></div>
+                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Life & Immunity</h3>
+                    <ul class="text-sm text-gray-300 space-y-1">
+                        <li>Chronic Fatigue</li>
+                        <li>Sleep Disorders / Addictions</li>
+                        <li>Digital Eye Strain</li>
+                        <li>Weak Immunity</li>
+                        <li>Autoimmune Supportive</li>
+                        <li>Longevity Care</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -405,11 +596,51 @@
         </div>
     </section>
 
+    <!-- LEADERSHIP SECTION (NEW) -->
+    <section id="leadership" class="py-24 bg-white/40 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">Our Leadership</span>
+                <h2 class="text-4xl font-serif font-bold text-gray-900 mt-2">The Visionaries Behind Ayusetu</h2>
+                <div class="w-24 h-1 bg-ayu-green mx-auto mt-4 rounded-full"></div>
+            </div>
+            <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Adarsh -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
+                    <div class="w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-green/20 group-hover:border-ayu-orange transition-colors">
+                        <img src="https://via.placeholder.com/300?text=Adarsh" alt="krishna" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900">Krishna Kumar Maya</h3>
+                    <p class="text-ayu-green font-semibold mb-4 text-sm">Founder</p>
+                    <p class="text-gray-500 text-sm leading-relaxed">Visionary leader dedicated to integrating traditional wellness with modern lifestyle through innovation and care.</p>
+                </div>
+                <!-- Anand -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
+                    <div class="w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-orange/20 group-hover:border-ayu-green transition-colors">
+                        <img src="IMG-20251201-WA0124.jpg" alt="Anand" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900">Anand</h3>
+                    <p class="text-ayu-orange font-semibold mb-4 text-sm">Co-Founder</p>
+                    <p class="text-gray-500 text-sm leading-relaxed">Technological expert focused on making wellness accessible to everyone through advanced AI-driven diagnostics.</p>
+                </div>
+                <!-- Asdf -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
+                    <div class="w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-green/20 group-hover:border-ayu-orange transition-colors">
+                        <img src="1-removebg-preview.png" alt="Adarsh" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900">Adarsh</h3>
+                    <p class="text-ayu-green font-semibold mb-4 text-sm">Strategic Director</p>
+                    <p class="text-gray-500 text-sm leading-relaxed">Bringing years of industry experience to guide the operational excellence and strategic growth of Ayusetu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- FOOTER -->
     <footer id="contact" class="bg-gray-900 text-white pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 mb-12">
             <div><h1 class="text-2xl font-bold text-ayu-orange mb-4">AYUSETU</h1><p class="text-gray-400 text-sm">Bridging tradition and technology.</p></div>
-            <div><h4 class="font-bold mb-4">Quick Links</h4><ul class="text-sm text-gray-400 space-y-2"><li>Home</li><li>About Us</li></ul></div>
+            <div><h4 class="font-bold mb-4">Quick Links</h4><ul class="text-sm text-gray-400 space-y-2"><li>Home</li><li>About Us</li><li>Treatments</li></ul></div>
             <div><h4 class="font-bold mb-4">Services</h4><ul class="text-sm text-gray-400 space-y-2"><li>Naturopathy</li><li>Yoga Therapy</li></ul></div>
             <div><h4 class="font-bold mb-4">Contact Us</h4><ul class="text-sm text-gray-400 space-y-2"><li>Patna, Bihar, India</li><li>help@ayusetu.com</li></ul></div>
         </div>
@@ -518,15 +749,20 @@
         let isLogin = true;
         let currentUser = null;
 
-        // HELPER: Determine dashboard target based on user role
+        // HELPER: Determine dashboard target based on user role (FIXED REDIRECT BUG)
         async function getDashboardTarget(uid) {
-            const userDoc = await getDoc(doc(db, "users", uid));
-            if (!userDoc.exists()) return 'user-dashboard.html';
-            
-            const role = userDoc.data().role;
-            if (role === 'admin') return 'admin-dashboard.html';
-            if (role === 'doctor') return 'doctor-dashboard.html';
-            return 'user-dashboard.html';
+            try {
+                const userDoc = await getDoc(doc(db, "users", uid));
+                if (!userDoc.exists()) return 'user-dashboard.html';
+                
+                const role = userDoc.data().role;
+                if (role === 'admin') return 'admin-dashboard.html';
+                if (role === 'doctor') return 'doctor-dashboard.html';
+                return 'user-dashboard.html';
+            } catch (e) {
+                console.error("Role check failed", e);
+                return 'user-dashboard.html';
+            }
         }
 
         // Handle UI updates based on auth state
@@ -537,14 +773,15 @@
             
             if (user) {
                 const target = await getDashboardTarget(user.uid);
+                const goDash = () => window.location.href = target;
                 
                 if(loginBtn) { 
                     loginBtn.innerText = "Dashboard"; 
-                    loginBtn.onclick = () => window.location.href = target; 
+                    loginBtn.onclick = goDash; 
                 }
                 if(dLoginBtn) { 
                     dLoginBtn.innerText = "Dashboard"; 
-                    dLoginBtn.onclick = () => window.location.href = target; 
+                    dLoginBtn.onclick = goDash; 
                 }
             } else {
                 if(loginBtn) { 
@@ -585,7 +822,7 @@
                     await setDoc(doc(db, "users", uid), { email, role: 'user', createdAt: new Date() });
                 }
                 
-                // Redirect based on role
+                // Redirect immediately after login based on role
                 const target = await getDashboardTarget(uid);
                 window.location.href = target;
                 closeAuthModal();
@@ -598,13 +835,14 @@
         window.handleBooking = (e, sectionId) => {
             if (e) e.preventDefault();
             if (!currentUser) {
-                alert("Please Login to proceed with your request.");
                 openLogin();
             } else {
                 if (sectionId) {
                     const el = document.getElementById(sectionId);
                     if(el) el.scrollIntoView({ behavior: 'smooth' });
-                    toggleDrawer();
+                    // Close drawer if open
+                    const drawer = document.getElementById('sideDrawer');
+                    if(drawer.classList.contains('open')) toggleDrawer();
                 }
             }
         };
@@ -639,7 +877,7 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     
-                    // RENDER SERVICES
+                    // RENDER SERVICES (RESTORED ORIGINAL LOGIC)
                     const sContainer = document.getElementById('services-container');
                     if (data.services && sContainer) {
                         const servicesList = Object.keys(data.services)
@@ -684,28 +922,27 @@
                         }).join('');
                     }
 
-                    // RENDER DOCTORS (Fixed order issue)
-                   // RENDER DOCTORS (FIXED PHOTO CROPPING)
-const dContainer = document.getElementById('doctors-container');
-if(data.doctors && dContainer) {
-    const doctorsList = Object.values(data.doctors);
-    dContainer.innerHTML = doctorsList.map(d => `
-    <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
-        <div class="h-64 overflow-hidden bg-gray-50 flex items-center justify-center">
-            <img src="${d.img || 'https://via.placeholder.com/400x300'}" 
-                 alt="${d.name}" 
-                 class="w-full h-full object-contain transform hover:scale-105 transition duration-500">
-        </div>
-        <div class="p-6">
-            <h4 class="font-bold text-lg text-gray-900">${d.name || 'Doctor Name'}</h4>
-            <p class="text-ayu-green text-sm font-medium mb-2">${d.spec || 'Specialist'}</p>
-            <div class="flex justify-between text-xs text-gray-500 border-t pt-3 mt-3">
-                <span class="bg-gray-100 px-2 py-1 rounded">${d.deg || 'MBBS'}</span>
-            </div>
-            <button onclick="handleBooking(event, 'consultation')" class="w-full mt-4 bg-gray-100 py-2 rounded text-xs font-bold hover:bg-ayu-green hover:text-white transition">Consult Now</button>
-        </div>
-    </div>`).join('');
-}
+                    // RENDER DOCTORS (FIXED PHOTO CROPPING)
+                    const dContainer = document.getElementById('doctors-container');
+                    if(data.doctors && dContainer) {
+                        const doctorsList = Object.values(data.doctors);
+                        dContainer.innerHTML = doctorsList.map(d => `
+                        <div class="w-[85vw] md:w-[30%] flex-shrink-0 snap-center bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                            <div class="h-64 overflow-hidden bg-gray-50 flex items-center justify-center">
+                                <img src="${d.img || 'https://via.placeholder.com/400x300'}" 
+                                     alt="${d.name}" 
+                                     class="w-full h-full object-contain transform hover:scale-105 transition duration-500">
+                            </div>
+                            <div class="p-6">
+                                <h4 class="font-bold text-lg text-gray-900">${d.name || 'Doctor Name'}</h4>
+                                <p class="text-ayu-green text-sm font-medium mb-2">${d.spec || 'Specialist'}</p>
+                                <div class="flex justify-between text-xs text-gray-500 border-t pt-3 mt-3">
+                                    <span class="bg-gray-100 px-2 py-1 rounded">${d.deg || 'MBBS'}</span>
+                                </div>
+                                <button onclick="handleBooking(event, 'consultation')" class="w-full mt-4 bg-gray-100 py-2 rounded text-xs font-bold hover:bg-ayu-green hover:text-white transition">Consult Now</button>
+                            </div>
+                        </div>`).join('');
+                    }
                 }
             } catch(e) { console.log("CMS load error", e); }
         }
