@@ -54,6 +54,7 @@
 
         .drawer { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
         .drawer.open { transform: translateX(0); }
+        .glass-drawer { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); }
 
         .hero-element { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .run-hero-anim .hero-element { opacity: 1; transform: translateY(0); }
@@ -63,9 +64,15 @@
 
         .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
         .logo-text { font-family: 'Merriweather', serif; }
+
+        @keyframes scaleIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .animate-scale-in { animation: scaleIn 0.4s ease-out forwards; }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen overflow-hidden" onload="startLoader()">
+<body class="text-gray-800 antialiased min-h-screen overflow-x-hidden" onload="startLoader()">
 
     <!-- PRELOADER -->
     <div id="preloader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#fdfbf7]">
@@ -79,46 +86,74 @@
         </div>
     </div>
 
-    <!-- NAVIGATION -->
+    <!-- NAVIGATION (Synced with index.html) -->
     <nav class="fixed top-6 left-0 right-0 z-50 px-4">
-        <div class="max-w-7xl mx-auto bg-white/80 backdrop-blur-lg rounded-full py-3 px-8 flex justify-between items-center border border-white/50 shadow-xl">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='./index.html'">
-                <div class="bg-ayu-green p-2 rounded-full">
-                    <i class="fas fa-leaf text-white text-xs"></i>
-                </div>
-                <span class="logo-text text-2xl font-bold tracking-tight">
-                    <span class="text-ayu-green">AYU</span><span class="text-ayu-orange">SETU</span>
-                </span>
+        <div class="pill-nav max-w-6xl mx-auto bg-white/90 backdrop-blur-md rounded-full py-2 px-6 md:px-8 flex justify-between items-center relative border border-white/50 shadow-lg">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                <img src="1-removebg-preview.png" onerror="this.src='https://via.placeholder.com/150x60?text=AYUSETU'" alt="Ayusetu Logo" class="h-14 w-auto object-contain mix-blend-multiply">
             </div>
 
-            <div class="hidden lg:flex items-center gap-10">
-                <a href="./index.html" class="text-gray-600 font-medium hover:text-ayu-green transition">Home</a>
-                <a href="./index.html#services" class="text-gray-600 font-medium hover:text-ayu-green transition">Online Programs</a>
-                <span class="text-ayu-green font-bold border-b-2 border-ayu-green">Offline Centers</span>
-                <button id="navLoginBtn" onclick="openLogin()" class="bg-ayu-green text-white px-10 py-3 rounded-full font-semibold hover:bg-[#1e5c22] transition shadow-lg transform active:scale-95">
-                    Login
+            <div class="flex items-center gap-2 md:gap-8">
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html#about" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">About</a>
+                    <a href="index.html#conditions" class="text-gray-600 font-medium hover:text-ayu-green transition text-sm">Treatments</a>
+                    <a href="centers.html" class="text-ayu-green font-bold transition text-sm whitespace-nowrap">Offline Centers</a>
+                    <button id="navLoginBtn" onclick="openLogin()" class="bg-ayu-green text-white px-8 py-2.5 rounded-full font-medium text-sm hover:bg-[#1e5c22] transition shadow-lg cursor-pointer">
+                        Login
+                    </button>
+                </div>
+
+                <button onclick="toggleDrawer()" class="text-ayu-green text-2xl hover:scale-110 transition p-1 focus:outline-none cursor-pointer">
+                    <i class="fas fa-ellipsis-v"></i>
                 </button>
             </div>
-
-            <button onclick="toggleDrawer()" class="lg:hidden text-ayu-green text-2xl p-2 focus:outline-none">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
     </nav>
 
-    <!-- SIDE DRAWER -->
-    <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
-    <div id="sideDrawer" class="drawer fixed top-0 right-0 h-full w-[300px] md:w-[400px] bg-white z-[70] shadow-2xl p-10 flex flex-col border-l border-gray-100">
-        <button onclick="toggleDrawer()" class="self-end text-3xl text-gray-400 hover:text-ayu-green transition mb-10">
+    <!-- DRAWER (Synced with index.html) -->
+    <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
+    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100 overflow-y-auto">
+        <button onclick="toggleDrawer()" class="absolute top-8 right-8 text-2xl text-ayu-green hover:rotate-90 transition duration-300">
             <i class="fas fa-times"></i>
         </button>
-        <div class="flex flex-col gap-8">
-            <button id="drawerLoginBtn" onclick="toggleDrawer(); openLogin();" class="w-full bg-ayu-green text-white py-4 rounded-xl font-bold shadow-md">Member Login</button>
-            <nav class="flex flex-col gap-6 text-xl font-serif">
-                <a href="./index.html" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">Home</a>
-                <a href="./index.html#services" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">Online Programs</a>
-                <a href="#consultation" onclick="toggleDrawer()" class="hover:text-ayu-green border-b border-gray-50 pb-2">Book Residential</a>
-            </nav>
+
+        <div class="mt-16 space-y-8">
+            <h3 class="font-serif text-3xl text-ayu-green border-b border-gray-100 pb-4">Wellness Menu</h3>
+            
+            <div class="group cursor-pointer" onclick="window.location.href='index.html#doctors'; toggleDrawer();">
+                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                    <span class="text-sm bg-green-100 text-ayu-green px-2 py-1 rounded">01</span> Consult Doctors
+                </h4>
+                <p class="text-gray-500 mt-2 pl-9 text-sm">Video consultation with top Naturopaths.</p>
+            </div>
+
+            <div class="group cursor-pointer" onclick="window.location.href='index.html#services'; toggleDrawer();">
+                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                    <span class="text-sm bg-orange-100 text-ayu-orange px-2 py-1 rounded">02</span> Online Sessions
+                </h4>
+                <p class="text-gray-500 mt-2 pl-9 text-sm">Daily live sessions for Mental & Physical Health.</p>
+            </div>
+
+            <div class="group cursor-pointer" onclick="toggleDrawer();">
+                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                    <span class="text-sm bg-blue-100 text-blue-600 px-2 py-1 rounded">03</span> Residential Therapy
+                </h4>
+                <p class="text-gray-500 mt-2 pl-9 text-sm">Offline healing at our centers.</p>
+            </div>
+            
+            <div class="group cursor-pointer" onclick="window.location.href='index.html#leadership'; toggleDrawer();">
+                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                    <span class="text-sm bg-purple-100 text-purple-600 px-2 py-1 rounded">04</span> Leadership
+                </h4>
+                <p class="text-gray-500 mt-2 pl-9 text-sm">Meet our Team members.</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 p-6 rounded-2xl mt-8">
+            <p class="text-ayu-green font-serif italic mb-4">"Balance your energy, balance your life."</p>
+            <button onclick="toggleDrawer(); document.getElementById('consultation').scrollIntoView({behavior:'smooth'});" class="w-full bg-ayu-green text-white py-3 rounded-xl font-bold hover:bg-[#1e5c22] transition">
+                Register Now
+            </button>
         </div>
     </div>
 
@@ -236,18 +271,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="opacity-40">
-                                <div class="flex items-center gap-4 mb-6">
-                                    <div class="h-px flex-grow bg-gray-100"></div>
-                                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] px-4">Upcoming Expansion</h4>
-                                    <div class="h-px flex-grow bg-gray-100"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4 text-xs font-bold text-gray-400 uppercase italic tracking-widest text-center">
-                                    <div class="p-4 border-2 border-dashed border-gray-100 rounded-2xl">Ranchi, JH</div>
-                                    <div class="p-4 border-2 border-dashed border-gray-100 rounded-2xl">Kolkata, WB</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     
@@ -255,13 +278,6 @@
                         <div class="absolute -inset-6 bg-ayu-orange/5 rounded-[4rem] rotate-3"></div>
                         <div class="rounded-[3rem] overflow-hidden shadow-2xl relative">
                             <img src="https://images.unsplash.com/photo-1570211776045-af3a51026f4a?auto=format&fit=crop&w=1000&q=80" class="w-full h-[550px] object-cover" alt="Banmankhi Center">
-                            <div class="absolute bottom-10 left-10 right-10 glass-card p-8 rounded-3xl border-white shadow-2xl">
-                                <p class="text-ayu-dark font-serif italic text-lg leading-relaxed">"A sanctuary where I finally found the silence my soul needed to heal."</p>
-                                <div class="mt-4 flex items-center gap-3">
-                                    <div class="w-8 h-1 bg-ayu-orange rounded-full"></div>
-                                    <p class="text-[10px] font-black text-ayu-orange uppercase tracking-widest">Our Banmankhi Retreat</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -275,7 +291,7 @@
             <div class="bg-ayu-dark rounded-[3rem] shadow-2xl border border-ayu-dark overflow-hidden text-white">
                 <div class="bg-ayu-green p-12 text-center">
                     <h2 class="text-4xl font-serif font-bold mb-4">Reservation Desk</h2>
-                    <p class="text-green-100 opacity-80">Our coordinator will call you to confirm health eligibility.</p>
+                    <p class="text-green-100 opacity-80">Finalize your stay at our residential wellness centers.</p>
                 </div>
                 <div class="p-12 md:p-20">
                     <form id="bookingForm" class="space-y-10">
@@ -297,9 +313,9 @@
                             <div class="space-y-2 border-b border-white/10 pb-2">
                                 <label class="text-[10px] font-black uppercase text-white/40 tracking-[0.2em]">Package Choice</label>
                                 <select id="packageType" class="w-full bg-transparent p-2 outline-none text-white transition cursor-pointer">
-                                    <option class="text-gray-900" value="10-Day Cleanse">10-Day Cleanse (₹25,000)</option>
-                                    <option class="text-gray-900" value="15-Day Deep Healing">15-Day Deep Healing (₹35,000)</option>
-                                    <option class="text-gray-900" value="30-Day Rejuvenation">30-Day Rejuvenation (₹55,000)</option>
+                                    <option class="text-gray-900" value="25000">10-Day Cleanse (₹25,000)</option>
+                                    <option class="text-gray-900" value="35000">15-Day Deep Healing (₹35,000)</option>
+                                    <option class="text-gray-900" value="55000">30-Day Rejuvenation (₹55,000)</option>
                                 </select>
                             </div>
                         </div>
@@ -310,12 +326,17 @@
                         
                         <div class="bg-white/5 p-6 rounded-2xl border border-white/10 flex items-center gap-4">
                             <div class="w-10 h-10 bg-ayu-orange rounded-full flex items-center justify-center text-white shrink-0"><i class="fas fa-info"></i></div>
-                            <p class="text-xs text-white/60 leading-relaxed italic">Payment verification occurs after our medical screening call. Your request is currently a "Reservation Interest".</p>
+                            <p class="text-xs text-white/60 leading-relaxed italic">You can either request a callback for health verification or proceed directly to payment to secure your dates.</p>
                         </div>
 
-                        <button type="button" onclick="submitBooking()" id="bookBtn" class="w-full bg-ayu-orange text-white py-6 rounded-2xl font-bold text-xl hover:shadow-2xl transition transform active:scale-95 shadow-orange-500/20">
-                            Confirm Stay Reservation
-                        </button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <button type="button" onclick="submitBooking('request_call')" id="callBtn" class="w-full bg-white text-ayu-dark py-5 rounded-2xl font-bold text-lg hover:bg-gray-100 transition shadow-xl">
+                                Request a Call
+                            </button>
+                            <button type="button" onclick="submitBooking('payment')" id="payBtn" class="w-full bg-ayu-orange text-white py-5 rounded-2xl font-bold text-lg hover:shadow-2xl transition shadow-ayu-orange/20">
+                                Make Payment
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -332,74 +353,65 @@
                 <a href="./index.html#about" class="hover:text-white transition">About</a>
                 <a href="./index.html#services" class="hover:text-white transition">Online Services</a>
             </div>
-            <p class="text-gray-600 text-[10px] font-bold uppercase tracking-[0.3em]">&copy; 2025 Ayusetu Wellness Pvt Ltd. Integrated Healthcare.</p>
+            <p class="text-gray-600 text-[10px] font-bold uppercase tracking-[0.3em]">&copy; 2025 Ayusetu Wellness Pvt Ltd. All rights reserved.</p>
         </div>
     </footer>
 
     <!-- AUTH MODAL -->
-    <div id="authModal" class="fixed inset-0 z-[100] hidden">
-        <div class="absolute inset-0 bg-ayu-dark/80 backdrop-blur-md" onclick="closeAuthModal()"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl overflow-hidden">
-            <div class="flex">
-                <div class="w-3 bg-ayu-orange"></div>
-                <div class="p-12 w-full">
-                    <div class="flex justify-between items-center mb-10">
-                        <h2 class="text-4xl font-serif font-bold text-ayu-dark" id="modalTitle">Welcome</h2>
-                        <button onclick="closeAuthModal()" class="text-gray-300 hover:text-red-500 transition text-2xl"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div id="authError" class="hidden bg-red-50 text-red-600 p-4 rounded-xl text-sm mb-6 border border-red-100 italic"></div>
-                    <form id="authForm" class="space-y-6">
-                        <input type="email" id="authEmail" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 focus:ring-2 focus:ring-ayu-green/20 outline-none transition" placeholder="Email" required>
-                        <input type="password" id="authPassword" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 focus:ring-2 focus:ring-ayu-green/20 outline-none transition" placeholder="Password" required>
-                        <button type="submit" class="w-full bg-ayu-green text-white py-5 rounded-2xl font-bold text-lg hover:shadow-xl transition transform active:scale-95">
-                            <span id="btnText">Enter Portal</span>
-                        </button>
-                    </form>
-                    <div class="mt-8 text-center">
-                        <p id="toggleText" class="text-gray-500 text-sm font-medium">New? <a href="#" onclick="toggleAuthMode()" class="text-ayu-orange font-bold underline">Create Account</a></p>
-                    </div>
+    <div id="authModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAuthModal()"></div>
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-scale-in">
+            <div class="p-12 w-full relative">
+                <button onclick="closeAuthModal()" class="absolute top-6 right-6 text-gray-400 hover:text-red-500 transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-serif font-bold text-ayu-dark" id="modalTitle">Welcome Back</h2>
+                    <p class="text-gray-400 text-sm mt-2" id="modalSubtext">Access your wellness dashboard.</p>
                 </div>
+                <div id="authError" class="hidden bg-red-50 text-red-600 p-4 rounded-xl text-xs mb-4"></div>
+                <form id="authForm" class="space-y-4">
+                    <input type="email" id="authEmail" class="w-full bg-gray-50 border border-gray-100 p-4 rounded-2xl outline-none focus:border-ayu-green" placeholder="Email Address" required>
+                    <input type="password" id="authPassword" class="w-full bg-gray-50 border border-gray-100 p-4 rounded-2xl outline-none focus:border-ayu-green" placeholder="Password" required>
+                    <button type="submit" class="w-full bg-ayu-dark text-white font-bold py-4 rounded-2xl hover:bg-black transition">
+                        <span id="btnText">Login to Ayusetu</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 
     <script>
         function startLoader() {
-            const pre = document.getElementById('preloader');
-            if (sessionStorage.getItem('v_ayusetu_centers')) {
-                pre.style.display = 'none';
-                document.body.classList.remove('overflow-hidden');
-                document.body.classList.add('run-hero-anim');
-                return;
-            }
-            setTimeout(() => { 
-                document.getElementById('text-ayu').classList.remove('translate-x-[-150%]', 'opacity-0'); 
-                document.getElementById('text-setu').classList.remove('translate-x-[150%]', 'opacity-0'); 
-            }, 300);
-            setTimeout(() => { 
-                const line = document.getElementById('loading-line');
-                line.classList.remove('opacity-0', 'w-0'); 
-                line.classList.add('w-full'); 
-            }, 1200);
             setTimeout(() => {
-                pre.style.transform = "translateY(-100%)";
-                pre.style.transition = "transform 1s cubic-bezier(0.7, 0, 0.3, 1)";
-                document.body.classList.add('run-hero-anim');
-                document.body.classList.remove('overflow-hidden');
-                sessionStorage.setItem('v_ayusetu_centers', 'true');
-            }, 2000);
+                const textAyu = document.getElementById('text-ayu');
+                const textSetu = document.getElementById('text-setu');
+                const line = document.getElementById('loading-line');
+                const preloader = document.getElementById('preloader');
+                
+                if (textAyu) textAyu.classList.remove('translate-x-[-150%]', 'opacity-0');
+                if (textSetu) textSetu.classList.remove('translate-x-[150%]', 'opacity-0');
+                if (line) { line.classList.remove('opacity-0', 'w-0'); line.classList.add('w-full'); }
+                
+                setTimeout(() => {
+                    preloader.style.transform = "translateY(-100%)";
+                    preloader.style.transition = "transform 1s cubic-bezier(0.7, 0, 0.3, 1)";
+                    document.body.classList.add('run-hero-anim');
+                }, 1500);
+            }, 500);
         }
 
         function toggleDrawer() {
-            const drw = document.getElementById('sideDrawer');
-            const ovl = document.getElementById('drawerOverlay');
-            drw.classList.toggle('open');
-            ovl.classList.toggle('hidden');
-            setTimeout(() => ovl.classList.toggle('opacity-0'), 10);
+            const d = document.getElementById('sideDrawer');
+            const o = document.getElementById('drawerOverlay');
+            d.classList.toggle('open');
+            o.classList.toggle('hidden');
+            setTimeout(() => o.classList.toggle('opacity-0'), 10);
         }
 
-        function selectPackage(pkg, price) {
-            document.getElementById('packageType').value = pkg;
+        function selectPackage(name, price) {
+            const select = document.getElementById('packageType');
+            select.value = price;
             document.getElementById('consultation').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
@@ -407,7 +419,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA4D778EYENNIBQG7UHj5Zffd8uEmsjlCw",
@@ -422,100 +434,86 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let isLoginMode = true;
-        let currentUserSession = null;
-
-        async function getDashboard(uid) {
-            const userDoc = await getDoc(doc(db, "users", uid));
-            if (userDoc.exists() && userDoc.data().role === 'admin') return './admin-dashboard.html';
-            if (userDoc.exists() && userDoc.data().role === 'doctor') return './doctor-dashboard.html';
-            return './user-dashboard.html';
-        }
+        let currentUser = null;
+        let isLogin = true;
 
         onAuthStateChanged(auth, async (user) => {
-            currentUserSession = user;
-            const loginBtns = [document.getElementById('navLoginBtn'), document.getElementById('drawerLoginBtn')];
-            if (user) {
-                const target = await getDashboard(user.uid);
-                loginBtns.forEach(btn => { if(btn) { btn.innerText = "Dashboard"; btn.onclick = () => window.location.href = target; } });
-            } else {
-                loginBtns.forEach(btn => { if(btn) { btn.innerText = "Login"; btn.onclick = () => openLogin(); } });
+            currentUser = user;
+            const loginBtn = document.getElementById('navLoginBtn');
+            if (user && loginBtn) {
+                loginBtn.innerText = "Dashboard";
+                loginBtn.onclick = async () => {
+                    const snap = await getDoc(doc(db, "users", user.uid));
+                    const role = snap.exists() ? snap.data().role : 'user';
+                    window.location.href = role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
+                };
+            } else if (loginBtn) {
+                loginBtn.innerText = "Login";
+                loginBtn.onclick = () => window.openLogin();
             }
         });
 
         window.openLogin = () => document.getElementById('authModal').classList.remove('hidden');
         window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
-        window.toggleAuthMode = () => {
-            isLoginMode = !isLoginMode;
-            document.getElementById('modalTitle').innerText = isLoginMode ? "Welcome Back" : "Join Ayusetu";
-            document.getElementById('btnText').innerText = isLoginMode ? "Login" : "Sign Up";
+
+        window.submitBooking = async (action) => {
+            if (!currentUser) { openLogin(); return; }
+
+            const name = document.getElementById('patientName').value;
+            const email = document.getElementById('patientEmail').value;
+            const phone = document.getElementById('patientPhone').value;
+            const pkgSelect = document.getElementById('packageType');
+            const amount = pkgSelect.value;
+            const packageName = pkgSelect.options[pkgSelect.selectedIndex].text;
+            const healthConcern = document.getElementById('healthConcern').value;
+
+            if (!name || !email || !phone) { alert("Please fill in contact details."); return; }
+
+            const bookingData = {
+                uid: currentUser.uid,
+                patientName: name,
+                userEmail: email,
+                userPhone: phone,
+                service: packageName,
+                amount: amount,
+                healthConcern: healthConcern,
+                type: "Residential Stay",
+                status: "Pending",
+                createdAt: serverTimestamp()
+            };
+
+            if (action === 'request_call') {
+                const callBtn = document.getElementById('callBtn');
+                callBtn.disabled = true;
+                callBtn.innerText = "Processing...";
+                try {
+                    await addDoc(collection(db, "bookings"), bookingData);
+                    alert("Request Successful! Our team will contact you shortly.");
+                    location.reload();
+                } catch (e) { alert("Error: " + e.message); callBtn.disabled = false; callBtn.innerText = "Request a Call"; }
+            } else if (action === 'payment') {
+                sessionStorage.setItem('active_booking', JSON.stringify(bookingData));
+                window.location.href = 'payment.html';
+            }
         };
 
         document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('authEmail').value;
-            const pass = document.getElementById('authPassword').value;
-            const errDiv = document.getElementById('authError');
+            const password = document.getElementById('authPassword').value;
             try {
-                let uid;
-                if (isLoginMode) {
-                    const cred = await signInWithEmailAndPassword(auth, email, pass);
-                    uid = cred.user.uid;
-                } else {
-                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-                    uid = cred.user.uid;
-                    await setDoc(doc(db, "users", uid), { email, role: 'user', createdAt: new Date() });
+                if (isLogin) { await signInWithEmailAndPassword(auth, email, password); } 
+                else {
+                    const cred = await createUserWithEmailAndPassword(auth, email, password);
+                    await setDoc(doc(db, "users", cred.user.uid), { email, role: 'user', createdAt: new Date() });
                 }
-                window.location.href = await getDashboard(uid);
-            } catch (err) {
-                errDiv.innerText = err.message;
-                errDiv.classList.remove('hidden');
+                closeAuthModal();
+            } catch (error) { 
+                const errDiv = document.getElementById('authError');
+                errDiv.innerText = error.message; 
+                errDiv.classList.remove('hidden'); 
             }
         });
-
-        window.submitBooking = async () => {
-            if (!currentUserSession) { 
-                alert("Membership required for residential bookings. Please login/signup first.");
-                openLogin(); 
-                return; 
-            }
-            
-            const btn = document.getElementById('bookBtn');
-            const name = document.getElementById('patientName').value;
-            const email = document.getElementById('patientEmail').value;
-            const phone = document.getElementById('patientPhone').value;
-
-            if(!name || !email || !phone) { 
-                alert("Contact details are required for coordination."); 
-                return; 
-            }
-
-            try {
-                btn.disabled = true;
-                btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Submitting Request...`;
-                
-                const bookingRef = doc(collection(db, "bookings"));
-                await setDoc(bookingRef, {
-                    uid: currentUserSession.uid,
-                    patientName: name,
-                    userEmail: email,
-                    userPhone: phone,
-                    package: document.getElementById('packageType').value,
-                    healthConcern: document.getElementById('healthConcern').value,
-                    type: "Residential Stay",
-                    status: "Pending", // Matches Admin Dashboard logic
-                    createdAt: new Date()
-                });
-                
-                alert("Stay Reservation Sent! Our wellness coordinator will call you within 24 hours to verify eligibility.");
-                window.location.href = await getDashboard(currentUserSession.uid);
-            } catch (e) {
-                console.error(e);
-                alert("Network error. Please try again.");
-                btn.disabled = false;
-                btn.innerText = "Confirm Stay Reservation";
-            }
-        };
     </script>
 </body>
 </html>
