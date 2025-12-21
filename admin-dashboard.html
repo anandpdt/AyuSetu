@@ -36,12 +36,16 @@
         .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
-        .img-edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2; cursor: pointer; }
+        .img-edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2; cursor: pointer; color: white; gap: 8px; }
         .editable-img-container:hover .img-edit-overlay { opacity: 1; }
+        
+        .uploading-spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden font-sans text-gray-800">
 
+    <!-- SIDEBAR -->
     <aside class="w-72 bg-white border-r border-gray-200 flex flex-col shadow-xl z-50">
         <div class="p-8 border-b border-gray-100">
             <h1 class="font-serif font-bold text-2xl text-ayu-green">AYU<span class="text-ayu-orange">SETU</span></h1>
@@ -63,6 +67,9 @@
             <button onclick="switchTab('home-editor')" id="btn-home-editor" class="nav-btn w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left text-gray-600 hover:bg-gray-50 transition-all">
                 <i class="fas fa-magic w-5"></i> Visual CMS
             </button>
+            <button onclick="switchTab('view-home')" id="btn-view-home" class="nav-btn w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fas fa-external-link-alt w-5"></i> View Home Page
+            </button>
             
             <p class="px-4 text-[10px] font-bold text-gray-400 uppercase mb-2 mt-8">Directory</p>
             <button onclick="switchTab('doctors-db')" id="btn-doctors-db" class="nav-btn w-full flex items-center gap-3 px-4 py-4 rounded-xl text-left text-gray-600 hover:bg-gray-50 transition-all">
@@ -80,6 +87,7 @@
         </div>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="flex-1 overflow-y-auto relative bg-[#fcfcfc]">
         
         <div id="loading-overlay" class="absolute inset-0 bg-white/90 z-[100] flex items-center justify-center">
@@ -89,21 +97,23 @@
             </div>
         </div>
 
+        <!-- 1. PAYMENT VERIFIER -->
         <div id="tab-payments" class="tab-content active p-12">
             <header class="mb-12">
                 <h2 class="text-4xl font-serif font-bold text-gray-800">Payment Verifier</h2>
-                <p class="text-gray-400 mt-2">Comprehensive view of all transactions including residential stays and online sessions.</p>
+                <p class="text-gray-400 mt-2">Comprehensive view of all transactions with associated patient emails.</p>
             </header>
             
             <div class="bg-white rounded-[2rem] shadow-xl border border-gray-100 overflow-hidden">
                 <table class="w-full text-left">
                     <thead class="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-widest">
                         <tr>
-                            <th class="p-6">Patient & Program</th>
-                            <th class="p-6">Contact / Transaction</th>
-                            <th class="p-6 text-center">Verification Proof</th>
+                            <th class="p-6">Patient & Email</th>
+                            <th class="p-6">Program / Contact</th>
+                            <th class="p-6">Payment IDs</th>
+                            <th class="p-6 text-center">Proof</th>
                             <th class="p-6 text-center">Status</th>
-                            <th class="p-6 text-right">Verification Action</th>
+                            <th class="p-6 text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody id="paymentsTableBody" class="divide-y divide-gray-50"></tbody>
@@ -111,10 +121,11 @@
             </div>
         </div>
 
+        <!-- 2. APPOINTMENT DESK -->
         <div id="tab-manage-bookings" class="tab-content p-12">
             <header class="mb-12">
                 <h2 class="text-4xl font-serif font-bold text-gray-800">Appointment Desk</h2>
-                <p class="text-gray-400 mt-2">Manage assigned healers and session links. All records remain visible after assignment.</p>
+                <p class="text-gray-400 mt-2">Manage assigned healers and session links.</p>
             </header>
             
             <div class="bg-white rounded-[2rem] shadow-xl border border-gray-100 overflow-hidden">
@@ -124,7 +135,7 @@
                             <th class="p-6">Patient Info</th>
                             <th class="p-6">Program Type</th>
                             <th class="p-6">Assign Medical Expert</th>
-                            <th class="p-6 text-center">Current Desk Status</th>
+                            <th class="p-6 text-center">Desk Status</th>
                             <th class="p-6 text-right">Linking Action</th>
                         </tr>
                     </thead>
@@ -133,32 +144,82 @@
             </div>
         </div>
 
+        <!-- 3. VISUAL CMS (Site Editor) -->
         <div id="tab-home-editor" class="tab-content">
             <div class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 px-12 py-6 flex justify-between items-center shadow-sm">
                 <div>
-                    <h2 class="font-serif font-bold text-2xl text-ayu-dark">Visual Page Editor</h2>
-                    <p class="text-[10px] text-ayu-green font-bold uppercase tracking-widest">Live Content Sync</p>
+                    <h2 class="font-serif font-bold text-2xl text-ayu-dark">Visual Site Editor</h2>
+                    <p class="text-[10px] text-ayu-green font-bold uppercase tracking-widest">Edit all cards across the home page</p>
                 </div>
                 <div class="flex gap-4">
                     <button onclick="saveCMS()" class="bg-ayu-orange hover:bg-orange-700 text-white px-8 py-3 rounded-xl shadow-lg font-bold flex items-center gap-3 transition">
-                        <i class="fas fa-check-circle"></i> Publish Changes
+                        <i class="fas fa-check-circle"></i> Save & Sync All Cards
                     </button>
                 </div>
             </div>
 
-            <div class="p-12 space-y-16">
-                <div class="relative p-10 border-2 border-dashed border-gray-200 rounded-[3rem]">
-                    <span class="absolute -top-4 left-10 bg-[#fcfcfc] px-4 py-1 text-[10px] font-black text-gray-300 uppercase italic">Section: Programs</span>
+            <div class="p-12 space-y-20">
+                <!-- Section: Programs -->
+                <div class="relative p-10 bg-white rounded-[3rem] shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-xl font-bold text-gray-800">1. Programs & Services</h3>
+                        <button onclick="addService()" class="text-ayu-green font-bold text-sm"><i class="fas fa-plus-circle mr-2"></i>Add New Program</button>
+                    </div>
                     <div class="flex overflow-x-auto gap-8 pb-4 custom-scrollbar" id="services-grid"></div>
                 </div>
 
-                <div class="relative p-10 border-2 border-dashed border-gray-200 rounded-[3rem]">
-                    <span class="absolute -top-4 left-10 bg-[#fcfcfc] px-4 py-1 text-[10px] font-black text-gray-300 uppercase italic">Section: Healers</span>
+                <!-- Section: Healers -->
+                <div class="relative p-10 bg-white rounded-[3rem] shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-xl font-bold text-gray-800">2. Medical Expert Team</h3>
+                        <button onclick="addHealer()" class="text-ayu-orange font-bold text-sm"><i class="fas fa-plus-circle mr-2"></i>Add New Healer</button>
+                    </div>
                     <div class="flex overflow-x-auto gap-8 pb-4 custom-scrollbar" id="doctors-editor-grid"></div>
+                </div>
+
+                <!-- Section: Health Verticals -->
+                <div class="relative p-10 bg-white rounded-[3rem] shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-xl font-bold text-gray-800">3. Health Verticals (Conditions)</h3>
+                        <button onclick="addVertical()" class="text-blue-600 font-bold text-sm"><i class="fas fa-plus-circle mr-2"></i>Add Vertical</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="verticals-grid"></div>
+                </div>
+
+                <!-- Section: Leadership -->
+                <div class="relative p-10 bg-white rounded-[3rem] shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-xl font-bold text-gray-800">4. Leadership Team</h3>
+                        <button onclick="addLeader()" class="text-purple-600 font-bold text-sm"><i class="fas fa-plus-circle mr-2"></i>Add Member</button>
+                    </div>
+                    <div class="flex overflow-x-auto gap-8 pb-4 custom-scrollbar" id="leadership-grid"></div>
+                </div>
+
+                <!-- Section: Blog -->
+                <div class="relative p-10 bg-white rounded-[3rem] shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-xl font-bold text-gray-800">5. Blog & Resources</h3>
+                        <button onclick="addBlog()" class="text-orange-500 font-bold text-sm"><i class="fas fa-plus-circle mr-2"></i>Add Article</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="blog-grid"></div>
                 </div>
             </div>
         </div>
 
+        <!-- 4. VIEW HOME PAGE (Preview) -->
+        <div id="tab-view-home" class="tab-content h-full">
+            <div class="w-full h-full bg-gray-100 p-4">
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden h-full flex flex-col">
+                    <div class="p-4 border-b flex justify-between items-center">
+                        <span class="text-xs font-bold text-gray-400 uppercase">Interactive Live Preview</span>
+                        <a href="index.html" target="_blank" class="text-ayu-orange text-xs font-bold hover:underline"><i class="fas fa-external-link-alt mr-1"></i> Open in New Tab</a>
+                    </div>
+                    <iframe src="index.html" class="flex-1 w-full border-none"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. DIRECTORIES -->
         <div id="tab-doctors-db" class="tab-content p-12">
             <h2 class="text-3xl font-serif font-bold mb-8">Medical Team Directory</h2>
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
@@ -184,14 +245,16 @@
         </div>
     </main>
 
-    <!-- Modals & Toasts -->
+    <!-- UI COMPONENTS -->
     <div id="screenshotModal" class="fixed inset-0 z-[200] hidden bg-black/95 flex items-center justify-center p-10">
         <button onclick="closeScreenshot()" class="absolute top-10 right-10 text-white text-5xl hover:text-ayu-orange">&times;</button>
         <img id="modalImg" src="" class="max-w-full max-h-full rounded-xl shadow-2xl">
     </div>
 
+    <input type="file" id="cms-photo-upload" class="hidden" accept="image/*">
+
     <div id="toast" class="fixed bottom-10 right-10 bg-ayu-dark text-white px-8 py-5 rounded-2xl shadow-2xl transform translate-y-40 transition-transform duration-500 z-[200] flex items-center gap-4">
-        <div class="bg-ayu-green p-2 rounded-full"><i class="fas fa-check text-white text-xs"></i></div>
+        <div id="toast-icon-box" class="bg-ayu-green p-2 rounded-full"><i id="toast-icon" class="fas fa-check text-white text-xs"></i></div>
         <div><h4 id="toast-title" class="font-bold text-sm">Success</h4><p id="toast-msg" class="text-xs text-gray-400">Database updated.</p></div>
     </div>
 
@@ -213,9 +276,18 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        const IMGBB_API_KEY = "f35548074917688c2226f338d77f59f6"; 
+
+        // State for CMS
         let servicesList = [];
         let doctorsCMS = [];
+        let verticalsCMS = [];
+        let leadersCMS = [];
+        let blogCMS = [];
+        
         let expertAccounts = [];
+        let currentEditingArray = null;
+        let currentEditingDocIndex = null;
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) { window.location.href = "./index.html"; return; }
@@ -242,60 +314,47 @@
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tab}`).classList.add('active');
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
-            document.getElementById(`btn-${tab}`).classList.add('nav-active');
+            const btn = document.getElementById(`btn-${tab}`);
+            if(btn) btn.classList.add('nav-active');
             
             if(tab === 'users-db') window.loadTable('usersTableBody', 'user');
             if(tab === 'doctors-db') window.loadTable('doctorsTableBody', 'doctor');
-            if(tab === 'payments') loadPayments();
-            if(tab === 'manage-bookings') loadManageBookings();
         }
 
         // --- 1. PAYMENT VERIFIER ---
         async function loadPayments() {
             const tbody = document.getElementById('paymentsTableBody');
-            tbody.innerHTML = '<tr><td colspan="5" class="p-10 text-center"><i class="fas fa-spinner fa-spin text-ayu-green"></i></td></tr>';
-            
             const snap = await getDocs(collection(db, "bookings"));
-
             if(snap.empty) {
-                tbody.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-gray-300 italic text-sm">No transaction records found in the system.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="p-20 text-center text-gray-300 italic text-sm">No transactions found.</td></tr>';
                 return;
             }
-
             tbody.innerHTML = snap.docs.map(d => {
                 const b = d.data();
                 const isPending = b.status === "Pending Verification" || b.status === "Pending";
                 const isVerified = b.status === "Verified" || b.status === "Scheduled";
-                
-                let statusBadge = `<span class="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-[9px] font-black uppercase border border-gray-200">${b.status}</span>`;
-                if(isPending) statusBadge = `<span class="px-3 py-1 bg-orange-50 text-orange-500 rounded-full text-[9px] font-black uppercase border border-orange-100 animate-pulse">Review Required</span>`;
-                if(isVerified) statusBadge = `<span class="px-3 py-1 bg-green-50 text-green-500 rounded-full text-[9px] font-black uppercase border border-green-100">Confirmed</span>`;
-                if(b.status === "Rejected") statusBadge = `<span class="px-3 py-1 bg-red-50 text-red-500 rounded-full text-[9px] font-black uppercase border border-red-100">Rejected</span>`;
-
                 return `
                 <tr class="hover:bg-gray-50 transition">
                     <td class="p-6">
                         <div class="font-bold text-gray-900 leading-tight">${b.patientName || b.name || 'Anonymous'}</div>
-                        <div class="text-[10px] text-ayu-green font-bold uppercase tracking-tight">${b.service || b.package || b.serviceName || 'Program Request'}</div>
+                        <div class="text-[10px] text-ayu-orange font-bold lowercase truncate max-w-[180px]">${b.userEmail || b.email || 'no-email@ayusetu.com'}</div>
                     </td>
                     <td class="p-6">
-                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${b.userPhone || b.phone || 'No Phone'}</div>
-                        <div class="text-xs text-gray-600 truncate max-w-[150px]">ID: ${b.payerUpi || b.transactionId || '---'}</div>
+                        <div class="text-[10px] text-ayu-green font-bold uppercase tracking-tight">${b.service || b.package || 'Session'}</div>
+                        <div class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">${b.userPhone || b.phone || 'No Phone'}</div>
+                    </td>
+                    <td class="p-6">
+                        <div class="text-[10px] font-bold text-gray-700">UPI: <span class="text-ayu-orange">${b.payerUpi || 'N/A'}</span></div>
+                        <div class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">TXN: ${b.transactionId || 'N/A'}</div>
                     </td>
                     <td class="p-6 text-center">
-                        ${b.screenshotUrl ? 
-                            `<img src="${b.screenshotUrl}" onclick="viewScreenshot('${b.screenshotUrl}')" class="w-10 h-10 mx-auto object-cover rounded-lg border border-gray-100 cursor-zoom-in hover:scale-110 transition shadow-sm">` : 
-                            `<span class="text-[9px] font-bold text-gray-300 uppercase">${b.type === 'Residential Stay' ? 'In-Person' : 'No Proof'}</span>`
-                        }
+                        ${b.screenshotUrl ? `<img src="${b.screenshotUrl}" onclick="viewScreenshot('${b.screenshotUrl}')" class="w-10 h-10 mx-auto object-cover rounded-lg border border-gray-100 cursor-zoom-in hover:scale-110 transition shadow-sm">` : `<span class="text-[9px] font-bold text-gray-300 uppercase italic">No Proof</span>`}
                     </td>
-                    <td class="p-6 text-center">${statusBadge}</td>
-                    <td class="p-6 text-right space-x-2">
-                        ${isPending ? `
-                            <button onclick="approvePayment('${d.id}')" class="bg-ayu-green text-white p-2 rounded-lg hover:bg-green-700 transition" title="Approve"><i class="fas fa-check"></i></button>
-                            <button onclick="rejectPayment('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-100 transition" title="Reject"><i class="fas fa-times"></i></button>
-                        ` : `
-                            <button onclick="approvePayment('${d.id}')" class="text-gray-300 hover:text-ayu-green transition text-xs font-bold uppercase tracking-widest">Re-Audit</button>
-                        `}
+                    <td class="p-6 text-center">
+                        <span class="px-3 py-1 ${isVerified ? 'bg-green-50 text-green-500 border-green-100' : isPending ? 'bg-orange-50 text-orange-500 border-orange-100 animate-pulse' : 'bg-gray-100 text-gray-400'} rounded-full text-[9px] font-black uppercase border">${b.status}</span>
+                    </td>
+                    <td class="p-6 text-right">
+                        ${isPending ? `<button onclick="approvePayment('${d.id}')" class="bg-ayu-green text-white p-2 rounded-lg hover:bg-green-700 transition"><i class="fas fa-check"></i></button>` : `<button onclick="approvePayment('${d.id}')" class="text-gray-300 hover:text-ayu-green transition text-[9px] font-black uppercase">Re-Audit</button>`}
                     </td>
                 </tr>`;
             }).join('');
@@ -303,20 +362,11 @@
 
         window.viewScreenshot = (url) => { document.getElementById('modalImg').src = url; document.getElementById('screenshotModal').classList.remove('hidden'); }
         window.closeScreenshot = () => document.getElementById('screenshotModal').classList.add('hidden');
-
         window.approvePayment = async (id) => {
-            if(!confirm("Approve payment? This enables healer assignment.")) return;
+            if(!confirm("Verify this payment?")) return;
             await updateDoc(doc(db, "bookings", id), { status: "Verified", paymentVerified: true });
-            showToast("Verified", "Record updated. Patient can now be assigned an expert.");
-            refreshAllData();
-        }
-
-        window.rejectPayment = async (id) => {
-            const reason = prompt("Enter rejection reason for the patient:");
-            if(!reason) return;
-            await updateDoc(doc(db, "bookings", id), { status: "Rejected", reason });
-            showToast("Rejected", "Patient notified of rejection.");
-            refreshAllData();
+            showToast("Success", "Payment verified.");
+            loadPayments();
         }
 
         // --- 2. APPOINTMENT DESK ---
@@ -328,50 +378,31 @@
         async function loadManageBookings() {
             const tbody = document.getElementById('manageBookingsTableBody');
             const snap = await getDocs(collection(db, "bookings"));
-            
             const deskList = snap.docs.filter(d => d.data().status === "Verified" || d.data().status === "Scheduled");
-
-            if(deskList.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-gray-300 italic">No verified records ready for assignment.</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = deskList.sort((a,b) => (b.data().createdAt?.seconds || 0) - (a.data().createdAt?.seconds || 0)).map(d => {
+            tbody.innerHTML = deskList.map(d => {
                 const b = d.data();
                 const options = expertAccounts.map(ex => `<option value="${ex.uid}" ${b.doctorId === ex.uid ? 'selected' : ''}>${ex.name || ex.email}</option>`).join('');
-                const statusColor = b.status === "Scheduled" ? "text-green-500" : "text-ayu-orange";
-
                 return `
-                <tr class="group hover:bg-gray-50/50 transition">
+                <tr class="hover:bg-gray-50/50 transition">
                     <td class="p-6">
                         <div class="font-bold text-gray-900 leading-tight">${b.patientName || b.name}</div>
                         <div class="text-[10px] text-gray-400 lowercase">${b.userEmail || b.email}</div>
                     </td>
-                    <td class="p-6">
-                        <span class="text-[10px] font-black text-ayu-green uppercase tracking-widest">${b.type || 'Consultation'}</span>
-                        <div class="text-[9px] text-gray-400 mt-1">${b.service || b.package || 'Standard'}</div>
-                    </td>
+                    <td class="p-6"><span class="text-[10px] font-black text-ayu-green uppercase tracking-widest">${b.type || 'Standard'}</span></td>
                     <td class="p-6">
                         <select id="doc-select-${d.id}" class="bg-gray-50 border border-gray-100 rounded-lg p-2 text-[10px] outline-none w-full font-bold">
-                            <option value="">-- Choose Expert --</option>${options}
+                            <option value="">-- Select Healer --</option>${options}
                         </select>
                     </td>
-                    <td class="p-6 text-center">
-                        <div class="text-[9px] font-black ${statusColor} uppercase tracking-widest">${b.status}</div>
-                        ${b.doctorName ? `<div class="text-[8px] text-gray-400 mt-1 font-bold">Dr. ${b.doctorName.split(' ')[0]}</div>` : ''}
-                    </td>
-                    <td class="p-6 text-right">
-                        <button onclick="linkExpert('${d.id}')" class="bg-ayu-dark text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition shadow-lg shadow-black/5">
-                            ${b.status === "Scheduled" ? 'Update Expert' : 'Link Healer'}
-                        </button>
-                    </td>
+                    <td class="p-6 text-center"><div class="text-[9px] font-black uppercase tracking-widest">${b.status}</div></td>
+                    <td class="p-6 text-right"><button onclick="linkExpert('${d.id}')" class="bg-ayu-dark text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition">Link</button></td>
                 </tr>`;
             }).join('');
         }
 
         window.linkExpert = async (id) => {
             const docId = document.getElementById(`doc-select-${id}`).value;
-            if(!docId) return alert("Please select a healer from the directory first.");
+            if(!docId) return alert("Select a healer.");
             const healer = expertAccounts.find(ex => ex.uid === docId);
             await updateDoc(doc(db, "bookings", id), { 
                 doctorId: docId, 
@@ -379,62 +410,153 @@
                 meetingLink: `https://meet.jit.si/ayusetu-${id}`,
                 status: "Scheduled"
             });
-            showToast("Session Linked", "The healer and patient portals are now synchronized.");
-            refreshAllData();
+            showToast("Linked", "Healer assigned.");
+            loadManageBookings();
         }
 
-        // --- 3. VISUAL CMS (GLOBALIZED FIXES) ---
+        // --- 3. VISUAL CMS (Site Editor) ---
         async function loadCMSData() {
             const snap = await getDoc(doc(db, "site_content", "homepage"));
             if (snap.exists()) {
                 const data = snap.data();
-                servicesList = Object.keys(data.services || {}).sort().map(k => data.services[k]);
-                doctorsCMS = Object.keys(data.doctors || {}).sort().map(k => data.doctors[k]);
+                servicesList = data.services ? Object.values(data.services) : [];
+                doctorsCMS = data.doctors ? Object.values(data.doctors) : [];
+                verticalsCMS = data.verticals ? Object.values(data.verticals) : [];
+                leadersCMS = data.leaders ? Object.values(data.leaders) : [];
+                blogCMS = data.blog ? Object.values(data.blog) : [];
                 window.renderCMS();
             }
         }
 
         window.renderCMS = function() {
+            // Programs
             const sGrid = document.getElementById('services-grid');
-            if(sGrid) {
-                sGrid.innerHTML = servicesList.map((s, i) => `
-                    <div class="w-[300px] flex-shrink-0 bg-white rounded-[2rem] p-8 shadow-sm border border-gray-50 flex flex-col group relative">
-                        <button onclick="window.removeService(${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
-                        <input type="text" oninput="servicesList[${i}].title=this.value" class="live-input text-xl font-bold mb-4" value="${s.title}">
-                        <textarea oninput="servicesList[${i}].desc=this.value" class="live-input text-xs text-gray-400 h-24 resize-none">${s.desc}</textarea>
-                        <div class="mt-4 flex items-center gap-2">
-                            <span class="text-xs font-bold text-gray-300">₹</span>
-                            <input type="text" oninput="servicesList[${i}].price=this.value" class="live-input text-lg font-bold" value="${s.price}">
-                        </div>
-                    </div>`).join('') + `<button onclick="window.addService()" class="w-[300px] flex-shrink-0 border-2 border-dashed border-gray-100 rounded-[2rem] text-gray-300 hover:text-ayu-green transition"><i class="fas fa-plus-circle text-3xl"></i></button>`;
-            }
+            sGrid.innerHTML = servicesList.map((s, i) => `
+                <div class="w-[300px] flex-shrink-0 bg-gray-50 rounded-[2rem] p-8 shadow-sm border border-gray-100 flex flex-col group relative">
+                    <button onclick="removeItem('servicesList', ${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
+                    <input type="text" oninput="servicesList[${i}].title=this.value" class="live-input text-lg font-bold mb-4" value="${s.title}">
+                    <textarea oninput="servicesList[${i}].desc=this.value" class="live-input text-xs text-gray-500 h-24 resize-none">${s.desc}</textarea>
+                    <div class="mt-4 flex items-center gap-2"><span class="text-xs font-bold text-gray-300">₹</span><input type="text" oninput="servicesList[${i}].price=this.value" class="live-input text-lg font-bold" value="${s.price}"></div>
+                </div>`).join('');
 
+            // Doctors
             const dGrid = document.getElementById('doctors-editor-grid');
-            if(dGrid) {
-                dGrid.innerHTML = doctorsCMS.map((d, i) => `
-                    <div class="w-[280px] flex-shrink-0 bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-50 group relative">
-                        <div class="h-48 relative editable-img-container">
-                            <img src="${d.img}" class="w-full h-full object-cover">
-                            <div class="img-edit-overlay" onclick="const u=prompt('Img URL:'); if(u) doctorsCMS[${i}].img=u; window.renderCMS();"><i class="fas fa-camera text-white"></i></div>
+            dGrid.innerHTML = doctorsCMS.map((d, i) => `
+                <div class="w-[280px] flex-shrink-0 bg-gray-50 rounded-3xl overflow-hidden shadow-sm border border-gray-100 group relative">
+                    <div class="h-48 relative editable-img-container bg-white" id="doc-photo-box-${i}">
+                        <img src="${d.img}" class="w-full h-full object-contain">
+                        <div class="img-edit-overlay" onclick="triggerImgUpload('doctorsCMS', ${i})">
+                            <i class="fas fa-camera text-2xl"></i>
+                            <span class="text-[10px] font-black uppercase">Change Photo</span>
                         </div>
-                        <div class="p-6">
-                            <button onclick="window.removeHealer(${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition z-20"><i class="fas fa-trash"></i></button>
-                            <input type="text" oninput="doctorsCMS[${i}].name=this.value" class="live-input font-bold" value="${d.name}">
-                            <input type="text" oninput="doctorsCMS[${i}].spec=this.value" class="live-input text-[10px] text-ayu-green font-bold uppercase" value="${d.spec}">
-                        </div>
-                    </div>`).join('') + `<button onclick="window.addHealer()" class="w-[280px] flex-shrink-0 border-2 border-dashed border-gray-100 rounded-3xl text-gray-300 hover:text-ayu-orange transition"><i class="fas fa-plus"></i></button>`;
-            }
+                    </div>
+                    <div class="p-6">
+                        <button onclick="removeItem('doctorsCMS', ${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition z-20"><i class="fas fa-trash"></i></button>
+                        <input type="text" oninput="doctorsCMS[${i}].name=this.value" class="live-input font-bold" value="${d.name}">
+                        <input type="text" oninput="doctorsCMS[${i}].spec=this.value" class="live-input text-[10px] text-ayu-green font-bold uppercase" value="${d.spec}">
+                    </div>
+                </div>`).join('');
+
+            // Verticals (Conditions)
+            const vGrid = document.getElementById('verticals-grid');
+            vGrid.innerHTML = verticalsCMS.map((v, i) => `
+                <div class="bg-ayu-dark text-white p-6 rounded-2xl group relative border border-white/10">
+                    <button onclick="removeItem('verticalsCMS', ${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
+                    <div class="text-ayu-orange mb-2"><i class="fas fa-brain"></i> Icon: <input type="text" oninput="verticalsCMS[${i}].icon=this.value" class="live-input text-xs bg-white/10 p-1" value="${v.icon}"></div>
+                    <input type="text" oninput="verticalsCMS[${i}].name=this.value" class="live-input font-bold text-lg mb-2" value="${v.name}">
+                    <textarea oninput="verticalsCMS[${i}].conditions=this.value" class="live-input text-[10px] text-gray-400 h-20 resize-none" placeholder="Condition 1, Condition 2...">${v.conditions}</textarea>
+                </div>`).join('');
+
+            // Leadership
+            const lGrid = document.getElementById('leadership-grid');
+            lGrid.innerHTML = leadersCMS.map((l, i) => `
+                <div class="w-[260px] flex-shrink-0 bg-gray-50 p-6 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col items-center text-center group relative">
+                    <button onclick="removeItem('leadersCMS', ${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
+                    <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-ayu-green/20 relative editable-img-container bg-white">
+                        <img src="${l.img}" class="w-full h-full object-cover">
+                        <div class="img-edit-overlay" onclick="triggerImgUpload('leadersCMS', ${i})"><i class="fas fa-camera text-sm"></i></div>
+                    </div>
+                    <input type="text" oninput="leadersCMS[${i}].name=this.value" class="live-input font-bold text-center" value="${l.name}">
+                    <input type="text" oninput="leadersCMS[${i}].role=this.value" class="live-input text-ayu-green text-[10px] font-bold uppercase text-center" value="${l.role}">
+                </div>`).join('');
+
+            // Blog
+            const bGrid = document.getElementById('blog-grid');
+            bGrid.innerHTML = blogCMS.map((b, i) => `
+                <div class="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group relative">
+                    <div class="h-32 relative editable-img-container bg-white">
+                        <img src="${b.img}" class="w-full h-full object-cover">
+                        <div class="img-edit-overlay" onclick="triggerImgUpload('blogCMS', ${i})"><i class="fas fa-camera text-xl"></i></div>
+                    </div>
+                    <div class="p-4">
+                        <button onclick="removeItem('blogCMS', ${i})" class="absolute top-4 right-4 text-red-300 opacity-0 group-hover:opacity-100 transition z-20"><i class="fas fa-trash"></i></button>
+                        <input type="text" oninput="blogCMS[${i}].tag=this.value" class="live-input text-[9px] font-black text-ayu-orange uppercase mb-1" value="${b.tag}">
+                        <input type="text" oninput="blogCMS[${i}].title=this.value" class="live-input font-bold text-sm mb-2" value="${b.title}">
+                        <textarea oninput="blogCMS[${i}].desc=this.value" class="live-input text-[10px] text-gray-500 h-16 resize-none">${b.desc}</textarea>
+                    </div>
+                </div>`).join('');
         }
 
-        window.addService = () => { servicesList.push({title:'New Program', desc:'...', price:'1000'}); window.renderCMS(); };
-        window.removeService = (i) => { servicesList.splice(i, 1); window.renderCMS(); };
-        window.addHealer = () => { doctorsCMS.push({name:'Dr. New', spec:'Expert Healer', img:'https://placehold.co/400x300'}); window.renderCMS(); };
-        window.removeHealer = (i) => { doctorsCMS.splice(i, 1); window.renderCMS(); };
+        // Add/Remove Items
+        window.addService = () => { servicesList.push({title:'New Program', desc:'Program description...', price:'1000'}); window.renderCMS(); };
+        window.addHealer = () => { doctorsCMS.push({name:'Dr. New', spec:'Expert Specialist', img:'https://placehold.co/400x300'}); window.renderCMS(); };
+        window.addVertical = () => { verticalsCMS.push({name:'New Health Vertical', icon:'brain', conditions:'Condition 1, Condition 2'}); window.renderCMS(); };
+        window.addLeader = () => { leadersCMS.push({name:'New Leader', role:'Founder', img:'https://placehold.co/300x300'}); window.renderCMS(); };
+        window.addBlog = () => { blogCMS.push({title:'New Wellness Article', tag:'Health', desc:'Article summary here...', img:'https://placehold.co/800x400'}); window.renderCMS(); };
+        
+        window.removeItem = (arrayName, index) => {
+            if(!confirm("Are you sure you want to delete this card?")) return;
+            if(arrayName === 'servicesList') servicesList.splice(index, 1);
+            if(arrayName === 'doctorsCMS') doctorsCMS.splice(index, 1);
+            if(arrayName === 'verticalsCMS') verticalsCMS.splice(index, 1);
+            if(arrayName === 'leadersCMS') leadersCMS.splice(index, 1);
+            if(arrayName === 'blogCMS') blogCMS.splice(index, 1);
+            window.renderCMS();
+        };
+
+        // Image Upload Logic
+        window.triggerImgUpload = (arrayName, index) => {
+            currentEditingArray = arrayName;
+            currentEditingDocIndex = index;
+            document.getElementById('cms-photo-upload').click();
+        };
+
+        document.getElementById('cms-photo-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if(!file || currentEditingDocIndex === null) return;
+
+            showToast("Uploading", "Processing high-resolution photo...");
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
+                const result = await response.json();
+                if(result.success) {
+                    const newUrl = result.data.url;
+                    if(currentEditingArray === 'doctorsCMS') doctorsCMS[currentEditingDocIndex].img = newUrl;
+                    if(currentEditingArray === 'leadersCMS') leadersCMS[currentEditingDocIndex].img = newUrl;
+                    if(currentEditingArray === 'blogCMS') blogCMS[currentEditingDocIndex].img = newUrl;
+                    showToast("Success", "Card photo updated.");
+                }
+            } catch (err) { alert("Upload error."); } finally { 
+                currentEditingDocIndex = null; 
+                e.target.value = ''; 
+                window.renderCMS(); 
+            }
+        });
 
         window.saveCMS = async () => {
-            const services = {}; servicesList.forEach((s, i) => services[`s${i+1}`] = s);
-            const doctors = {}; doctorsCMS.forEach((d, i) => doctors[`doc${i+1}`] = d);
-            await setDoc(doc(db, "site_content", "homepage"), { services, doctors }, { merge: true });
+            const dataToSave = {
+                services: {}, doctors: {}, verticals: {}, leaders: {}, blog: {}
+            };
+            servicesList.forEach((s, i) => dataToSave.services[`s${i}`] = s);
+            doctorsCMS.forEach((d, i) => dataToSave.doctors[`d${i}`] = d);
+            verticalsCMS.forEach((v, i) => dataToSave.verticals[`v${i}`] = v);
+            leadersCMS.forEach((l, i) => dataToSave.leaders[`l${i}`] = l);
+            blogCMS.forEach((b, i) => dataToSave.blog[`b${i}`] = b);
+
+            await setDoc(doc(db, "site_content", "homepage"), dataToSave, { merge: true });
             showToast("Published", "Live site updated successfully.");
         }
 
