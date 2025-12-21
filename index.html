@@ -111,10 +111,10 @@
     </div>
     
     <!-- NAVIGATION -->
-    <nav class="fixed top-6 left-0 right-0 z-50 px-4">
-        <div class="pill-nav max-w-6xl mx-auto bg-white/90 backdrop-blur-md rounded-full py-2 px-6 md:px-8 flex justify-between items-center relative border border-white/50 shadow-lg">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-                <img src="1-removebg-preview.png" onerror="this.src='https://via.placeholder.com/150x60?text=AYUSETU'" alt="Ayusetu Logo" class="h-14 w-auto object-contain mix-blend-multiply">
+    <nav class="fixed top-4 md:top-6 left-0 right-0 z-50 px-3 md:px-4">
+        <div class="pill-nav max-w-6xl mx-auto bg-white/90 backdrop-blur-md rounded-full py-1.5 md:py-2 px-4 md:px-8 flex justify-between items-center relative border border-white/50 shadow-lg">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                <img src="1-removebg-preview.png" onerror="this.src='https://via.placeholder.com/150x60?text=AYUSETU'" alt="Ayusetu Logo" class="h-10 md:h-14 w-auto object-contain mix-blend-multiply">
             </div>
 
             <div class="flex items-center gap-2 md:gap-8">
@@ -127,7 +127,7 @@
                     </button>
                 </div>
 
-                <button onclick="toggleDrawer()" class="text-ayu-green text-2xl hover:scale-110 transition p-1 focus:outline-none cursor-pointer">
+                <button onclick="toggleDrawer()" class="text-ayu-green text-xl md:text-2xl hover:scale-110 transition p-1 focus:outline-none cursor-pointer">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
             </div>
@@ -136,40 +136,47 @@
 
     <!-- DRAWER -->
     <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300"></div>
-    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-8 flex flex-col justify-between border-l border-gray-100 overflow-y-auto">
+    <div id="sideDrawer" class="drawer glass-drawer fixed top-0 right-0 h-full w-full md:w-[450px] z-[70] shadow-2xl p-6 md:p-8 flex flex-col justify-between border-l border-gray-100 overflow-y-auto">
         <button onclick="toggleDrawer()" class="absolute top-8 right-8 text-2xl text-ayu-green hover:rotate-90 transition duration-300">
             <i class="fas fa-times"></i>
         </button>
 
         <div class="mt-16 space-y-8">
-            <h3 class="font-serif text-3xl text-ayu-green border-b border-gray-100 pb-4">Wellness Menu</h3>
+            <h3 class="font-serif text-2xl md:text-3xl text-ayu-green border-b border-gray-100 pb-4">Wellness Menu</h3>
             
+            <!-- Mobile Login Trigger (Only visible on Mobile inside drawer) -->
+            <div class="md:hidden">
+                <button id="navLoginBtnMobile" onclick="openLogin(); toggleDrawer();" class="w-full bg-ayu-green text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-lg">
+                    <i class="fas fa-user-circle"></i> Login to Account
+                </button>
+            </div>
+
             <div class="group cursor-pointer" onclick="handleBooking(event, 'doctors')">
-                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                <h4 class="text-lg md:text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
                     <span class="text-sm bg-green-100 text-ayu-green px-2 py-1 rounded">01</span> Consult Doctors
                 </h4>
-                <p class="text-gray-500 mt-2 pl-9 text-sm">Video consultation with top Naturopaths.</p>
+                <p class="text-gray-500 mt-2 pl-9 text-xs md:text-sm">Video consultation with top Naturopaths.</p>
             </div>
 
             <div class="group cursor-pointer" onclick="handleBooking(event, 'services')">
-                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                <h4 class="text-lg md:text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
                     <span class="text-sm bg-orange-100 text-ayu-orange px-2 py-1 rounded">02</span> Online Sessions
                 </h4>
-                <p class="text-gray-500 mt-2 pl-9 text-sm">Daily live sessions for Mental & Physical Health.</p>
+                <p class="text-gray-500 mt-2 pl-9 text-xs md:text-sm">Daily live sessions for Mental & Physical Health.</p>
             </div>
 
             <div class="group cursor-pointer" onclick="window.location.href='centers.html'; toggleDrawer();">
-                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                <h4 class="text-lg md:text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
                     <span class="text-sm bg-blue-100 text-blue-600 px-2 py-1 rounded">03</span> Residential Therapy
                 </h4>
-                <p class="text-gray-500 mt-2 pl-9 text-sm">Offline healing at our centers.</p>
+                <p class="text-gray-500 mt-2 pl-9 text-xs md:text-sm">Offline healing at our centers.</p>
             </div>
             
             <div class="group cursor-pointer" onclick="toggleDrawer(); document.getElementById('leadership').scrollIntoView({behavior:'smooth'});">
-                <h4 class="text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
+                <h4 class="text-lg md:text-xl font-bold text-gray-800 group-hover:text-ayu-orange transition flex items-center gap-3">
                     <span class="text-sm bg-purple-100 text-purple-600 px-2 py-1 rounded">04</span> Leadership
                 </h4>
-                <p class="text-gray-500 mt-2 pl-9 text-sm">Meet our Team members.</p>
+                <p class="text-gray-500 mt-2 pl-9 text-xs md:text-sm">Meet our Team members.</p>
             </div>
         </div>
 
@@ -182,26 +189,26 @@
     </div>
 
     <!-- HERO SECTION -->
-    <header class="relative overflow-hidden pt-40 pb-20"> 
+    <header class="relative overflow-hidden pt-32 md:pt-40 pb-16 md:pb-20"> 
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div class="z-10 relative">
-                <span class="hero-element bg-white/60 backdrop-blur-md border border-green-100 text-ayu-green px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block shadow-sm">Natural Healing</span>
-                <h1 class="hero-element text-5xl md:text-6xl font-serif font-bold text-gray-900 leading-tight mb-6">
+                <span class="hero-element bg-white/60 backdrop-blur-md border border-green-100 text-ayu-green px-4 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider mb-4 inline-block shadow-sm">Natural Healing</span>
+                <h1 class="hero-element text-3xl sm:text-4xl md:text-6xl font-serif font-bold text-gray-900 leading-tight mb-6">
                     Your Trusted <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-ayu-orange to-red-600">Wellness Partners</span>
                 </h1>
-                <p class="hero-element text-lg text-gray-600 mb-8 leading-relaxed">
+                <p class="hero-element text-base md:text-lg text-gray-600 mb-8 leading-relaxed">
                     Combining ancient wisdom with modern expertise. From <strong>AI Body Diagnosis</strong> to <strong>Residential Therapy Centers</strong>, we provide a holistic healing experience.
                 </p>
                 
                 <div class="hero-element flex flex-wrap gap-4">
-                    <button onclick="handleBooking(event, 'consultation')" class="bg-ayu-orange text-white px-8 py-4 rounded hover:bg-orange-700 transition shadow-xl font-semibold">
+                    <button onclick="handleBooking(event, 'consultation')" class="w-full sm:w-auto bg-ayu-orange text-white px-8 py-4 rounded hover:bg-orange-700 transition shadow-xl font-semibold text-center">
                         Start Healing Journey
                     </button>
                 </div>
             </div>
 
             <div class="relative hero-img hero-element">
-                <img src="Gemini_Generated_Image_ggxfcqggxfcqggxf (1) (1).png" alt="Yoga Woman" class="relative rounded-[3rem] shadow-2xl object-cover w-full h-[500px]">
+                <img src="Gemini_Generated_Image_ggxfcqggxfcqggxf (1) (1).png" alt="Yoga Woman" class="relative rounded-[2rem] md:rounded-[3rem] shadow-2xl object-cover w-full h-[350px] md:h-[500px]">
             </div>
         </div>
     </header>
@@ -209,20 +216,20 @@
     <!-- STATS -->
     <section class="bg-white/80 backdrop-blur-sm py-10 shadow-sm border-b border-gray-100 relative z-20">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div><h3 class="text-3xl font-bold text-ayu-green">500+</h3><p class="text-gray-500 text-sm">Happy Patients</p></div>
-            <div><h3 class="text-3xl font-bold text-ayu-green">7+</h3><p class="text-gray-500 text-sm">Offline Centers</p></div>
-            <div><h3 class="text-3xl font-bold text-ayu-green">15+</h3><p class="text-gray-500 text-sm">Expert Doctors</p></div>
-            <div><h3 class="text-3xl font-bold text-ayu-green">4.9</h3><p class="text-gray-500 text-sm">Average Rating</p></div>
+            <div><h3 class="text-2xl md:text-3xl font-bold text-ayu-green">500+</h3><p class="text-gray-500 text-xs md:text-sm">Happy Patients</p></div>
+            <div><h3 class="text-2xl md:text-3xl font-bold text-ayu-green">7+</h3><p class="text-gray-500 text-xs md:text-sm">Offline Centers</p></div>
+            <div><h3 class="text-2xl md:text-3xl font-bold text-ayu-green">15+</h3><p class="text-gray-500 text-xs md:text-sm">Expert Doctors</p></div>
+            <div><h3 class="text-2xl md:text-3xl font-bold text-ayu-green">4.9</h3><p class="text-gray-500 text-xs md:text-sm">Average Rating</p></div>
         </div>
     </section>
 
     <!-- ABOUT -->
-    <section id="about" class="py-24 bg-white/50 backdrop-blur-sm relative overflow-hidden">
+    <section id="about" class="py-16 md:py-24 bg-white/50 backdrop-blur-sm relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
             <div>
-                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">About Ayusetu</span>
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mt-2 mb-6">Bridging Ancient Wisdom & Modern Lifestyle</h2>
-                <p class="text-gray-600 mb-6 leading-relaxed">
+                <span class="text-ayu-orange font-bold uppercase text-[10px] md:text-xs tracking-widest">About Ayusetu</span>
+                <h2 class="text-2xl md:text-4xl font-serif font-bold text-gray-900 mt-2 mb-6 leading-snug">Bridging Ancient Wisdom & Modern Lifestyle</h2>
+                <p class="text-gray-600 mb-6 text-sm md:text-base leading-relaxed">
                     Ayusetu was born from a simple yet powerful vision: to make authentic holistic healing accessible to everyone, everywhere. We believe that true wellness comes from the perfect balance of mind, body, and spirit.
                 </p>
             </div>
@@ -233,20 +240,20 @@
     </section>
 
     <!-- CONDITIONS TREATED -->
-    <section id="conditions" class="py-24 bg-ayu-dark text-white relative overflow-hidden">
+    <section id="conditions" class="py-16 md:py-24 bg-ayu-dark text-white relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16">
-                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">Health Verticals</span>
-                <h2 class="text-4xl font-serif font-bold mt-2">Conditions We Treat</h2>
-                <div class="w-24 h-1 bg-white/20 mx-auto mt-4 rounded-full"></div>
+            <div class="text-center mb-12 md:after:mb-16">
+                <span class="text-ayu-orange font-bold uppercase text-[10px] md:text-xs tracking-widest">Health Verticals</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold mt-2">Conditions We Treat</h2>
+                <div class="w-20 md:w-24 h-1 bg-white/20 mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 <!-- 1. Mental Health -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition duration-300">
-                    <div class="text-ayu-orange text-3xl mb-4"><i class="fas fa-brain"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Mental Health</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition duration-300">
+                    <div class="text-ayu-orange text-2xl md:text-3xl mb-4"><i class="fas fa-brain"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Mental Health</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Anxiety & Depression</li>
                         <li>Stress & Panic Disorders</li>
                         <li>Insomnia / OCD</li>
@@ -257,10 +264,10 @@
                 </div>
 
                 <!-- 2. Cardiovascular -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-red-400 text-3xl mb-4"><i class="fas fa-heartbeat"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Cardiovascular</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-red-400 text-2xl md:text-3xl mb-4"><i class="fas fa-heartbeat"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Cardiovascular</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>High & Low BP</li>
                         <li>Ischemic Heart Disease</li>
                         <li>Atherosclerosis</li>
@@ -271,10 +278,10 @@
                 </div>
 
                 <!-- 3. Respiratory -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-blue-400 text-3xl mb-4"><i class="fas fa-lungs"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Respiratory</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-blue-400 text-2xl md:text-3xl mb-4"><i class="fas fa-lungs"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Respiratory</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Asthma / Allergic Rhinitis</li>
                         <li>Chronic Bronchitis</li>
                         <li>Sinusitis / Sleep Apnea</li>
@@ -285,10 +292,10 @@
                 </div>
 
                 <!-- 4. Digestive -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-yellow-400 text-3xl mb-4"><i class="fas fa-utensils"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Digestive</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-yellow-400 text-2xl md:text-3xl mb-4"><i class="fas fa-utensils"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Digestive</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Acid Reflux (GERD)</li>
                         <li>Gastritis / Indigestion</li>
                         <li>Constipation / IBS</li>
@@ -299,10 +306,10 @@
                 </div>
 
                 <!-- 5. Metabolic -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-green-400 text-3xl mb-4"><i class="fas fa-vial"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Metabolic</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-green-400 text-2xl md:text-3xl mb-4"><i class="fas fa-vial"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Metabolic</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Diabetes Type 2</li>
                         <li>Obesity / Gout</li>
                         <li>Metabolic Syndrome</li>
@@ -313,10 +320,10 @@
                 </div>
 
                 <!-- 6. Musculoskeletal -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-ayu-orange text-3xl mb-4"><i class="fas fa-bone"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Musculoskeletal</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-ayu-orange text-2xl md:text-3xl mb-4"><i class="fas fa-bone"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Musculoskeletal</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Back Pain / Slip Disc</li>
                         <li>Cervical Spondylosis</li>
                         <li>Lumbar Spondylosis</li>
@@ -327,10 +334,10 @@
                 </div>
 
                 <!-- 7. Skin Care -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-pink-300 text-3xl mb-4"><i class="fas fa-spa"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Skin Care</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-pink-300 text-2xl md:text-3xl mb-4"><i class="fas fa-spa"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Skin Care</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Psoriasis / Eczema</li>
                         <li>Acne / Dermatitis</li>
                         <li>Vitiligo (Leucoderma)</li>
@@ -340,10 +347,10 @@
                 </div>
 
                 <!-- 8. Neurological -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-purple-400 text-3xl mb-4"><i class="fas fa-microchip"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Neurological</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-purple-400 text-2xl md:text-3xl mb-4"><i class="fas fa-microchip"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Neurological</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Migraine / Tension</li>
                         <li>Epilepsy Support</li>
                         <li>Parkinson's Support</li>
@@ -353,10 +360,10 @@
                 </div>
 
                 <!-- 9. Women's Health -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-red-300 text-3xl mb-4"><i class="fas fa-female"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Women's Health</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-red-300 text-2xl md:text-3xl mb-4"><i class="fas fa-female"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Women's Health</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Menstrual Disorders</li>
                         <li>Menopause Relief</li>
                         <li>Female Infertility</li>
@@ -366,10 +373,10 @@
                 </div>
 
                 <!-- 10. Men's Health -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-blue-300 text-3xl mb-4"><i class="fas fa-male"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Men's Health</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-blue-300 text-2xl md:text-3xl mb-4"><i class="fas fa-male"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Men's Health</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Erectile Dysfunction</li>
                         <li>Premature Ejaculation</li>
                         <li>Low Testosterone</li>
@@ -379,10 +386,10 @@
                 </div>
 
                 <!-- 11. Renal & Urinary -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-teal-400 text-3xl mb-4"><i class="fas fa-tint"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Renal & Urinary</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-teal-400 text-2xl md:text-3xl mb-4"><i class="fas fa-tint"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Renal & Urinary</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Kidney Stones</li>
                         <li>Recurrent UTI</li>
                         <li>Incontinence</li>
@@ -392,10 +399,10 @@
                 </div>
 
                 <!-- 12. Life & Immunity -->
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition">
-                    <div class="text-gray-400 text-3xl mb-4"><i class="fas fa-couch"></i></div>
-                    <h3 class="font-bold text-xl mb-3 border-b border-white/10 pb-2">Life & Immunity</h3>
-                    <ul class="text-sm text-gray-300 space-y-1">
+                <div class="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl hover:bg-white/10 transition">
+                    <div class="text-gray-400 text-2xl md:text-3xl mb-4"><i class="fas fa-couch"></i></div>
+                    <h3 class="font-bold text-lg md:text-xl mb-3 border-b border-white/10 pb-2">Life & Immunity</h3>
+                    <ul class="text-xs md:text-sm text-gray-300 space-y-1">
                         <li>Chronic Fatigue</li>
                         <li>Addictions / Sleep</li>
                         <li>Digital Eye Strain</li>
@@ -408,60 +415,60 @@
     </section>
 
     <!-- DYNAMIC SERVICES -->
-    <section id="services" class="py-24 bg-white/60 backdrop-blur-sm relative">
+    <section id="services" class="py-16 md:py-24 bg-white/60 backdrop-blur-sm relative">
         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16">
-                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">Our Services</span>
-                <h2 class="text-4xl font-serif font-bold text-gray-900 mt-2">Comprehensive Wellness Solutions</h2>
-                <div class="w-24 h-1 bg-ayu-green mx-auto mt-4 rounded-full"></div>
+            <div class="text-center mb-12 md:mb-16">
+                <span class="text-ayu-orange font-bold uppercase text-[10px] md:text-xs tracking-widest">Our Services</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mt-2">Comprehensive Wellness Solutions</h2>
+                <div class="w-20 md:w-24 h-1 bg-ayu-green mx-auto mt-4 rounded-full"></div>
             </div>
-            <div id="services-container" class="flex overflow-x-auto gap-8 pb-10 snap-x custom-scrollbar items-stretch" style="scroll-behavior: smooth;">
+            <div id="services-container" class="flex overflow-x-auto gap-6 md:gap-8 pb-10 snap-x custom-scrollbar items-stretch" style="scroll-behavior: smooth;">
                 <!-- Content handled by JS -->
             </div>
         </div>
     </section>
 
     <!-- YOGA THERAPY VERTICALS POPUP -->
-    <div id="yogaVerticalsModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+    <div id="yogaVerticalsModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-3 md:p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeYogaModal()"></div>
-        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto p-8 md:p-12 animate-scale-in">
-            <button onclick="closeYogaModal()" class="absolute top-8 right-8 text-2xl text-ayu-green hover:rotate-90 transition"><i class="fas fa-times"></i></button>
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-serif font-bold text-ayu-dark">Yoga Therapy Plans</h2>
-                <p class="text-gray-500 mt-2">Specialized sessions tailored for each health vertical</p>
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto p-6 md:p-12 animate-scale-in">
+            <button onclick="closeYogaModal()" class="absolute top-6 right-6 md:top-8 md:right-8 text-xl md:text-2xl text-ayu-green hover:rotate-90 transition"><i class="fas fa-times"></i></button>
+            <div class="text-center mb-8 md:mb-10">
+                <h2 class="text-2xl md:text-3xl font-serif font-bold text-ayu-dark">Yoga Therapy Plans</h2>
+                <p class="text-gray-500 mt-2 text-sm">Specialized sessions tailored for each health vertical</p>
             </div>
-            <div id="verticals-pricing-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="verticals-pricing-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 <!-- Populated by JavaScript -->
             </div>
         </div>
     </div>
 
     <!-- DYNAMIC DOCTORS -->
-    <section id="doctors" class="py-24 bg-transparent">
+    <section id="doctors" class="py-16 md:py-24 bg-transparent">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl font-serif font-bold text-center mb-16">Meet Our Expert Team</h2>
-            <div id="doctors-container" class="flex overflow-x-auto gap-6 pb-10 snap-x custom-scrollbar" style="scroll-behavior: smooth;">
+            <h2 class="text-2xl md:text-3xl font-serif font-bold text-center mb-12 md:mb-16">Meet Our Expert Team</h2>
+            <div id="doctors-container" class="flex overflow-x-auto gap-4 md:gap-6 pb-10 snap-x custom-scrollbar" style="scroll-behavior: smooth;">
                  <!-- Content handled by JS -->
             </div>
         </div>
     </section>
 
     <!-- BOOKING FORM -->
-    <section id="consultation" class="py-24 bg-white/30 backdrop-blur-sm">
+    <section id="consultation" class="py-16 md:py-24 bg-white/30 backdrop-blur-sm">
         <div class="max-w-4xl mx-auto px-6">
             <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border-t-8 border-ayu-orange">
-                <div class="bg-green-50 p-8 text-center border-b border-green-100">
-                    <h2 class="text-3xl font-serif font-bold text-ayu-green">Start Your Healing Journey</h2>
+                <div class="bg-green-50 p-6 md:p-8 text-center border-b border-green-100">
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-ayu-green">Start Your Healing Journey</h2>
                 </div>
-                <div class="p-8 md:p-12">
-                    <form id="bookingForm" class="space-y-6">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <input type="text" id="patientName" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange outline-none" placeholder="Full Name" required>
-                            <input type="email" id="patientEmail" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange outline-none" placeholder="Email" required>
+                <div class="p-6 md:p-12">
+                    <form id="bookingForm" class="space-y-4 md:space-y-6">
+                        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+                            <input type="text" id="patientName" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange outline-none text-sm md:text-base" placeholder="Full Name" required>
+                            <input type="email" id="patientEmail" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange outline-none text-sm md:text-base" placeholder="Email" required>
                         </div>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <input type="tel" id="patientPhone" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange outline-none" placeholder="Phone Number" required>
-                            <select id="serviceType" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange outline-none">
+                        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+                            <input type="tel" id="patientPhone" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange outline-none text-sm md:text-base" placeholder="Phone Number" required>
+                            <select id="serviceType" class="w-full bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:border-ayu-orange outline-none text-sm md:text-base">
                                 <option value="1000">Doctor Consultation (₹1000)</option>
                                 <option value="1500">Yoga Therapy Session (₹1500)</option>
                                 <option value="25000">10-Day Cleanse (₹25,000)</option>
@@ -469,7 +476,7 @@
                                 <option value="55000">30-Day Rejuvenation (₹55,000)</option>
                             </select>
                         </div>
-                        <button type="button" onclick="submitBooking()" class="w-full bg-ayu-green text-white font-bold py-4 rounded text-lg hover:bg-green-800 transition">Proceed to Payment</button>
+                        <button type="button" onclick="submitBooking()" class="w-full bg-ayu-green text-white font-bold py-4 rounded text-base md:text-lg hover:bg-green-800 transition">Proceed to Payment</button>
                     </form>
                 </div>
             </div>
@@ -477,60 +484,60 @@
     </section>
 
     <!-- BLOG SECTION -->
-    <section id="blog" class="py-24 bg-white/70 backdrop-blur-md">
+    <section id="blog" class="py-16 md:py-24 bg-white/70 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between items-end mb-12">
+            <div class="flex justify-between items-end mb-10 md:mb-12">
                 <div>
-                    <span class="bg-green-100 text-ayu-green px-3 py-1 rounded-full text-xs font-bold uppercase">Blog & Resources</span>
-                    <h2 class="text-3xl font-serif font-bold text-gray-900 mt-3">Wellness Insights & Tips</h2>
+                    <span class="bg-green-100 text-ayu-green px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase">Blog & Resources</span>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-gray-900 mt-3">Wellness Insights & Tips</h2>
                 </div>
                 <a href="#" class="hidden md:inline-block text-ayu-orange font-bold hover:underline">View All Articles</a>
             </div>
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
                 <div class="group cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-4 h-56">
+                    <div class="overflow-hidden rounded-xl mb-4 h-48 md:h-56">
                         <img src="Gemini_Generated_Image_ydhtvrydhtvrydht (1).png" alt="Sleep" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
                     </div>
-                    <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs font-bold">Naturopathy</span>
-                    <h3 class="font-bold text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">10 Natural Remedies for Better Sleep</h3>
-                    <p class="text-gray-500 text-sm line-clamp-2">Discover time-tested natural approaches to improve your sleep quality without medication.</p>
+                    <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-[10px] md:text-xs font-bold">Naturopathy</span>
+                    <h3 class="font-bold text-lg md:text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">10 Natural Remedies for Better Sleep</h3>
+                    <p class="text-gray-500 text-xs md:text-sm line-clamp-2">Discover time-tested natural approaches to improve your sleep quality without medication.</p>
                 </div>
                 <div class="group cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-4 h-56">
+                    <div class="overflow-hidden rounded-xl mb-4 h-48 md:h-56">
                         <img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Yoga" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
                     </div>
-                    <span class="bg-purple-100 text-purple-600 px-2 py-1 rounded text-xs font-bold">Yoga</span>
-                    <h3 class="font-bold text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">Yoga Poses for Stress Relief</h3>
-                    <p class="text-gray-500 text-sm line-clamp-2">Learn essential yoga asanas that can help reduce stress and anxiety in daily life.</p>
+                    <span class="bg-purple-100 text-purple-600 px-2 py-1 rounded text-[10px] md:text-xs font-bold">Yoga</span>
+                    <h3 class="font-bold text-lg md:text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">Yoga Poses for Stress Relief</h3>
+                    <p class="text-gray-500 text-xs md:text-sm line-clamp-2">Learn essential yoga asanas that can help reduce stress and anxiety in daily life.</p>
                 </div>
                 <div class="group cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-4 h-56">
+                    <div class="overflow-hidden rounded-xl mb-4 h-48 md:h-56">
                         <img src="https://images.unsplash.com/photo-1606902965551-dce093cda6e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Ayurveda" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
                     </div>
-                    <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded text-xs font-bold">Ayurveda</span>
-                    <h3 class="font-bold text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">Understanding Your Dosha</h3>
-                    <p class="text-gray-500 text-sm line-clamp-2">A comprehensive guide to identifying your body constitution (Prakriti) and living in harmony.</p>
+                    <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded text-[10px] md:text-xs font-bold">Ayurveda</span>
+                    <h3 class="font-bold text-lg md:text-xl mt-2 mb-2 group-hover:text-ayu-orange transition">Understanding Your Dosha</h3>
+                    <p class="text-gray-500 text-xs md:text-sm line-clamp-2">A comprehensive guide to identifying your body constitution (Prakriti) and living in harmony.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- GIVE REVIEW SECTION -->
-    <section id="reviews" class="py-24 bg-ayu-light/50">
+    <section id="reviews" class="py-16 md:py-24 bg-ayu-light/50">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-serif font-bold text-gray-900">Patient Experiences</h2>
-                <p class="text-gray-500 mt-2">Real feedback from our community</p>
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-2xl md:text-3xl font-serif font-bold text-gray-900">Patient Experiences</h2>
+                <p class="text-gray-500 mt-2 text-sm">Real feedback from our community</p>
                 
                 <!-- Simple Trigger Button -->
-                <div id="reviewActionArea" class="mt-8 flex justify-center">
+                <div id="reviewActionArea" class="mt-6 md:mt-8 flex justify-center">
                     <!-- Dynamic button -->
                 </div>
             </div>
 
             <!-- Full Width Review Cards -->
             <div class="max-w-4xl mx-auto">
-                <div id="reviews-list" class="space-y-6">
+                <div id="reviews-list" class="space-y-4 md:space-y-6">
                     <div class="text-center py-10 text-gray-400">Loading feedback...</div>
                 </div>
             </div>
@@ -540,24 +547,24 @@
     <!-- REVIEW DIALOGUE BOX (MODAL) -->
     <div id="reviewModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeReviewModal()"></div>
-        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-scale-in p-8">
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-scale-in p-6 md:p-8">
             <button onclick="closeReviewModal()" class="absolute top-6 right-6 text-gray-400 hover:text-red-500 transition">
                 <i class="fas fa-times text-xl"></i>
             </button>
             
             <div class="text-center mb-6">
-                <h3 class="text-2xl font-serif font-bold text-ayu-dark">Share Your Experience</h3>
-                <p class="text-gray-500 text-sm">Tell us how Ayusetu helped you on your journey.</p>
+                <h3 class="text-xl md:text-2xl font-serif font-bold text-ayu-dark">Share Your Experience</h3>
+                <p class="text-gray-500 text-xs md:text-sm">Tell us how Ayusetu helped you on your journey.</p>
             </div>
 
             <form id="reviewForm" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Your Name</label>
-                    <input type="text" id="reviewerName" required class="w-full border border-gray-100 bg-gray-50 rounded-xl p-3 focus:border-ayu-green outline-none" placeholder="e.g. Rahul Sharma">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Your Name</label>
+                    <input type="text" id="reviewerName" required class="w-full border border-gray-100 bg-gray-50 rounded-xl p-3 focus:border-ayu-green outline-none text-sm" placeholder="e.g. Rahul Sharma">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Rating</label>
-                    <div class="flex gap-4 text-3xl text-gray-300" id="starRating">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Rating</label>
+                    <div class="flex gap-3 md:gap-4 text-2xl md:text-3xl text-gray-300" id="starRating">
                         <i class="fas fa-star cursor-pointer hover:text-yellow-400 transition" onclick="setRating(1)"></i>
                         <i class="fas fa-star cursor-pointer hover:text-yellow-400 transition" onclick="setRating(2)"></i>
                         <i class="fas fa-star cursor-pointer hover:text-yellow-400 transition" onclick="setRating(3)"></i>
@@ -566,10 +573,10 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Your Experience</label>
-                    <textarea id="reviewText" required class="w-full border border-gray-100 bg-gray-50 rounded-xl p-3 focus:border-ayu-green outline-none h-32" placeholder="Describe your recovery or treatment experience..."></textarea>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Your Experience</label>
+                    <textarea id="reviewText" required class="w-full border border-gray-100 bg-gray-50 rounded-xl p-3 focus:border-ayu-green outline-none h-24 md:h-32 text-sm" placeholder="Describe your recovery or treatment experience..."></textarea>
                 </div>
-                <button type="submit" id="reviewSubmitBtn" class="w-full bg-ayu-orange text-white font-bold py-4 rounded-2xl hover:bg-orange-700 transition shadow-xl shadow-ayu-orange/20">
+                <button type="submit" id="reviewSubmitBtn" class="w-full bg-ayu-orange text-white font-bold py-3.5 md:py-4 rounded-2xl hover:bg-orange-700 transition shadow-xl shadow-ayu-orange/20 text-sm md:text-base">
                     Post My Feedback
                 </button>
             </form>
@@ -577,97 +584,97 @@
     </div>
 
     <!-- LEADERSHIP SECTION -->
-    <section id="leadership" class="py-24 bg-white/40 backdrop-blur-sm">
+    <section id="leadership" class="py-16 md:py-24 bg-white/40 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-ayu-orange font-bold uppercase text-xs tracking-widest">Our Leadership</span>
-                <h2 class="text-4xl font-serif font-bold text-gray-900 mt-2">The Visionaries Behind Ayusetu</h2>
-                <div class="w-24 h-1 bg-ayu-green mx-auto mt-4 rounded-full"></div>
+            <div class="text-center mb-12 md:mb-16">
+                <span class="text-ayu-orange font-bold uppercase text-[10px] md:text-xs tracking-widest">Our Leadership</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mt-2">The Visionaries Behind Ayusetu</h2>
+                <div class="w-20 md:w-24 h-1 bg-ayu-green mx-auto mt-4 rounded-full"></div>
             </div>
-            <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
-                    <div class="w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-green/20 group-hover:border-ayu-orange transition-colors">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
+                    <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-green/20 group-hover:border-ayu-orange transition-colors">
                         <img src="maya.jpeg" alt="krishna" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900">Krishna Kumar Maya</h3>
-                    <p class="text-ayu-green font-semibold mb-4 text-sm">Director & COO</p>
-                    <p class="text-gray-500 text-sm leading-relaxed">Leads medical operations, doctor onboarding, and end-to-end customer experience. Ensures Ayusetu delivers trusted, patient-centric wellness at scale.</p>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900">Krishna Kumar Maya</h3>
+                    <p class="text-ayu-green font-semibold mb-4 text-xs md:text-sm">Director & COO</p>
+                    <p class="text-gray-500 text-xs md:text-sm leading-relaxed">Leads medical operations, doctor onboarding, and end-to-end customer experience. Ensures Ayusetu delivers trusted, patient-centric wellness at scale.</p>
                 </div>
-                 <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
-                    <div class="w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-orange/20 group-hover:border-ayu-green transition-colors">
+                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
+                    <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-orange/20 group-hover:border-ayu-green transition-colors">
                         <img src="adarsh.jpeg" alt="Adarsh" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900">Adarsh (IITP'28)</h3>
-                    <p class="text-ayu-green font-semibold mb-4 text-sm">Founder & CEO</p>
-                    <p class="text-gray-500 text-sm leading-relaxed">Oversees high-level decision-making, long-term strategy, and operational execution. Aligns business goals, growth plans, and team efforts to ensure Ayusetu scales sustainably and decisively.</p>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900">Adarsh (IITP'28)</h3>
+                    <p class="text-ayu-green font-semibold mb-4 text-xs md:text-sm">Founder & CEO</p>
+                    <p class="text-gray-500 text-xs md:text-sm leading-relaxed">Oversees high-level decision-making, long-term strategy, and operational execution. Aligns business goals, growth plans, and team efforts to ensure Ayusetu scales sustainably and decisively.</p>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
-                    <div class="w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-orange/20 group-hover:border-ayu-green transition-colors">
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
+                    <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-orange/20 group-hover:border-ayu-green transition-colors">
                         <img src="anand.jpeg" alt="Anand" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900">Anand(IITP'28)</h3>
-                    <p class="text-ayu-orange font-semibold mb-4 text-sm">Co-founder & CTO</p>
-                    <p class="text-gray-500 text-sm leading-relaxed">Owns the entire technology stack and product architecture, driving AI-powered diagnostics and platform scalability.</p>
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900">Anand(IITP'28)</h3>
+                    <p class="text-ayu-orange font-semibold mb-4 text-xs md:text-sm">Co-founder & CTO</p>
+                    <p class="text-gray-500 text-xs md:text-sm leading-relaxed">Owns the entire technology stack and product architecture, driving AI-powered diagnostics and platform scalability.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
-    <footer id="contact" class="bg-gray-900 text-white pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 mb-12">
-            <div><h1 class="text-2xl font-bold text-ayu-orange mb-4">AYUSETU</h1><p class="text-gray-400 text-sm">Bridging tradition and technology.</p></div>
-            <div><h4 class="font-bold mb-4">Quick Links</h4><ul class="text-sm text-gray-400 space-y-2"><li>Home</li><li>Treatments</li></ul></div>
-            <div><h4 class="font-bold mb-4">Services</h4><ul class="text-sm text-gray-400 space-y-2"><li>Naturopathy</li><li>Yoga Therapy</li></ul></div>
-            <div><h4 class="font-bold mb-4">Contact Us</h4><p class="text-gray-400 text-sm">help@ayusetu.com</p></div>
+    <footer id="contact" class="bg-gray-900 text-white pt-12 md:pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12">
+            <div><h1 class="text-xl md:text-2xl font-bold text-ayu-orange mb-4">AYUSETU</h1><p class="text-gray-400 text-xs md:text-sm">Bridging tradition and technology.</p></div>
+            <div><h4 class="font-bold mb-4 text-sm md:text-base">Quick Links</h4><ul class="text-xs md:text-sm text-gray-400 space-y-2"><li>Home</li><li>Treatments</li></ul></div>
+            <div><h4 class="font-bold mb-4 text-sm md:text-base">Services</h4><ul class="text-xs md:text-sm text-gray-400 space-y-2"><li>Naturopathy</li><li>Yoga Therapy</li></ul></div>
+            <div><h4 class="font-bold mb-4 text-sm md:text-base">Contact Us</h4><p class="text-xs md:text-sm text-gray-400">help@ayusetu.com</p></div>
         </div>
-        <div class="border-t border-gray-800 pt-8 text-center text-xs text-gray-500">&copy; 2025 Ayusetu Wellness. All rights reserved.</div>
+        <div class="border-t border-gray-800 pt-8 text-center text-[10px] md:text-xs text-gray-500">&copy; 2025 Ayusetu Wellness. All rights reserved.</div>
     </footer>
 
     <!-- AUTH MODAL -->
-    <div id="authModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+    <div id="authModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-3 md:p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAuthModal()"></div>
-        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-scale-in">
-            <div class="flex">
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-y-auto max-h-[95vh] md:max-h-[90vh] animate-scale-in">
+            <div class="flex flex-col md:flex-row min-h-full">
                 <div class="hidden md:block w-2 bg-gradient-to-b from-ayu-orange to-ayu-green"></div>
-                <div class="p-8 w-full relative">
-                    <button onclick="closeAuthModal()" class="absolute top-6 right-6 text-gray-400 hover:text-red-500 transition duration-300">
-                        <i class="fas fa-times text-xl"></i>
+                <div class="p-6 md:p-8 w-full relative">
+                    <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition duration-300">
+                        <i class="fas fa-times text-lg"></i>
                     </button>
                     
-                    <div class="text-center mb-8">
-                        <div class="w-16 h-16 bg-ayu-light rounded-2xl flex items-center justify-center mx-auto mb-4 border border-ayu-green/10">
-                            <img src="1-removebg-preview.png" alt="Logo" class="w-10 h-10 object-contain">
+                    <div class="text-center mb-6 md:mb-8">
+                        <div class="w-14 h-14 md:w-16 md:h-16 bg-ayu-light rounded-2xl flex items-center justify-center mx-auto mb-4 border border-ayu-green/10">
+                            <img src="1-removebg-preview.png" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain">
                         </div>
-                        <h2 class="text-3xl font-serif font-bold text-ayu-dark" id="modalTitle">Welcome Back</h2>
-                        <p class="text-gray-400 text-sm mt-2" id="modalSubtext">Enter your details to access your wellness dashboard.</p>
+                        <h2 class="text-2xl md:text-3xl font-serif font-bold text-ayu-dark" id="modalTitle">Welcome Back</h2>
+                        <p class="text-gray-400 text-xs md:text-sm mt-2" id="modalSubtext">Enter your details to access your wellness dashboard.</p>
                     </div>
 
-                    <div id="authError" class="hidden bg-red-50 text-red-600 p-4 rounded-xl text-xs font-bold mb-4 border border-red-100"></div>
+                    <div id="authError" class="hidden bg-red-50 text-red-600 p-4 rounded-xl text-[10px] font-bold mb-4 border border-red-100"></div>
 
                     <form id="authForm" class="space-y-4">
                         <div class="relative group">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-ayu-green transition">
                                 <i class="fas fa-envelope"></i>
                             </span>
-                            <input type="email" id="authEmail" class="w-full bg-gray-50 border border-gray-100 p-4 pl-12 rounded-2xl outline-none focus:border-ayu-green focus:bg-white transition" placeholder="Email Address" required>
+                            <input type="email" id="authEmail" class="w-full bg-gray-50 border border-gray-100 p-3.5 pl-11 md:p-4 md:pl-12 rounded-2xl outline-none focus:border-ayu-green focus:bg-white transition text-sm" placeholder="Email Address" required>
                         </div>
                         
                         <div class="relative group">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-ayu-green transition">
                                 <i class="fas fa-lock"></i>
                             </span>
-                            <input type="password" id="authPassword" class="w-full bg-gray-50 border border-gray-100 p-4 pl-12 rounded-2xl outline-none focus:border-ayu-green focus:bg-white transition" placeholder="Password" required>
+                            <input type="password" id="authPassword" class="w-full bg-gray-50 border border-gray-100 p-3.5 pl-11 md:p-4 md:pl-12 rounded-2xl outline-none focus:border-ayu-green focus:bg-white transition text-sm" placeholder="Password" required>
                         </div>
 
-                        <button type="submit" class="w-full bg-ayu-dark text-white font-bold py-4 rounded-2xl hover:bg-black transition shadow-xl shadow-ayu-dark/10 group">
+                        <button type="submit" class="w-full bg-ayu-dark text-white font-bold py-3.5 md:py-4 rounded-2xl hover:bg-black transition shadow-xl shadow-ayu-dark/10 group text-sm md:text-base">
                             <span id="btnText">Login to Ayusetu</span>
                             <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition duration-300"></i>
                         </button>
                     </form>
 
-                    <div class="mt-8 text-center">
-                        <p class="text-sm text-gray-500" id="toggleContainer">
+                    <div class="mt-6 md:mt-8 text-center">
+                        <p class="text-xs md:text-sm text-gray-500" id="toggleContainer">
                             New to Ayusetu? 
                             <a href="javascript:void(0)" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline" id="toggleLink">Create Account</a>
                         </p>
@@ -690,9 +697,12 @@
                 if (line) { line.classList.remove('opacity-0', 'w-0'); line.classList.add('w-full'); }
                 
                 setTimeout(() => {
-                    document.getElementById('loader-top').style.transform = "translateY(-100%)";
-                    document.getElementById('loader-bottom').style.transform = "translateY(100%)";
-                    document.getElementById('loader-content').classList.add('opacity-0');
+                    const top = document.getElementById('loader-top');
+                    const bottom = document.getElementById('loader-bottom');
+                    if(top) top.style.transform = "translateY(-100%)";
+                    if(bottom) bottom.style.transform = "translateY(100%)";
+                    const content = document.getElementById('loader-content');
+                    if(content) content.classList.add('opacity-0');
                     document.body.classList.add('run-hero-anim');
                 }, 1500);
                 setTimeout(() => { if(preloader) preloader.style.display = 'none'; }, 2500);
@@ -702,9 +712,11 @@
         function toggleDrawer() {
             const d = document.getElementById('sideDrawer');
             const o = document.getElementById('drawerOverlay');
-            d.classList.toggle('open');
-            o.classList.toggle('hidden');
-            setTimeout(() => o.classList.toggle('opacity-0'), 10);
+            if(d && o) {
+                d.classList.toggle('open');
+                o.classList.toggle('hidden');
+                setTimeout(() => o.classList.toggle('opacity-0'), 10);
+            }
         }
 
         const healthVerticals = [
@@ -724,36 +736,44 @@
 
         function showYogaVerticals() {
             const grid = document.getElementById('verticals-pricing-grid');
+            if(!grid) return;
             grid.innerHTML = healthVerticals.map(v => `
-                <div class="group bg-gray-50 p-6 rounded-2xl hover:bg-ayu-dark hover:text-white transition-all duration-300 border border-gray-100 shadow-sm">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-full bg-ayu-orange/10 group-hover:bg-white/20 flex items-center justify-center text-ayu-orange group-hover:text-white transition">
-                            <i class="fas fa-${v.icon} text-xl"></i>
+                <div class="group bg-gray-50 p-5 md:p-6 rounded-2xl hover:bg-ayu-dark hover:text-white transition-all duration-300 border border-gray-100 shadow-sm">
+                    <div class="flex items-center gap-3 md:gap-4 mb-4">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-ayu-orange/10 group-hover:bg-white/20 flex items-center justify-center text-ayu-orange group-hover:text-white transition">
+                            <i class="fas fa-${v.icon} text-lg md:text-xl"></i>
                         </div>
-                        <h4 class="font-bold text-lg">${v.name}</h4>
+                        <h4 class="font-bold text-base md:text-lg">${v.name}</h4>
                     </div>
                     <div class="bg-white/60 group-hover:bg-white/10 p-4 rounded-xl">
-                        <p class="text-xs text-gray-400 group-hover:text-gray-300 uppercase font-black">Online Therapy</p>
+                        <p class="text-[10px] text-gray-400 group-hover:text-gray-300 uppercase font-black">Online Therapy</p>
                         <div class="flex items-baseline gap-2 mt-1">
-                            <span class="text-2xl font-bold">₹${v.base}</span>
-                            <span class="text-sm line-through text-gray-400">₹${v.old}</span>
+                            <span class="text-xl md:text-2xl font-bold">₹${v.base}</span>
+                            <span class="text-xs md:text-sm line-through text-gray-400">₹${v.old}</span>
                         </div>
                         <div class="mt-4">
-                            <button onclick="selectVertical('${v.name}', ${v.base})" class="w-full bg-ayu-green text-white py-2 rounded-lg text-sm font-bold hover:bg-[#1e5c22] transition">Select Plan</button>
+                            <button onclick="selectVertical('${v.name}', ${v.base})" class="w-full bg-ayu-green text-white py-2 rounded-lg text-xs md:text-sm font-bold hover:bg-[#1e5c22] transition">Select Plan</button>
                         </div>
                     </div>
                 </div>
             `).join('');
-            document.getElementById('yogaVerticalsModal').classList.remove('hidden');
+            const modal = document.getElementById('yogaVerticalsModal');
+            if(modal) modal.classList.remove('hidden');
         }
 
-        function closeYogaModal() { document.getElementById('yogaVerticalsModal').classList.add('hidden'); }
+        function closeYogaModal() { 
+            const modal = document.getElementById('yogaVerticalsModal');
+            if(modal) modal.classList.add('hidden'); 
+        }
         
         function selectVertical(name, price) {
             closeYogaModal();
             const sType = document.getElementById('serviceType');
-            sType.innerHTML += `<option value="${price}" selected>${name} Yoga Therapy (₹${price})</option>`;
-            document.getElementById('consultation').scrollIntoView({ behavior: 'smooth' });
+            if(sType) {
+                sType.innerHTML += `<option value="${price}" selected>${name} Yoga Therapy (₹${price})</option>`;
+                const target = document.getElementById('consultation');
+                if(target) target.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         window.selectStay = (name, price) => {
@@ -783,7 +803,6 @@
         let currentUser = null;
         let isLogin = true;
 
-        // REDIRECT HELPER
         async function redirectToDashboard(user) {
             const snap = await getDoc(doc(db, "users", user.uid));
             const role = snap.exists() ? snap.data().role : 'user';
@@ -800,13 +819,32 @@
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             updateReviewUI(user);
-            const loginBtn = document.getElementById('navLoginBtn');
-            if (user && loginBtn) {
-                loginBtn.innerText = "Dashboard";
-                loginBtn.onclick = () => redirectToDashboard(user);
-            } else if(loginBtn) {
-                loginBtn.innerText = "Login";
-                loginBtn.onclick = () => window.openLogin();
+            
+            const loginBtnDesktop = document.getElementById('navLoginBtn');
+            const loginBtnMobile = document.getElementById('navLoginBtnMobile');
+
+            if (user) {
+                // Update Desktop Button
+                if (loginBtnDesktop) {
+                    loginBtnDesktop.innerText = "Dashboard";
+                    loginBtnDesktop.onclick = () => redirectToDashboard(user);
+                }
+                // Update Mobile Button
+                if (loginBtnMobile) {
+                    loginBtnMobile.innerHTML = `<i class="fas fa-columns"></i> Go to Dashboard`;
+                    loginBtnMobile.onclick = () => { redirectToDashboard(user); toggleDrawer(); };
+                }
+            } else {
+                // Restore Desktop Button
+                if (loginBtnDesktop) {
+                    loginBtnDesktop.innerText = "Login";
+                    loginBtnDesktop.onclick = () => window.openLogin();
+                }
+                // Restore Mobile Button
+                if (loginBtnMobile) {
+                    loginBtnMobile.innerHTML = `<i class="fas fa-user-circle"></i> Login to Account`;
+                    loginBtnMobile.onclick = () => { window.openLogin(); toggleDrawer(); };
+                }
             }
         });
 
@@ -814,16 +852,22 @@
             const container = document.getElementById('reviewActionArea');
             if (!container) return;
             if (user) {
-                container.innerHTML = `<button onclick="window.openReviewModal()" class="bg-ayu-green text-white px-10 py-4 rounded-full font-bold hover:bg-green-800 transition shadow-xl transform hover:-translate-y-1"><i class="fas fa-edit mr-2"></i> Write a Review</button>`;
+                container.innerHTML = `<button onclick="window.openReviewModal()" class="bg-ayu-green text-white px-8 md:px-10 py-3 md:py-4 rounded-full font-bold hover:bg-green-800 transition shadow-xl transform hover:-translate-y-1 text-sm md:text-base"><i class="fas fa-edit mr-2"></i> Write a Review</button>`;
                 const nameInput = document.getElementById('reviewerName');
                 if (nameInput) nameInput.value = user.displayName || "";
             } else {
-                container.innerHTML = `<button onclick="openLogin()" class="bg-ayu-orange text-white px-10 py-4 rounded-full font-bold hover:bg-orange-700 transition shadow-xl transform hover:-translate-y-1"><i class="fas fa-lock mr-2"></i> Login to Post Review</button>`;
+                container.innerHTML = `<button onclick="openLogin()" class="bg-ayu-orange text-white px-8 md:px-10 py-3 md:py-4 rounded-full font-bold hover:bg-orange-700 transition shadow-xl transform hover:-translate-y-1 text-sm md:text-base"><i class="fas fa-lock mr-2"></i> Login to Post Review</button>`;
             }
         }
 
-        window.openReviewModal = () => document.getElementById('reviewModal').classList.remove('hidden');
-        window.closeReviewModal = () => document.getElementById('reviewModal').classList.add('hidden');
+        window.openReviewModal = () => {
+            const modal = document.getElementById('reviewModal');
+            if(modal) modal.classList.remove('hidden');
+        };
+        window.closeReviewModal = () => {
+            const modal = document.getElementById('reviewModal');
+            if(modal) modal.classList.add('hidden');
+        };
 
         let currentRating = 5;
         window.setRating = (n) => {
@@ -834,25 +878,28 @@
             });
         };
 
-        document.getElementById('reviewForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!currentUser) { window.closeReviewModal(); window.openLogin(); return; }
-            const btn = document.getElementById('reviewSubmitBtn');
-            btn.disabled = true;
-            btn.innerText = "Posting...";
-            try {
-                const name = document.getElementById('reviewerName').value;
-                const text = document.getElementById('reviewText').value;
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'reviews'), {
-                    name, rating: currentRating, text, uid: currentUser.uid, createdAt: serverTimestamp()
-                });
-                e.target.reset();
-                window.setRating(5);
-                window.closeReviewModal();
-            } catch (err) { console.error("Review Error:", err); } finally {
-                btn.disabled = false; btn.innerText = "Post My Feedback";
-            }
-        });
+        const rForm = document.getElementById('reviewForm');
+        if(rForm) {
+            rForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser) { window.closeReviewModal(); window.openLogin(); return; }
+                const btn = document.getElementById('reviewSubmitBtn');
+                btn.disabled = true;
+                btn.innerText = "Posting...";
+                try {
+                    const name = document.getElementById('reviewerName').value;
+                    const text = document.getElementById('reviewText').value;
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'reviews'), {
+                        name, rating: currentRating, text, uid: currentUser.uid, createdAt: serverTimestamp()
+                    });
+                    e.target.reset();
+                    window.setRating(5);
+                    window.closeReviewModal();
+                } catch (err) { console.error("Review Error:", err); } finally {
+                    btn.disabled = false; btn.innerText = "Post My Feedback";
+                }
+            });
+        }
 
         const reviewsRef = collection(db, 'artifacts', appId, 'public', 'data', 'reviews');
         onSnapshot(reviewsRef, (snapshot) => {
@@ -862,7 +909,7 @@
             snapshot.forEach(doc => reviews.push({ id: doc.id, ...doc.data() }));
             reviews.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             if (reviews.length === 0) {
-                list.innerHTML = `<div class="text-center py-10 text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">No reviews yet. Be the first to share!</div>`;
+                list.innerHTML = `<div class="text-center py-10 text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200 text-sm">No reviews yet. Be the first to share!</div>`;
                 return;
             }
             list.innerHTML = reviews.map(r => {
@@ -870,21 +917,27 @@
                 let starsHtml = '';
                 for(let i=0; i<5; i++) starsHtml += `<i class="fas fa-star ${i < r.rating ? 'text-yellow-400' : 'text-gray-200'}"></i>`;
                 return `
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 animate-scale-in">
+                    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-gray-50 animate-scale-in">
                         <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 bg-ayu-green/10 text-ayu-green rounded-full flex items-center justify-center font-bold text-xs">${initials}</div>
-                                <div><h4 class="font-bold text-gray-900">${r.name}</h4><p class="text-[10px] text-gray-400 uppercase">Verified Patient</p></div>
+                            <div class="flex items-center gap-3 md:gap-4">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-ayu-green/10 text-ayu-green rounded-full flex items-center justify-center font-bold text-[10px] md:text-xs">${initials}</div>
+                                <div><h4 class="font-bold text-gray-900 text-sm md:text-base">${r.name}</h4><p class="text-[8px] md:text-[10px] text-gray-400 uppercase">Verified Patient</p></div>
                             </div>
-                            <div class="text-sm flex gap-1">${starsHtml}</div>
+                            <div class="text-[10px] md:text-sm flex gap-0.5 md:gap-1">${starsHtml}</div>
                         </div>
-                        <p class="text-gray-600 italic text-sm">"${r.text}"</p>
+                        <p class="text-gray-600 italic text-xs md:text-sm">"${r.text}"</p>
                     </div>`;
             }).join('');
         }, (err) => console.error("Reviews stream error:", err));
 
-        window.openLogin = () => document.getElementById('authModal').classList.remove('hidden');
-        window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
+        window.openLogin = () => {
+            const modal = document.getElementById('authModal');
+            if(modal) modal.classList.remove('hidden');
+        };
+        window.closeAuthModal = () => {
+            const modal = document.getElementById('authModal');
+            if(modal) modal.classList.add('hidden');
+        };
         window.toggleAuthMode = () => {
             isLogin = !isLogin;
             const title = document.getElementById('modalTitle');
@@ -892,53 +945,60 @@
             const btnText = document.getElementById('btnText');
             const toggleContainer = document.getElementById('toggleContainer');
             if (isLogin) {
-                title.innerText = "Welcome Back"; subtext.innerText = "Enter your details to access your wellness dashboard.";
-                btnText.innerText = "Login to Ayusetu"; toggleContainer.innerHTML = `New to Ayusetu? <a href="javascript:void(0)" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a>`;
+                if(title) title.innerText = "Welcome Back"; 
+                if(subtext) subtext.innerText = "Enter your details to access your wellness dashboard.";
+                if(btnText) btnText.innerText = "Login to Ayusetu"; 
+                if(toggleContainer) toggleContainer.innerHTML = `New to Ayusetu? <a href="javascript:void(0)" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Create Account</a>`;
             } else {
-                title.innerText = "Join Ayusetu"; subtext.innerText = "Start your journey to holistic health today.";
-                btnText.innerText = "Create Your Account"; toggleContainer.innerHTML = `Already have an account? <a href="javascript:void(0)" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Login instead</a>`;
+                if(title) title.innerText = "Join Ayusetu"; 
+                if(subtext) subtext.innerText = "Start your journey to holistic health today.";
+                if(btnText) btnText.innerText = "Create Your Account"; 
+                if(toggleContainer) toggleContainer.innerHTML = `Already have an account? <a href="javascript:void(0)" onclick="toggleAuthMode()" class="text-ayu-orange font-bold hover:underline">Login instead</a>`;
             }
         };
 
         window.handleBooking = (e, id) => {
             if (e) e.preventDefault();
-            if (!currentUser) { openLogin(); return; }
+            if (!currentUser) { window.openLogin(); return; }
             const el = document.getElementById(id); if(el) el.scrollIntoView({ behavior: 'smooth' });
             const drawer = document.getElementById('sideDrawer'); if(drawer && drawer.classList.contains('open')) toggleDrawer();
         };
 
         window.submitBooking = () => {
-            if (!currentUser) { openLogin(); return; }
+            if (!currentUser) { window.openLogin(); return; }
             const name = document.getElementById('patientName').value;
             const email = document.getElementById('patientEmail').value;
             const phone = document.getElementById('patientPhone').value;
             const serviceTypeEl = document.getElementById('serviceType');
             const amount = serviceTypeEl.value;
             const serviceName = serviceTypeEl.options[serviceTypeEl.selectedIndex].text;
-            if (!name || !email || !phone) { alert("Please fill in all details."); return; }
+            if (!name || !email || !phone) { return; }
             sessionStorage.setItem('active_booking', JSON.stringify({ name, email, phone, amount, service: serviceName, uid: currentUser.uid }));
             window.location.href = 'payment.html';
         };
 
-        document.getElementById('authForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-            const errorDiv = document.getElementById('authError');
-            errorDiv.classList.add('hidden');
-            try {
-                if (isLogin) { 
-                    const cred = await signInWithEmailAndPassword(auth, email, password);
-                    redirectToDashboard(cred.user);
-                } 
-                else {
-                    const cred = await createUserWithEmailAndPassword(auth, email, password);
-                    await setDoc(doc(db, "users", cred.user.uid), { email, role: 'user', createdAt: new Date() });
-                    redirectToDashboard(cred.user);
-                }
-                closeAuthModal();
-            } catch (error) { errorDiv.innerText = error.message; errorDiv.classList.remove('hidden'); }
-        });
+        const aForm = document.getElementById('authForm');
+        if(aForm) {
+            aForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('authEmail').value;
+                const password = document.getElementById('authPassword').value;
+                const errorDiv = document.getElementById('authError');
+                errorDiv.classList.add('hidden');
+                try {
+                    if (isLogin) { 
+                        const cred = await signInWithEmailAndPassword(auth, email, password);
+                        redirectToDashboard(cred.user);
+                    } 
+                    else {
+                        const cred = await createUserWithEmailAndPassword(auth, email, password);
+                        await setDoc(doc(db, "users", cred.user.uid), { email, role: 'user', createdAt: new Date() });
+                        redirectToDashboard(cred.user);
+                    }
+                    window.closeAuthModal();
+                } catch (error) { errorDiv.innerText = error.message; errorDiv.classList.remove('hidden'); }
+            });
+        }
 
         async function fetchContent() {
             try {
@@ -946,7 +1006,6 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     
-                    // 1. SERVICES LOGIC
                     const sContainer = document.getElementById('services-container');
                     if (sContainer) {
                         let cmsServices = data.services ? Object.values(data.services) : [];
@@ -971,46 +1030,45 @@
 
                         const otherServices = cmsServices.filter(s => !s.title.toLowerCase().includes('yoga therapy') && !s.title.toLowerCase().includes('expert consultation'));
 
-                        let html = `<div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-ayu-green ring-2 ring-ayu-green/10 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
-                            <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-20 animate-float-slow"><span class="bg-gradient-to-r from-ayu-orange to-red-600 text-white text-[12px] font-black px-6 py-2 rounded-full uppercase tracking-tight shadow-xl border-2 border-white flex items-center gap-2 whitespace-nowrap ring-4 ring-orange-500/10"><i class="fas fa-fire text-[10px]"></i> MOST POPULAR</span></div>
-                            <div class="w-16 h-16 bg-ayu-green text-white rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm"><i class="fas fa-om"></i></div>
-                            <h3 class="text-2xl font-bold mb-2 text-gray-900">${yogaTherapyCard.title}</h3>
-                            <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${yogaTherapyCard.desc}</p>
-                            <ul class="space-y-4 mb-10 text-sm text-gray-600">${yogaTherapyCard.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
-                            <button onclick="showYogaVerticals()" class="w-full bg-ayu-orange text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-orange/20">View Programs</button>
+                        let html = `<div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-ayu-green ring-2 ring-ayu-green/10 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 hover-lift shadow-sm flex flex-col min-h-[500px] md:min-h-[550px] relative">
+                            <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-20 animate-float-slow"><span class="bg-gradient-to-r from-ayu-orange to-red-600 text-white text-[10px] md:text-[12px] font-black px-4 md:px-6 py-1.5 md:py-2 rounded-full uppercase tracking-tight shadow-xl border-2 border-white flex items-center gap-2 whitespace-nowrap ring-4 ring-orange-500/10"><i class="fas fa-fire text-[8px] md:text-[10px]"></i> MOST POPULAR</span></div>
+                            <div class="w-12 h-12 md:w-16 md:h-16 bg-ayu-green text-white rounded-xl md:rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-6 md:mb-8 shadow-sm"><i class="fas fa-om"></i></div>
+                            <h3 class="text-xl md:text-2xl font-bold mb-2 text-gray-900">${yogaTherapyCard.title}</h3>
+                            <p class="text-gray-400 text-xs md:text-sm mb-6 leading-relaxed flex-grow">${yogaTherapyCard.desc}</p>
+                            <ul class="space-y-3 md:space-y-4 mb-8 md:mb-10 text-xs md:text-sm text-gray-600">${yogaTherapyCard.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
+                            <button onclick="showYogaVerticals()" class="w-full bg-ayu-orange text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-orange/20 text-sm md:text-base">View Programs</button>
                         </div>`;
 
-                        html += `<div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-gray-100 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
-                            <div class="w-16 h-16 bg-orange-100 text-ayu-orange rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm"><i class="fas fa-user-md"></i></div>
-                            <h3 class="text-2xl font-bold mb-2 text-gray-900">${expertConsultationCard.title}</h3>
-                            <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${expertConsultationCard.desc}</p>
-                            <div class="mb-8"><div class="flex items-center gap-3"><span class="text-4xl font-bold text-ayu-green">₹${expertConsultationCard.price}</span><span class="text-lg line-through text-gray-400">₹${expertConsultationCard.oldPrice}</span></div><span class="text-sm text-gray-400 font-medium">Limited Time Offer</span></div>
-                            <ul class="space-y-4 mb-10 text-sm text-gray-600">${expertConsultationCard.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
-                            <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-green text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-green/20">Book Session Now</button>
+                        html += `<div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-gray-100 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 hover-lift shadow-sm flex flex-col min-h-[500px] md:min-h-[550px] relative">
+                            <div class="w-12 h-12 md:w-16 md:h-16 bg-orange-100 text-ayu-orange rounded-xl md:rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-6 md:mb-8 shadow-sm"><i class="fas fa-user-md"></i></div>
+                            <h3 class="text-xl md:text-2xl font-bold mb-2 text-gray-900">${expertConsultationCard.title}</h3>
+                            <p class="text-gray-400 text-xs md:text-sm mb-6 leading-relaxed flex-grow">${expertConsultationCard.desc}</p>
+                            <div class="mb-6 md:mb-8"><div class="flex items-center gap-2 md:gap-3"><span class="text-3xl md:text-4xl font-bold text-ayu-green">₹${expertConsultationCard.price}</span><span class="text-base md:text-lg line-through text-gray-400">₹${expertConsultationCard.oldPrice}</span></div><span class="text-[10px] md:text-sm text-gray-400 font-medium uppercase tracking-wider">Limited Time Offer</span></div>
+                            <ul class="space-y-3 md:space-y-4 mb-8 md:mb-10 text-xs md:text-sm text-gray-600">${expertConsultationCard.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
+                            <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-green text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-green/20 text-sm md:text-base">Book Session Now</button>
                         </div>`;
 
                         html += offlineCenters.map(oc => `
-                            <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center rounded-[2.5rem] p-10 hover-lift flex flex-col min-h-[550px] relative transition-all duration-300 ${oc.theme === 'dark' ? 'bg-ayu-dark text-white border-4 border-ayu-orange shadow-2xl scale-105 z-10' : 'bg-white text-gray-800 border border-gray-100 shadow-sm'}">
-                                ${oc.featured ? `<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-ayu-orange text-white text-[10px] font-black tracking-[0.2em] px-6 py-2 rounded-full shadow-lg uppercase whitespace-nowrap">Best Transformation</div>` : ''}
-                                <div class="w-16 h-16 ${oc.theme === 'dark' ? 'bg-white/10' : 'bg-green-100 text-ayu-green'} rounded-2xl flex items-center justify-center text-3xl mb-8"><i class="fas fa-${oc.icon}"></i></div>
-                                <h3 class="text-2xl font-bold mb-2">${oc.title}</h3>
-                                <p class="${oc.theme === 'dark' ? 'text-gray-300' : 'text-gray-400'} text-sm mb-6 flex-grow">${oc.desc}</p>
-                                <div class="mb-8"><span class="text-4xl font-bold ${oc.theme === 'dark' ? 'text-white' : 'text-ayu-green'}">${oc.price}</span><span class="text-sm ${oc.theme === 'dark' ? 'text-white/50' : 'text-gray-400'} font-medium">/ ${oc.dur}</span></div>
-                                <ul class="space-y-4 mb-10 text-sm">${oc.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
-                                <button onclick="selectStay('${oc.title}', '${oc.val}')" class="w-full py-4 font-bold rounded-2xl transition shadow-lg ${oc.theme === 'dark' ? 'bg-ayu-orange text-white hover:bg-white hover:text-ayu-dark' : 'bg-ayu-green text-white hover:bg-ayu-dark'}">Book Resident Stay</button>
+                            <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 hover-lift flex flex-col min-h-[500px] md:min-h-[550px] relative transition-all duration-300 ${oc.theme === 'dark' ? 'bg-ayu-dark text-white border-4 border-ayu-orange shadow-2xl scale-105 z-10' : 'bg-white text-gray-800 border border-gray-100 shadow-sm'}">
+                                ${oc.featured ? `<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-ayu-orange text-white text-[8px] md:text-[10px] font-black tracking-[0.2em] px-4 md:px-6 py-1.5 md:py-2 rounded-full shadow-lg uppercase whitespace-nowrap">Best Transformation</div>` : ''}
+                                <div class="w-12 h-12 md:w-16 md:h-16 ${oc.theme === 'dark' ? 'bg-white/10' : 'bg-green-100 text-ayu-green'} rounded-xl md:rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-6 md:mb-8"><i class="fas fa-${oc.icon}"></i></div>
+                                <h3 class="text-xl md:text-2xl font-bold mb-2">${oc.title}</h3>
+                                <p class="${oc.theme === 'dark' ? 'text-gray-300' : 'text-gray-400'} text-xs md:text-sm mb-6 flex-grow">${oc.desc}</p>
+                                <div class="mb-6 md:mb-8"><span class="text-3xl md:text-4xl font-bold ${oc.theme === 'dark' ? 'text-white' : 'text-ayu-green'}">${oc.price}</span><span class="text-[10px] md:text-sm ${oc.theme === 'dark' ? 'text-white/50' : 'text-gray-400'} font-medium lowercase tracking-wide">/ ${oc.dur}</span></div>
+                                <ul class="space-y-3 md:space-y-4 mb-8 md:mb-10 text-xs md:text-sm">${oc.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
+                                <button onclick="selectStay('${oc.title}', '${oc.val}')" class="w-full py-3.5 md:py-4 font-bold rounded-xl md:rounded-2xl transition shadow-lg text-sm md:text-base ${oc.theme === 'dark' ? 'bg-ayu-orange text-white hover:bg-white hover:text-ayu-dark' : 'bg-ayu-green text-white hover:bg-ayu-dark'}">Book Resident Stay</button>
                             </div>`).join('');
 
                         html += otherServices.map(s => `
-                            <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-gray-100 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
-                                <div class="w-16 h-16 bg-green-100 text-ayu-green rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm"><i class="fas fa-leaf"></i></div>
-                                <h3 class="text-2xl font-bold mb-3 text-gray-900">${s.title}</h3>
-                                <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${s.desc}</p>
-                                <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-green text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-green/20">Book Session Now</button>
+                            <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-gray-100 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 hover-lift shadow-sm flex flex-col min-h-[500px] md:min-h-[550px] relative">
+                                <div class="w-12 h-12 md:w-16 md:h-16 bg-green-100 text-ayu-green rounded-xl md:rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-6 md:mb-8 shadow-sm"><i class="fas fa-leaf"></i></div>
+                                <h3 class="text-xl md:text-2xl font-bold mb-3 text-gray-900">${s.title}</h3>
+                                <p class="text-gray-400 text-xs md:text-sm mb-6 leading-relaxed flex-grow">${s.desc}</p>
+                                <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-green text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-green/20 text-sm md:text-base">Book Session Now</button>
                             </div>`).join('');
                         sContainer.innerHTML = html;
                     }
 
-                    // 2. DOCTORS LOGIC
                     const dContainer = document.getElementById('doctors-container');
                     if (data.doctors && dContainer) {
                         dContainer.innerHTML = "";
@@ -1018,15 +1076,15 @@
                         Object.values(data.doctors).forEach(d => uniqueDoctors.set(d.name, d));
 
                         dContainer.innerHTML = Array.from(uniqueDoctors.values()).map(d => `
-                            <div class="w-[80vw] md:w-[280px] flex-shrink-0 snap-center bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
-                                <div class="h-64 overflow-hidden bg-slate-50 flex items-center justify-center border-b border-gray-50">
+                            <div class="w-[75vw] md:w-[280px] flex-shrink-0 snap-center bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
+                                <div class="h-48 md:h-64 overflow-hidden bg-slate-50 flex items-center justify-center border-b border-gray-50">
                                     <img src="${d.img || 'https://via.placeholder.com/400x300'}" alt="${d.name}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
                                 </div>
-                                <div class="p-6 text-center">
-                                    <h4 class="font-bold text-lg text-gray-900">${d.name || 'Expert'}</h4>
-                                    <p class="text-ayu-green text-xs font-semibold mb-3 uppercase tracking-wider">${d.spec || 'Specialist'}</p>
-                                    <div class="inline-block bg-gray-50 px-3 py-1 rounded-full text-[10px] text-gray-500 mb-4 border border-gray-100">${d.deg || 'Credentials'}</div>
-                                    <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-dark text-white py-3 rounded-xl text-xs font-bold hover:bg-black transition">Book Consultation</button>
+                                <div class="p-5 md:p-6 text-center">
+                                    <h4 class="font-bold text-base md:text-lg text-gray-900">${d.name || 'Expert'}</h4>
+                                    <p class="text-ayu-green text-[10px] md:text-xs font-semibold mb-3 uppercase tracking-wider">${d.spec || 'Specialist'}</p>
+                                    <div class="inline-block bg-gray-50 px-3 py-1 rounded-full text-[9px] md:text-[10px] text-gray-500 mb-4 border border-gray-100">${d.deg || 'Credentials'}</div>
+                                    <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-dark text-white py-2.5 md:py-3 rounded-xl text-[10px] md:text-xs font-bold hover:bg-black transition">Book Consultation</button>
                                 </div>
                             </div>`).join('');
                     }
