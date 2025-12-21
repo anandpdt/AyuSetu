@@ -783,17 +783,27 @@
         let currentUser = null;
         let isLogin = true;
 
+        // REDIRECT HELPER
+        async function redirectToDashboard(user) {
+            const snap = await getDoc(doc(db, "users", user.uid));
+            const role = snap.exists() ? snap.data().role : 'user';
+            
+            if (role === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            } else if (role === 'doctor') {
+                window.location.href = 'doctor-dashboard.html';
+            } else {
+                window.location.href = 'user-dashboard.html';
+            }
+        }
+
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             updateReviewUI(user);
             const loginBtn = document.getElementById('navLoginBtn');
             if (user && loginBtn) {
                 loginBtn.innerText = "Dashboard";
-                loginBtn.onclick = async () => {
-                    const snap = await getDoc(doc(db, "users", user.uid));
-                    const role = snap.exists() ? snap.data().role : 'user';
-                    window.location.href = role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
-                };
+                loginBtn.onclick = () => redirectToDashboard(user);
             } else if(loginBtn) {
                 loginBtn.innerText = "Login";
                 loginBtn.onclick = () => window.openLogin();
@@ -917,10 +927,14 @@
             const errorDiv = document.getElementById('authError');
             errorDiv.classList.add('hidden');
             try {
-                if (isLogin) { await signInWithEmailAndPassword(auth, email, password); } 
+                if (isLogin) { 
+                    const cred = await signInWithEmailAndPassword(auth, email, password);
+                    redirectToDashboard(cred.user);
+                } 
                 else {
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
                     await setDoc(doc(db, "users", cred.user.uid), { email, role: 'user', createdAt: new Date() });
+                    redirectToDashboard(cred.user);
                 }
                 closeAuthModal();
             } catch (error) { errorDiv.innerText = error.message; errorDiv.classList.remove('hidden'); }
@@ -996,7 +1010,7 @@
                         sContainer.innerHTML = html;
                     }
 
-                    // 2. DOCTORS LOGIC (Moved inside the scope)
+                    // 2. DOCTORS LOGIC
                     const dContainer = document.getElementById('doctors-container');
                     if (data.doctors && dContainer) {
                         dContainer.innerHTML = "";
