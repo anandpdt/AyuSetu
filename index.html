@@ -594,7 +594,7 @@
                     <p class="text-gray-500 text-sm leading-relaxed">Leads medical operations, doctor onboarding, and end-to-end customer experience. Ensures Ayusetu delivers trusted, patient-centric wellness at scale.</p>
                 </div>
                  <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center text-center group hover-lift">
-                    <div class="w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-green/20 group-hover:border-ayu-orange transition-colors">
+                    <div class="w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-ayu-orange/20 group-hover:border-ayu-green transition-colors">
                         <img src="adarsh.jpeg" alt="Adarsh" class="w-full h-full object-cover">
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900">Adarsh (IITP'28)</h3>
@@ -609,7 +609,6 @@
                     <p class="text-ayu-orange font-semibold mb-4 text-sm">Co-founder & CTO</p>
                     <p class="text-gray-500 text-sm leading-relaxed">Owns the entire technology stack and product architecture, driving AI-powered diagnostics and platform scalability.</p>
                 </div>
-               
             </div>
         </div>
     </section>
@@ -758,7 +757,6 @@
         }
 
         window.selectStay = (name, price) => {
-            // Redirect to the centers.html page at the reservation desk section
             window.location.href = 'centers.html#consultation';
         };
     </script>
@@ -785,7 +783,6 @@
         let currentUser = null;
         let isLogin = true;
 
-        // AUTH LISTENER
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             updateReviewUI(user);
@@ -803,25 +800,15 @@
             }
         });
 
-        // REVIEWS LOGIC
         function updateReviewUI(user) {
             const container = document.getElementById('reviewActionArea');
             if (!container) return;
-
             if (user) {
-                container.innerHTML = `
-                    <button onclick="window.openReviewModal()" class="bg-ayu-green text-white px-10 py-4 rounded-full font-bold hover:bg-green-800 transition shadow-xl transform hover:-translate-y-1">
-                        <i class="fas fa-edit mr-2"></i> Write a Review
-                    </button>
-                `;
+                container.innerHTML = `<button onclick="window.openReviewModal()" class="bg-ayu-green text-white px-10 py-4 rounded-full font-bold hover:bg-green-800 transition shadow-xl transform hover:-translate-y-1"><i class="fas fa-edit mr-2"></i> Write a Review</button>`;
                 const nameInput = document.getElementById('reviewerName');
                 if (nameInput) nameInput.value = user.displayName || "";
             } else {
-                container.innerHTML = `
-                    <button onclick="openLogin()" class="bg-ayu-orange text-white px-10 py-4 rounded-full font-bold hover:bg-orange-700 transition shadow-xl transform hover:-translate-y-1">
-                        <i class="fas fa-lock mr-2"></i> Login to Post Review
-                    </button>
-                `;
+                container.innerHTML = `<button onclick="openLogin()" class="bg-ayu-orange text-white px-10 py-4 rounded-full font-bold hover:bg-orange-700 transition shadow-xl transform hover:-translate-y-1"><i class="fas fa-lock mr-2"></i> Login to Post Review</button>`;
             }
         }
 
@@ -857,7 +844,6 @@
             }
         });
 
-        // LISTEN FOR REVIEWS
         const reviewsRef = collection(db, 'artifacts', appId, 'public', 'data', 'reviews');
         onSnapshot(reviewsRef, (snapshot) => {
             const list = document.getElementById('reviews-list');
@@ -887,7 +873,6 @@
             }).join('');
         }, (err) => console.error("Reviews stream error:", err));
 
-        // UTILITIES
         window.openLogin = () => document.getElementById('authModal').classList.remove('hidden');
         window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
         window.toggleAuthMode = () => {
@@ -944,183 +929,93 @@
         async function fetchContent() {
             try {
                 const docSnap = await getDoc(doc(db, "site_content", "homepage"));
-                let cmsServices = [];
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if (data.services) {
-                        cmsServices = Object.values(data.services);
+                    
+                    // 1. SERVICES LOGIC
+                    const sContainer = document.getElementById('services-container');
+                    if (sContainer) {
+                        let cmsServices = data.services ? Object.values(data.services) : [];
+                        const yogaTherapyCard = {
+                            title: "Yoga Therapy",
+                            desc: "Scientific application of yoga tools to alleviate physical and mental health conditions through 12 specialized health verticals.",
+                            features: ["12 Specialized Vertical Plans", "Expert Guided Therapy Sessions", "Holistic Mind-Body Balance"],
+                            icon: "om"
+                        };
+                        const expertConsultationCard = {
+                            title: "Expert Consultation",
+                            desc: "Direct video session with our senior Naturopaths for personalized recovery roadmaps and diagnosis.",
+                            price: "999", oldPrice: "1999",
+                            features: ["30-Minute Video Consultation", "Personalized Health Report", "Follow-up Support Access"],
+                            icon: "user-md"
+                        };
+                        const offlineCenters = [
+                            { title: "Short Cleanse", desc: "A perfect 10-day reset for busy professionals looking to detoxify and reboot their energy.", price: "25k", val: "25000", dur: "10 Days", icon: "seedling", features: ["Standard Private Room", "3 Sattvic Meals", "Daily Hydrotherapy"], theme: "light" },
+                            { title: "Deep Healing", desc: "Intensive 15-day supervision for chronic ailments including metabolic and digestive issues.", price: "35k", val: "35000", dur: "15 Days", icon: "spa", features: ["Premium Garden Suite", "Personalized Plan", "Daily Healer Supervision"], theme: "light", featured: true },
+                            { title: "Rejuvenation", desc: "A complete 30-day life-changing transformation. Ideal for post-recovery and mental health.", price: "55k", val: "55000", dur: "30 Days", icon: "peace", features: ["Luxury Mountain View", "Panchakarma Series", "Lifetime Training"], theme: "light" }
+                        ];
+
+                        const otherServices = cmsServices.filter(s => !s.title.toLowerCase().includes('yoga therapy') && !s.title.toLowerCase().includes('expert consultation'));
+
+                        let html = `<div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-ayu-green ring-2 ring-ayu-green/10 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
+                            <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-20 animate-float-slow"><span class="bg-gradient-to-r from-ayu-orange to-red-600 text-white text-[12px] font-black px-6 py-2 rounded-full uppercase tracking-tight shadow-xl border-2 border-white flex items-center gap-2 whitespace-nowrap ring-4 ring-orange-500/10"><i class="fas fa-fire text-[10px]"></i> MOST POPULAR</span></div>
+                            <div class="w-16 h-16 bg-ayu-green text-white rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm"><i class="fas fa-om"></i></div>
+                            <h3 class="text-2xl font-bold mb-2 text-gray-900">${yogaTherapyCard.title}</h3>
+                            <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${yogaTherapyCard.desc}</p>
+                            <ul class="space-y-4 mb-10 text-sm text-gray-600">${yogaTherapyCard.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
+                            <button onclick="showYogaVerticals()" class="w-full bg-ayu-orange text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-orange/20">View Programs</button>
+                        </div>`;
+
+                        html += `<div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-gray-100 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
+                            <div class="w-16 h-16 bg-orange-100 text-ayu-orange rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm"><i class="fas fa-user-md"></i></div>
+                            <h3 class="text-2xl font-bold mb-2 text-gray-900">${expertConsultationCard.title}</h3>
+                            <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${expertConsultationCard.desc}</p>
+                            <div class="mb-8"><div class="flex items-center gap-3"><span class="text-4xl font-bold text-ayu-green">₹${expertConsultationCard.price}</span><span class="text-lg line-through text-gray-400">₹${expertConsultationCard.oldPrice}</span></div><span class="text-sm text-gray-400 font-medium">Limited Time Offer</span></div>
+                            <ul class="space-y-4 mb-10 text-sm text-gray-600">${expertConsultationCard.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
+                            <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-green text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-green/20">Book Session Now</button>
+                        </div>`;
+
+                        html += offlineCenters.map(oc => `
+                            <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center rounded-[2.5rem] p-10 hover-lift flex flex-col min-h-[550px] relative transition-all duration-300 ${oc.theme === 'dark' ? 'bg-ayu-dark text-white border-4 border-ayu-orange shadow-2xl scale-105 z-10' : 'bg-white text-gray-800 border border-gray-100 shadow-sm'}">
+                                ${oc.featured ? `<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-ayu-orange text-white text-[10px] font-black tracking-[0.2em] px-6 py-2 rounded-full shadow-lg uppercase whitespace-nowrap">Best Transformation</div>` : ''}
+                                <div class="w-16 h-16 ${oc.theme === 'dark' ? 'bg-white/10' : 'bg-green-100 text-ayu-green'} rounded-2xl flex items-center justify-center text-3xl mb-8"><i class="fas fa-${oc.icon}"></i></div>
+                                <h3 class="text-2xl font-bold mb-2">${oc.title}</h3>
+                                <p class="${oc.theme === 'dark' ? 'text-gray-300' : 'text-gray-400'} text-sm mb-6 flex-grow">${oc.desc}</p>
+                                <div class="mb-8"><span class="text-4xl font-bold ${oc.theme === 'dark' ? 'text-white' : 'text-ayu-green'}">${oc.price}</span><span class="text-sm ${oc.theme === 'dark' ? 'text-white/50' : 'text-gray-400'} font-medium">/ ${oc.dur}</span></div>
+                                <ul class="space-y-4 mb-10 text-sm">${oc.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}</ul>
+                                <button onclick="selectStay('${oc.title}', '${oc.val}')" class="w-full py-4 font-bold rounded-2xl transition shadow-lg ${oc.theme === 'dark' ? 'bg-ayu-orange text-white hover:bg-white hover:text-ayu-dark' : 'bg-ayu-green text-white hover:bg-ayu-dark'}">Book Resident Stay</button>
+                            </div>`).join('');
+
+                        html += otherServices.map(s => `
+                            <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-gray-100 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
+                                <div class="w-16 h-16 bg-green-100 text-ayu-green rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm"><i class="fas fa-leaf"></i></div>
+                                <h3 class="text-2xl font-bold mb-3 text-gray-900">${s.title}</h3>
+                                <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${s.desc}</p>
+                                <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-green text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-green/20">Book Session Now</button>
+                            </div>`).join('');
+                        sContainer.innerHTML = html;
                     }
-                }
 
-                const sContainer = document.getElementById('services-container');
-                if (!sContainer) return;
+                    // 2. DOCTORS LOGIC (Moved inside the scope)
+                    const dContainer = document.getElementById('doctors-container');
+                    if (data.doctors && dContainer) {
+                        dContainer.innerHTML = "";
+                        const uniqueDoctors = new Map();
+                        Object.values(data.doctors).forEach(d => uniqueDoctors.set(d.name, d));
 
-                // 1. Explicitly Define the Pinned Yoga Therapy Card
-                const yogaTherapyCard = {
-                    title: "Yoga Therapy",
-                    desc: "Scientific application of yoga tools to alleviate physical and mental health conditions through 12 specialized health verticals.",
-                    features: [
-                        "12 Specialized Vertical Plans",
-                        "Expert Guided Therapy Sessions",
-                        "Holistic Mind-Body Balance"
-                    ],
-                    icon: "om"
-                };
-
-                // 2. Explicitly Define the Expert Consultation Card
-                const expertConsultationCard = {
-                    title: "Expert Consultation",
-                    desc: "Direct video session with our senior Naturopaths for personalized recovery roadmaps and diagnosis.",
-                    price: "999",
-                    oldPrice: "1999",
-                    features: [
-                        "30-Minute Video Consultation",
-                        "Personalized Health Report",
-                        "Follow-up Support Access"
-                    ],
-                    icon: "user-md"
-                };
-
-                // 3. Define Offline Centers
-                const offlineCenters = [
-                    {
-                        title: "Short Cleanse",
-                        desc: "A perfect 10-day reset for busy professionals looking to detoxify and reboot their energy.",
-                        price: "25k", val: "25000", dur: "10 Days", icon: "seedling",
-                        features: ["Standard Private Room", "3 Sattvic Meals", "Daily Hydrotherapy"],
-                        theme: "light"
-                    },
-                    {
-                        title: "Deep Healing",
-                        desc: "Intensive 15-day supervision for chronic ailments including metabolic and digestive issues.",
-                        price: "35k", val: "35000", dur: "15 Days", icon: "spa",
-                        features: ["Premium Garden Suite", "Personalized Plan", "Daily Healer Supervision"],
-                        theme: "light", featured: true
-                    },
-                    {
-                        title: "Rejuvenation",
-                        desc: "A complete 30-day life-changing transformation. Ideal for post-recovery and mental health.",
-                        price: "55k", val: "55000", dur: "30 Days", icon: "peace",
-                        features: ["Luxury Mountain View", "Panchakarma Series", "Lifetime Training"],
-                        theme: "light"
-                    }
-                ];
-
-                // Filter out any Yoga Therapy or Consultant cards from CMS to avoid duplicates
-                const otherServices = cmsServices.filter(s => 
-                    !s.title.toLowerCase().includes('yoga therapy') && 
-                    !s.title.toLowerCase().includes('expert consultation')
-                );
-
-                let html = "";
-
-                // Render Hardcoded Yoga Therapy Card (Pinned First)
-                html += `
-                    <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-ayu-green ring-2 ring-ayu-green/10 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
-                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-20 animate-float-slow">
-                            <span class="bg-gradient-to-r from-ayu-orange to-red-600 text-white text-[12px] font-black px-6 py-2 rounded-full uppercase tracking-tight shadow-xl border-2 border-white flex items-center gap-2 whitespace-nowrap ring-4 ring-orange-500/10">
-                                <i class="fas fa-fire text-[10px]"></i> MOST POPULAR
-                            </span>
-                        </div>
-                        <div class="w-16 h-16 bg-ayu-green text-white rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm">
-                            <i class="fas fa-om"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2 text-gray-900">${yogaTherapyCard.title}</h3>
-                        <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${yogaTherapyCard.desc}</p>
-                        
-                        <!-- Pricing removed as requested, as each internal plan has its own price -->
-                        
-                        <ul class="space-y-4 mb-10 text-sm text-gray-600">
-                            ${yogaTherapyCard.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}
-                        </ul>
-                        <button onclick="showYogaVerticals()" class="w-full bg-ayu-orange text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-orange/20">
-                            View Programs
-                        </button>
-                    </div>`;
-
-                // Render Hardcoded Expert Consultation Card
-                html += `
-                    <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-gray-100 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
-                        <div class="w-16 h-16 bg-orange-100 text-ayu-orange rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm">
-                            <i class="fas fa-user-md"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2 text-gray-900">${expertConsultationCard.title}</h3>
-                        <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${expertConsultationCard.desc}</p>
-                        <div class="mb-8">
-                            <div class="flex items-center gap-3">
-                                <span class="text-4xl font-bold text-ayu-green">₹${expertConsultationCard.price}</span>
-                                <span class="text-lg line-through text-gray-400">₹${expertConsultationCard.oldPrice}</span>
-                            </div>
-                            <span class="text-sm text-gray-400 font-medium">Limited Time Offer</span>
-                        </div>
-                        <ul class="space-y-4 mb-10 text-sm text-gray-600">
-                            ${expertConsultationCard.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}
-                        </ul>
-                        <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-green text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-green/20">
-                            Book Session Now
-                        </button>
-                    </div>`;
-
-                // Render Offline Centers
-                html += offlineCenters.map(oc => `
-                    <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center rounded-[2.5rem] p-10 hover-lift flex flex-col min-h-[550px] relative transition-all duration-300 ${oc.theme === 'dark' ? 'bg-ayu-dark text-white border-4 border-ayu-orange shadow-2xl scale-105 z-10' : 'bg-white text-gray-800 border border-gray-100 shadow-sm'}">
-                        ${oc.featured ? `<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-ayu-orange text-white text-[10px] font-black tracking-[0.2em] px-6 py-2 rounded-full shadow-lg uppercase whitespace-nowrap">Best Transformation</div>` : ''}
-                        <div class="w-16 h-16 ${oc.theme === 'dark' ? 'bg-white/10' : 'bg-green-100 text-ayu-green'} rounded-2xl flex items-center justify-center text-3xl mb-8">
-                            <i class="fas fa-${oc.icon}"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">${oc.title}</h3>
-                        <p class="${oc.theme === 'dark' ? 'text-gray-300' : 'text-gray-400'} text-sm mb-6 flex-grow">${oc.desc}</p>
-                        <div class="mb-8">
-                            <span class="text-4xl font-bold ${oc.theme === 'dark' ? 'text-white' : 'text-ayu-green'}">${oc.price}</span>
-                            <span class="text-sm ${oc.theme === 'dark' ? 'text-white/50' : 'text-gray-400'} font-medium">/ ${oc.dur}</span>
-                        </div>
-                        <ul class="space-y-4 mb-10 text-sm">
-                            ${oc.features.map(f => `<li class="flex items-center gap-3"><i class="fas fa-check-circle text-ayu-orange"></i> ${f}</li>`).join('')}
-                        </ul>
-                        <button onclick="selectStay('${oc.title}', '${oc.val}')" class="w-full py-4 font-bold rounded-2xl transition shadow-lg ${oc.theme === 'dark' ? 'bg-ayu-orange text-white hover:bg-white hover:text-ayu-dark' : 'bg-ayu-green text-white hover:bg-ayu-dark'}">
-                            Book Resident Stay
-                        </button>
-                    </div>
-                `).join('');
-
-                // Render Other Dynamic Services from CMS
-                html += otherServices.map(s => `
-                    <div class="w-[85vw] md:w-[350px] flex-shrink-0 snap-center bg-white border border-gray-100 rounded-[2.5rem] p-10 hover-lift shadow-sm flex flex-col min-h-[550px] relative">
-                        <div class="w-16 h-16 bg-green-100 text-ayu-green rounded-2xl flex items-center justify-center text-3xl mb-8 shadow-sm">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-3 text-gray-900">${s.title}</h3>
-                        <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${s.desc}</p>
-                        <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-green text-white py-4 rounded-2xl font-bold hover:opacity-90 transition shadow-lg shadow-ayu-green/20">
-                            Book Session Now
-                        </button>
-                    </div>`).join('');
-
-                sContainer.innerHTML = html;
-
-                // Doctors container logic
-                const dContainer = document.getElementById('doctors-container');
-                if(data.doctors && dContainer) {
-                    dContainer.innerHTML = "";
-                    const uniqueDoctors = new Map();
-                    Object.values(data.doctors).forEach(d => uniqueDoctors.set(d.name, d));
-
-                    dContainer.innerHTML = Array.from(uniqueDoctors.values()).map(d => `
-                        <div class="w-[80vw] md:w-[280px] flex-shrink-0 snap-center bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
-                            <div class="h-64 overflow-hidden bg-slate-50 flex items-center justify-center border-b border-gray-50">
-                                <img src="${d.img || 'https://via.placeholder.com/400x300'}" 
-                                     alt="${d.name}" 
-                                     class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
-                            </div>
-                            <div class="p-6 text-center">
-                                <h4 class="font-bold text-lg text-gray-900">${d.name || 'Expert'}</h4>
-                                <p class="text-ayu-green text-xs font-semibold mb-3 uppercase tracking-wider">${d.spec || 'Specialist'}</p>
-                                <div class="inline-block bg-gray-50 px-3 py-1 rounded-full text-[10px] text-gray-500 mb-4 border border-gray-100">
-                                    ${d.deg || 'Credentials'}
+                        dContainer.innerHTML = Array.from(uniqueDoctors.values()).map(d => `
+                            <div class="w-[80vw] md:w-[280px] flex-shrink-0 snap-center bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
+                                <div class="h-64 overflow-hidden bg-slate-50 flex items-center justify-center border-b border-gray-50">
+                                    <img src="${d.img || 'https://via.placeholder.com/400x300'}" alt="${d.name}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
                                 </div>
-                                <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-dark text-white py-3 rounded-xl text-xs font-bold hover:bg-black transition">Book Consultation</button>
-                            </div>
-                        </div>`).join('');
+                                <div class="p-6 text-center">
+                                    <h4 class="font-bold text-lg text-gray-900">${d.name || 'Expert'}</h4>
+                                    <p class="text-ayu-green text-xs font-semibold mb-3 uppercase tracking-wider">${d.spec || 'Specialist'}</p>
+                                    <div class="inline-block bg-gray-50 px-3 py-1 rounded-full text-[10px] text-gray-500 mb-4 border border-gray-100">${d.deg || 'Credentials'}</div>
+                                    <button onclick="handleBooking(event, 'consultation')" class="w-full bg-ayu-dark text-white py-3 rounded-xl text-xs font-bold hover:bg-black transition">Book Consultation</button>
+                                </div>
+                            </div>`).join('');
+                    }
                 }
             } catch(e) { console.log("CMS load error", e); }
         }
