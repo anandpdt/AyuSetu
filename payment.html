@@ -140,8 +140,7 @@
                 const screenshotUrl = imgData.data.url;
 
                 // 2. Save Final Booking in Firebase artifacts path
-                const appId = 'ayusetu-wellness';
-                const bookingsCollection = collection(db, 'artifacts', appId, 'public', 'data', 'bookings');
+                const bookingsCollection = collection(db, 'bookings');
                 
                 await addDoc(bookingsCollection, {
                     ...bookingData,
